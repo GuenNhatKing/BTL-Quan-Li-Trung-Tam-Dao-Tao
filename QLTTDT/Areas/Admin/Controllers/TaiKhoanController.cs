@@ -145,13 +145,13 @@ namespace QLTTDT.Areas.Admin.Controllers
                 MaNguoiDung = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.Email
             }).Single(i => i.MaNguoiDung == taiKhoan.MaNguoiDung);
-            var vaiTroList = _context.VaiTros
+            var vaiTro = _context.VaiTros
             .Select(i => new {
                 MaVaiTro = i.MaVaiTro,
                 DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
-            }).ToList();
+            }).Single(i => i.MaVaiTro == taiKhoan.MaVaiTro);
             ViewData["MaNguoiDung"] = nguoiDung.DisplayText;
-            ViewData["MaVaiTro"] = new SelectList(vaiTroList, "MaVaiTro", "DisplayText", vaiTroList.Find(i => i.MaVaiTro == taiKhoan.MaVaiTro).DisplayText);
+            ViewData["MaVaiTro"] = vaiTro.DisplayText;
             return View(taiKhoan);
         }
 
