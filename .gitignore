@@ -398,3 +398,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# wwwroot
+QLTTDT/wwwroot/lib
+QLTTDT/wwwroot/images

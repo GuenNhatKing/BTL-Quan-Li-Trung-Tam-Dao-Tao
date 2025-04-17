@@ -1,0 +1,39 @@
+﻿@model LoginForm;
+
+<div>
+    <div>
+        <h3>Login to <strong>Couratest</strong></h3>
+    </div>
+    <form asp-controller="Authentication" asp-action="Login" method="post">
+        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>
+            <label asp-for="Username">Username</label>
+            <input asp-for="Username" type="text" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div>
+             <label asp-for="RememberMe">
+                <span>Remember me</span> 
+             </label>
+             <input asp-for="RememberMe" type="checkbox" />
+             <span>
+                 <a href="#" class="forgot-pass">Forgot Password</a>
+             </span>
+        </div>
+
+        <input type="submit" value="Log In" />
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

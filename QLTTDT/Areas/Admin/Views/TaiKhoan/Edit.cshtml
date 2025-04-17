@@ -1,0 +1,61 @@
+﻿@model QLTTDT.Models.TaiKhoan
+
+@{
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>TaiKhoan</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MaTaiKhoan" />
+            <input type="hidden" asp-for="MaNguoiDung" />
+            <input type="hidden" asp-for="Salt" />
+            <input type="hidden" asp-for="MatKhau" />
+            <div class="form-group">
+                <label name="MaNguoiDung" class="control-label"></label>
+                <input name="MaNguoiDung"value="@ViewBag.MaNguoiDung" class="form-control" readonly />
+                <span asp-validation-for="MaNguoiDung" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaVaiTro" class="control-label"></label>
+                <select asp-for="MaVaiTro" class="form-control" asp-items="ViewBag.MaVaiTro"></select>
+                <span asp-validation-for="MaVaiTro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TenDangNhap" class="control-label"></label>
+                <input asp-for="TenDangNhap" class="form-control" />
+                <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label name="MatKhauMoi" class="control-label">Mật khẩu mới</label>
+                <input name="MatKhauMoi" class="form-control" />
+                <span asp-validation-for="MatKhau" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+</body>
+</html>

@@ -1,0 +1,52 @@
+﻿@model RegisterForm;
+
+<div>
+    <div>
+        <h3>Login to <strong>AAA</strong></h3>
+    </div>
+    <form asp-controller="Authentication" asp-action="Register" method="post">
+        <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>
+            <label asp-for="HoVaTen">Họ và tên</label>
+            <input asp-for="HoVaTen" type="text" />
+            <span asp-validation-for="HoVaTen" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="NgaySinh">Ngày sinh</label>
+            <input asp-for="NgaySinh" type="date" />
+            <span asp-validation-for="NgaySinh" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="SoDienThoai">Số điện thoại</label>
+            <input asp-for="SoDienThoai" type="text" />
+            <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" type="text" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Username">Tên đăng nhập</label>
+            <input asp-for="Username" type="text" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Password">Mật khẩu</label>
+            <input asp-for="Password" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="RePassword">Nhập lại mật khẩu</label>
+            <input asp-for="RePassword" type="password" />
+            <span asp-validation-for="RePassword" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Register">
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

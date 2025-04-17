@@ -1,0 +1,67 @@
+﻿@model IEnumerable<QLTTDT.Models.DangKiKhoaHoc>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ThoiGianDangKi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TienDo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DaHuy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaHocVienNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaKhoaHocNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThoiGianDangKi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TienDo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DaHuy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaHocVienNavigation.MaNguoiDung)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaKhoaHocNavigation.MaKhoaHoc)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MaDangKi">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MaDangKi">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MaDangKi">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>
