@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
 using QLTTDT.ViewModels;
@@ -6,6 +7,7 @@ using QLTTDT.ViewModels;
 namespace QLTTDT.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize("Admin")]
     public class DashboardController : Controller
     {
         private QLTTDTDbContext _context;
