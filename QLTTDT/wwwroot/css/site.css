@@ -1,11 +1,14 @@
-:root {
+﻿:root {
     --color-background-primary: #ffffff;
     --color-foreground-primary: #1f2328;
     --color-foreground-secondary: #59636e;
+    --color-button-secondary: #1D1616;
     --color-foreground-tertiary: #90C67C;
     --color-highlight: #FA5E00;
     --color-gray-9: #59636e;
+    --color-gray-10: #454c54;
     --color-gray-11: #393f46;
+    --color-gray-12: #25292e;
     --color-gray-13: #1f2328;
     --font-family-base: "Helvetica", "Arial", sans-serif;
     --font-size-base: 0.875rem;
@@ -58,6 +61,20 @@
 
     .tabs__link--secondary.active {
         color: var(--color-foreground-primary);
+    }
+
+.tabs__link--tertiary {
+    text-decoration: none;
+    align-items: center;
+    color: var(--color-foreground-primary);
+}
+
+    .tabs__link--tertiary:hover {
+        color: var(--color-foreground-tertiary);
+    }
+
+    .tabs__link--tertiary.active {
+        color: var(--color-foreground-tertiary);
     }
 
 .text-caption {
@@ -140,22 +157,32 @@
 
 .header__nav--expanded {
     background-color: var(--color-background-primary);
-    padding-bottom: 2rem;
-    padding-top: 2rem;
+    padding-bottom: 1.25rem;
+    padding-top: 1.25rem;
 }
 
 .view-container {
     margin-top: 0rem;
 }
 
-/* Trang chu */
-.template {
+.template__homepage {
     padding-top: 10rem;
+    padding-bottom: 2rem;
+}
+
+.template__homepage-content {
+    padding-top: 2rem;
     padding-bottom: 4rem;
 }
 
-.template-2 {
+.template__content {
     padding-top: 2rem;
+    padding-bottom: 4rem;
+    background-color: #F6F5F2;
+}
+
+.template__login-page {
+    padding-top: 4rem;
     padding-bottom: 4rem;
     background-color: #F6F5F2;
 }
@@ -189,24 +216,26 @@
     gap: .5rem;
 }
 
-.btn {
-    display: inline-flex;
-    font-size: .8125rem;
-    letter-spacing: .06em;
-    line-height: 1.25rem;
-    text-transform: uppercase;
-}
-
 .btn--black {
+    font-size: .875rem;
+    text-transform: uppercase;
     background-color: var(--color-foreground-primary);
     border-color: var(--color-foreground-primary);
     color: var(--color-background-primary);
-    border-radius: 10px;
+    border-radius: 0.35rem;
+    padding: 0.4rem 0.8rem;
+    text-decoration: none;
 }
 
-    .btn-black:hover {
+    .btn--black:hover {
         background-color: var(--color-gray-11);
         border-color: var(--color-gray-11);
+        color: var(--color-background-primary);
+    }
+
+    .btn--black:active {
+        background-color: var(--color-gray-10);
+        border-color: var(--color-gray-10);
         color: var(--color-background-primary);
     }
 
@@ -368,3 +397,157 @@
 .u-margin-left-auto {
     margin-left: auto;
 }
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--color-background-primary);
+    padding: 30px;
+    width: 450px;
+    border-radius: 20px;
+}
+
+    .form label {
+        color: var(--color-foreground-primary);
+        font-weight: 500;
+    }
+
+.inputForm {
+    border: 1.5px solid var(--color-foreground-secondary);
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    transition: 0.2s ease-in-out;
+}
+
+.input {
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+    .input:focus {
+        outline: none;
+    }
+
+.inputForm:focus-within {
+    border: 1.5px solid var(--color-foreground-tertiary)
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+    .flex-row label {
+        font-size: 14px;
+        color: black;
+        font-weight: 400;
+    }
+
+.button-submit {
+    background: var(--color-foreground-primary);
+    border: 1px solid var(--color-foreground-primary);
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+    color: var(--color-background-primary);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 16px;
+    min-height: 40px;
+    padding: 12px 14px;
+    text-align: center;
+    text-decoration: none;
+}
+    .button-submit:hover,
+    .button-submit:active {
+        background-color: var(--color-button-secondary);
+    }
+
+/* Check check tuy chinh */
+.custom-checkbox-container {
+    display: block; 
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+    .custom-checkbox-container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee; 
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.custom-checkbox-container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.custom-checkbox-container input:checked ~ .checkmark {
+    background-color: var(--color-foreground-tertiary);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+    left: 7px; 
+    top: 3px;
+    width: 5px;
+    height: 10px; 
+    border: solid white; 
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+.padding-top-10px {
+    padding-top: 10px;
+}
+
+.text-color-tertiary {
+    color: var(--color-foreground-tertiary);
+}
+
+.box {
+    display: flex;
+}
+
+.box-half {
+    flex: 1;
+    padding: 20px;
+}
+
+    .box-half img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
