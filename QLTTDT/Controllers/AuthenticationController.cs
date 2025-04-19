@@ -81,5 +81,10 @@ namespace QLTTDT.Controllers
             await HttpContext.SignOutAsync("AuthenticationSchema");
             return RedirectToAction("Index", "Home", new { area = "" });
         }
+
+        public IActionResult AccessDenied(string ReturnUrl)
+        {
+            return View();
+        }
     }
 }
