@@ -12,8 +12,8 @@ using QLTTDT.Data;
 namespace QLTTDT.Migrations
 {
     [DbContext(typeof(QLTTDTDbContext))]
-    [Migration("20250415144902_unicode-capdo")]
-    partial class unicodecapdo
+    [Migration("20250419001043_ThemHocPhiDKKH")]
+    partial class ThemHocPhiDKKH
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,8 +60,12 @@ namespace QLTTDT.Migrations
                     b.Property<string>("TenChuDe")
                         .IsRequired()
                         .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("UrlAnhChuDe")
+                        .HasMaxLength(1024)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(512)");
+                        .HasColumnType("varchar(1024)");
 
                     b.HasKey("MaChuDe")
                         .HasName("PK__ChuDe__358545113217E9F1");
@@ -82,6 +86,9 @@ namespace QLTTDT.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<int?>("HocPhi")
+                        .HasColumnType("int");
+
                     b.Property<int>("MaHocVien")
                         .HasColumnType("int");
 
@@ -92,6 +99,9 @@ namespace QLTTDT.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int>("TienDo")
+                        .HasColumnType("int");
 
                     b.HasKey("MaDangKi")
                         .HasName("PK__DangKiKh__BA90F03DA183D1E4");

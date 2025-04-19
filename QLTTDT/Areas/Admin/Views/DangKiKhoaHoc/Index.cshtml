@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<QLTTDT.Models.DangKiKhoaHoc>
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
 
 <html>
@@ -28,10 +24,13 @@
                 @Html.DisplayNameFor(model => model.DaHuy)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MaHocVienNavigation)
+                @Html.DisplayNameFor(model => model.MaHocVien)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MaKhoaHocNavigation)
+                @Html.DisplayNameFor(model => model.MaKhoaHoc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HocPhi)
             </th>
             <th></th>
         </tr>
@@ -43,16 +42,23 @@
                 @Html.DisplayFor(modelItem => item.ThoiGianDangKi)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TienDo)
+                @Html.DisplayFor(modelItem => item.TienDo)%
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DaHuy)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MaHocVienNavigation.MaNguoiDung)
+                <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@item.MaHocVienNavigation.MaNguoiDung">
+                    @Html.DisplayFor(modelItem => item.MaHocVienNavigation.Email)
+                </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MaKhoaHocNavigation.MaKhoaHoc)
+                <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@item.MaKhoaHocNavigation.MaKhoaHoc">
+                    @Html.DisplayFor(modelItem => item.MaKhoaHocNavigation.TenKhoaHoc)
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HocPhi)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.MaDangKi">Edit</a> |

@@ -2,22 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
 using QLTTDT.Models;
+using QLTTDT.Services;
 
 namespace QLTTDT.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class ChuDeController : Controller
     {
+        private readonly IWebHostEnvironment _webHost;
         private readonly QLTTDTDbContext _context;
 
-        public ChuDeController(QLTTDTDbContext context)
+        public ChuDeController(QLTTDTDbContext context, IWebHostEnvironment webHost)
         {
             _context = context;
+            _webHost = webHost;
         }
 
         // GET: Admin/ChuDe
@@ -55,10 +59,13 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaChuDe,TenChuDe,MoTa")] ChuDe chuDe)
+        public async Task<IActionResult> Create([Bind("MaChuDe,TenChuDe,MoTa")] ChuDe chuDe, IFormFile? AnhChuDe = null)
         {
             if (ModelState.IsValid)
             {
+                var imageUpload = new ImageUpload(_webHost);
+                if (await imageUpload.SaveImageAs(AnhChuDe))
+                    chuDe.UrlAnhChuDe = imageUpload.FileName;
                 _context.Add(chuDe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +94,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaChuDe,TenChuDe,MoTa")] ChuDe chuDe)
+        public async Task<IActionResult> Edit(int id, [Bind("MaChuDe,TenChuDe,MoTa")] ChuDe chuDe, IFormFile? AnhChuDe = null)
         {
             if (id != chuDe.MaChuDe)
             {
@@ -98,6 +105,12 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
+                    var imageUpload = new ImageUpload(_webHost);
+                    if (await imageUpload.SaveImageAs(AnhChuDe))
+                    {
+                        imageUpload.DeleteImage(chuDe.UrlAnhChuDe);
+                        chuDe.UrlAnhChuDe = imageUpload.FileName;
+                    }
                     _context.Update(chuDe);
                     await _context.SaveChangesAsync();
                 }
@@ -143,6 +156,8 @@ namespace QLTTDT.Areas.Admin.Controllers
             var chuDe = await _context.ChuDes.FindAsync(id);
             if (chuDe != null)
             {
+                var imgDelete = new ImageUpload(_webHost);
+                imgDelete.DeleteImage(chuDe.UrlAnhChuDe);
                 _context.ChuDes.Remove(chuDe);
             }
 

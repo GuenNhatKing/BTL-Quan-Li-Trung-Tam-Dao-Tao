@@ -1,0 +1,17 @@
+﻿@model IEnumerable<TopicCard>;
+
+@foreach(var item in Model)
+{
+	<div>
+		<a asp-action="Details" 
+		asp-route-topicSlug="@StrToSlug.Convert(item.TenChuDe)"
+		asp-route-topicId="@item.MaChuDe">
+			@Html.DisplayFor(modelItem => item.TenChuDe)
+		</a>
+		<div class="graphic-cover">
+			<img src="~/images/@Html.DisplayFor(modelItem => item.UrlAnhChuDe)" />
+		</div>
+		<div>@Html.DisplayFor(modelItem => item.MoTa)</div>
+		<div>@Html.DisplayFor(modelItem => item.SoKhoaHocDaDangKi)</div>
+	</div>
+}

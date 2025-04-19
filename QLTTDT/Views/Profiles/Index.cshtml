@@ -1,0 +1,45 @@
+﻿@model Profiles;
+
+<h1>Thông tin người dùng</h1>
+
+<div class="graphic-cover">
+    <img src="~/images/@Html.DisplayFor(model => model.UrlAnhDaiDien)"/>
+</div>
+
+<div>
+    <strong>Họ và Tên:</strong>
+    <div>@Html.DisplayFor(model => model.HoVaTen)</div>
+</div>
+
+<div>
+    <strong>Ngày Sinh:</strong>
+    <div>@Html.DisplayFor(model => model.NgaySinh)</div>
+</div>
+
+<div>
+    <strong>Số Điện Thoại:</strong>
+    <div>@Html.DisplayFor(model => model.SoDienThoai)</div>
+</div>
+
+<div>
+    <strong>Email:</strong>
+    <div>@Html.DisplayFor(model => model.Email)</div>
+</div>
+<div>
+    <a asp-action="ChangeProfiles" asp-route-username="@User.Identity.Name" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Chỉnh sửa thông tin</a>
+</div>
+
+<div>
+    <strong>Số Khóa Học Đã Đăng Kí:</strong>
+    <div>@Html.DisplayFor(model => model.SoKhoaHocDaDangKi)</div>
+</div>
+
+<div>
+    <strong>Số Khóa Học Đang Học:</strong>
+    <div>@Html.DisplayFor(model => model.SoKhoaHocDangHoc)</div>
+</div>
+
+<div>
+    <strong>Số Khóa Học Đã Hoàn Thành:</strong>
+    <div>@Html.DisplayFor(model => model.SoKhoaHocDaHoanThanh)</div>
+</div>

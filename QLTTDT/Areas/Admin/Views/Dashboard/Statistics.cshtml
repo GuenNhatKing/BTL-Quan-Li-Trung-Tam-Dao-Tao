@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<Statistics>;
 
-<h1>Danh sách các khóa học</h1>
+<h1>Thống kê khóa học</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th>Mã Khóa Học</th>
             <th>Tên Khóa Học</th>
+            <th>Thời Gian</th>
             <th>Số học viên đăng kí</th>
+            <th>Doanh Thu</th>
         </tr>
     </thead>
     <tbody>
@@ -16,7 +18,9 @@
             <tr>
                 <td>@Html.DisplayFor(model => item.MaKhoaHoc)</td>
                 <td>@Html.DisplayFor(model => item.TenKhoaHoc)</td>
+                <td>@Html.DisplayFor(model => item.ThoiGian)</td>
                 <td>@Html.DisplayFor(model => item.SoHocVienDangKi)</td>
+                <td>@Html.DisplayFor(model => item.DoanhThu)</td>
             </tr>
         }
     </tbody>

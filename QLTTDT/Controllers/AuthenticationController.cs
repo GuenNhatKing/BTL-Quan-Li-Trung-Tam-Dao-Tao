@@ -37,7 +37,7 @@ namespace QLTTDT.Controllers
                     await _context.Entry(account).Reference(i => i.MaVaiTroNavigation).LoadAsync();
                     var role = account.MaVaiTroNavigation.TenVaiTro;
                     await HttpContext.SignInAsync("AuthenticationSchema",
-                    AuCookie.CreatePrincipal(account.MaTaiKhoan, account.TenDangNhap, role),
+                    AuCookie.CreatePrincipal(account.MaNguoiDung, account.TenDangNhap, role),
                     loginForm.RememberMe? AuCookie.CreateProperties(): null);
                     if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
                         return Redirect(ReturnUrl);

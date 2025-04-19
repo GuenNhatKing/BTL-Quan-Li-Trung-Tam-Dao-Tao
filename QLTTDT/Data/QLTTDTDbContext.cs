@@ -52,6 +52,7 @@ public partial class QLTTDTDbContext : DbContext
             entity.HasOne(d => d.MaKhoaHocNavigation).WithMany(p => p.DangKiKhoaHocs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DangKiKhoaHoc_KhoaHoc");
+            entity.HasQueryFilter(i => i.DaHuy == null || i.DaHuy == false);
         });
 
         modelBuilder.Entity<KhoaHoc>(entity =>

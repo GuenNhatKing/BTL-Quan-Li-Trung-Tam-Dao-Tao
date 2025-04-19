@@ -59,6 +59,11 @@ namespace QLTTDT.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<string>("UrlAnhChuDe")
+                        .HasMaxLength(1024)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(1024)");
+
                     b.HasKey("MaChuDe")
                         .HasName("PK__ChuDe__358545113217E9F1");
 
@@ -77,6 +82,9 @@ namespace QLTTDT.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("HocPhi")
+                        .HasColumnType("int");
 
                     b.Property<int>("MaHocVien")
                         .HasColumnType("int");

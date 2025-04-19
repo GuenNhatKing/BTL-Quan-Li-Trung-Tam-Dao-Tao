@@ -20,10 +20,6 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="MaTaiKhoan" />
-            <input type="hidden" asp-for="MaNguoiDung" />
-            <input type="hidden" asp-for="MaVaiTro" />
-            <input type="hidden" asp-for="Salt" />
-            <input type="hidden" asp-for="MatKhau" />
             <div class="form-group">
                 <label name="MaNguoiDung" class="control-label"></label>
                 <input name="MaNguoiDung" class="form-control" value="@ViewBag.MaNguoiDung" readonly />

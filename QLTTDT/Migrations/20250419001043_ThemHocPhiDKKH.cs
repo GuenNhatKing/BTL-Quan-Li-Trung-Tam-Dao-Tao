@@ -5,24 +5,23 @@
 namespace QLTTDT.Migrations
 {
     /// <inheritdoc />
-    public partial class addTienDoDKKH : Migration
+    public partial class ThemHocPhiDKKH : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "TienDo",
+                name: "HocPhi",
                 table: "DangKiKhoaHoc",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "TienDo",
+                name: "HocPhi",
                 table: "DangKiKhoaHoc");
         }
     }

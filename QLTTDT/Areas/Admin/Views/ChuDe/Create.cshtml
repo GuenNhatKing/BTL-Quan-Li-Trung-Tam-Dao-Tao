@@ -17,8 +17,15 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label name="AnhChuDe" class="control-label"></label>
+                <input name="AnhChuDe" type="file" onchange="readImage(this);" class="form-control" data-val="false" />
+            </div>
+            <div class="graphic-cover">
+                <img id="uploadedImage" src="#" style="display: none" />
+            </div>
             <div class="form-group">
                 <label asp-for="TenChuDe" class="control-label"></label>
                 <input asp-for="TenChuDe" class="form-control" />

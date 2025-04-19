@@ -17,6 +17,9 @@ public partial class ChuDe
 
     [StringLength(2048)]
     public string MoTa { get; set; } = null!;
+    [StringLength(1024)]
+    [Unicode(false)]
+    public string? UrlAnhChuDe { get; set; }
 
     [InverseProperty("MaChuDeNavigation")]
     public virtual ICollection<KhoaHoc> KhoaHocs { get; set; } = new List<KhoaHoc>();

@@ -59,7 +59,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaNguoiDung,UrlAnhDaiDien,HoVaTen,NgaySinh,SoDienThoai,Email")] NguoiDung nguoiDung, IFormFile? AnhDaiDien = null)
+        public async Task<IActionResult> Create([Bind("MaNguoiDung,HoVaTen,NgaySinh,SoDienThoai,Email")] NguoiDung nguoiDung, IFormFile? AnhDaiDien = null)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +69,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                 var validation = new ValidCheck(_context);
                 if(!await validation.UserValidation(nguoiDung))
                 {
-                    Console.WriteLine("Kiem tra nguoi dung failed");
                     ModelState.AddModelError(validation.ErrorKey, validation.Error);
                     return View(nguoiDung);
                 }
@@ -101,7 +100,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaNguoiDung,UrlAnhDaiDien,HoVaTen,NgaySinh,SoDienThoai,Email")] NguoiDung nguoiDung, IFormFile? AnhDaiDien = null)
+        public async Task<IActionResult> Edit(int id, [Bind("MaNguoiDung,HoVaTen,NgaySinh,SoDienThoai,Email")] NguoiDung nguoiDung, IFormFile? AnhDaiDien = null)
         {
             if (id != nguoiDung.MaNguoiDung)
             {
@@ -118,7 +117,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                         imageUpload.DeleteImage(nguoiDung.UrlAnhDaiDien);
                         nguoiDung.UrlAnhDaiDien = imageUpload.FileName;
                     }
-                    _context.Update(nguoiDung);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

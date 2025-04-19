@@ -1,0 +1,51 @@
+﻿@model TopicDescription;
+
+<div>
+	@Html.DisplayFor(Model => Model.TenChuDe)
+</div>
+<div class="graphic-cover">
+	<img src="~/images/@Html.DisplayFor(Model => Model.UrlAnhChuDe)" />
+</div>
+<div>
+	@Html.DisplayFor(Model => Model.MoTa)
+</div>
+<br />
+<div>
+	@foreach(var item in Model.DanhSachKhoaHoc)
+	{
+		<a asp-controller="Course" asp-action="Index" 
+		asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+		asp-route-topicId="@Model.MaChuDe"
+		asp-route-courseSlug="@StrToSlug.Convert(item.TenKhoaHoc)"
+		asp-route-courseId="@item.MaKhoaHoc">
+			<div>
+				<strong>
+					Tên khoá học: 
+				</strong>
+				<div>
+					@Html.DisplayFor(modelItem => item.TenKhoaHoc)
+				</div>
+			</div>
+			<div class="graphic-cover">
+				<img src="~/images/@Html.DisplayFor(modelItem => item.UrlAnhKhoaHoc)" />
+			</div>
+			<div>
+				<strong>
+					Mô tả: 
+				</strong>
+				<div>
+					@Html.DisplayFor(modelItem => item.MoTa)
+				</div>
+			</div>
+			<div>
+				<strong>
+					Đã đăng kí: 
+				</strong>
+				<div>
+					@Html.DisplayFor(modelItem => item.DaDangKi)
+				</div>
+			</div>
+		</a>
+		<br />
+	}
+</div>

@@ -28,6 +28,7 @@ namespace QLTTDT
                 options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
                 options.AddPolicy("HocVien", policy => policy.RequireClaim(ClaimTypes.Role, "HocVien"));
             });
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
@@ -44,9 +45,42 @@ namespace QLTTDT
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapStaticAssets();
+
             app.MapControllerRoute(
+				name: "Dashboard-short",
+				pattern: "Dashboard/{action}/{id?}",
+                defaults: new { area="admin", controller = "Dashboard", action="Index" }
+                )	
+                .WithStaticAssets();
+
+            app.MapAreaControllerRoute(
+                name: "Dashboard",
+                areaName: "Admin",
+                pattern: "Dashboard/{controller}/{action}/{id?}",
+                defaults: new { controller = "Dashboard", action = "Index" }
+                )
+                .WithStaticAssets();
+
+            app.MapControllerRoute(
+				name: "Profiles",
+				pattern: "Profiles/{username}-{id}",
+                defaults: new { controller = "Profiles", action="Index" }
+                )	
+                .WithStaticAssets();
+            app.MapControllerRoute(
+				name: "Course",
+				pattern: "Course/{topicSlug}-{topicId}/{courseSlug}-{courseId}",
+                defaults: new { controller = "Course", action="Index" }
+                )	
+                .WithStaticAssets();
+			app.MapControllerRoute(
+				name: "Topic",
+				pattern: "Topic/{topicSlug}-{topicId}",
+                defaults: new { controller = "AllTopic", action="Details" }
+                )	
+                .WithStaticAssets();
+			app.MapControllerRoute(
                 name: "areas",
                 pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}")
                 .WithStaticAssets();

@@ -12,8 +12,8 @@ using QLTTDT.Data;
 namespace QLTTDT.Migrations
 {
     [DbContext(typeof(QLTTDTDbContext))]
-    [Migration("20250417035200_add-TienDo-DKKH")]
-    partial class addTienDoDKKH
+    [Migration("20250418074434_Initialization")]
+    partial class Initialization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,6 +61,11 @@ namespace QLTTDT.Migrations
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("UrlAnhChuDe")
+                        .HasMaxLength(1024)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(1024)");
 
                     b.HasKey("MaChuDe")
                         .HasName("PK__ChuDe__358545113217E9F1");

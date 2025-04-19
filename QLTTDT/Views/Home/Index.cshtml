@@ -1,14 +1,3 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@if(User.Identity.IsAuthenticated)
-{
-    <form asp-controller="Authentication" asp-action="Logout" method="post">
-        <input type="submit" value="Log Out" class="" />
-    </form>
-}
-else
-{
-    <a asp-controller="Authentication" asp-action="Login">Login</a>
-    <a asp-controller="Authentication" asp-action="Register">Register</a>
-}

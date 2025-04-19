@@ -1,9 +1,5 @@
 ﻿@model QLTTDT.Models.DangKiKhoaHoc
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
 
 <html>
@@ -36,16 +32,26 @@
             @Html.DisplayFor(model => model.DaHuy)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaHocVienNavigation)
+            @Html.DisplayNameFor(model => model.MaHocVien)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaHocVienNavigation.MaNguoiDung)
+            <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@Model.MaHocVienNavigation.MaNguoiDung">
+                @Html.DisplayFor(model => model.MaHocVienNavigation.Email)
+            </a>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaKhoaHocNavigation)
+            @Html.DisplayNameFor(model => model.MaKhoaHoc)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaKhoaHocNavigation.MaKhoaHoc)
+            <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@Model.MaKhoaHocNavigation.MaKhoaHoc">
+                @Html.DisplayFor(model => model.MaKhoaHocNavigation.TenKhoaHoc)
+            </a>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HocPhi)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HocPhi)
         </dd>
     </dl>
 </div>

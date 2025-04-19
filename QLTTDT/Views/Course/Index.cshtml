@@ -1,0 +1,98 @@
+﻿@model CourseDescription;
+<h1>Thông tin khóa học</h1>
+
+<div>
+    <strong>Tên Khóa Học:</strong>
+    <div>@Html.DisplayFor(model => model.TenKhoaHoc)</div>
+</div>
+<div class="graphic-cover">
+    <img src="~/images/@Html.DisplayFor(model => model.UrlAnh)"/>
+</div>
+
+<div>
+    <strong>Mô Tả:</strong>
+    <div>@Html.DisplayFor(model => model.MoTa)</div>
+</div>
+
+<div>
+    <strong>Tên Chủ Đề:</strong>
+    <div>@Html.DisplayFor(model => model.TenChuDe)</div>
+</div>
+
+<div>
+    <strong>Học Phí:</strong>
+    <div>@Html.DisplayFor(model => model.HocPhi)</div>
+</div>
+
+<div>
+    <strong>Tên Cấp Độ:</strong>
+    <div>@Html.DisplayFor(model => model.TenCapDo)</div>
+</div>
+
+<div>
+    <strong>Tên Giảng Viên:</strong>
+    <div>@Html.DisplayFor(model => model.TenGiangVien)</div>
+</div>
+
+<div>
+    <strong>Thời Gian Khai Giảng:</strong>
+    <div>@Html.DisplayFor(model => model.ThoiGianKhaiGiang)</div>
+</div>
+
+<div>
+    <strong>Số Lượng Học Viên Đăng Kí:</strong>
+    <div>@Html.DisplayFor(model => model.SoLuongHocVienDangKi)</div>
+</div>
+
+<div>
+    <strong>Số Lượng Học Viên Tối Đa:</strong>
+    <div>@Html.DisplayFor(model => model.SoLuongHocVienToiDa)</div>
+</div>
+
+@if(Model.DaDangKi)
+{
+    <div>
+        <strong>Đã Đăng Kí</strong>
+    </div>
+    if (DateTime.UtcNow < Model.ThoiGianKhaiGiang)
+    {
+        <form asp-controller="Course" asp-action="CancellCourse"
+              asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+              asp-route-topicId="@Model.MaChuDe"
+              asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
+              asp-route-courseId="@Model.MaKhoaHoc" method="post">
+            <input type="submit" value="Huỷ đăng kí" />
+        </form>
+    }
+    else
+    {
+        <div>
+            <strong>Tiến Độ:</strong>
+            <div>@Html.DisplayFor(model => model.TienDo)%</div>
+        </div>
+        <form asp-controller="Course" asp-action="IncreaseProgress"
+              asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+              asp-route-topicId="@Model.MaChuDe"
+              asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
+              asp-route-courseId="@Model.MaKhoaHoc" method="post">
+            <input type="submit" value="Tăng 20% tiến độ" />
+        </form>
+    }
+}
+else if (Model.SoLuongHocVienDangKi < Model.SoLuongHocVienToiDa)
+{
+    <form asp-controller="Course" asp-action="Index" 
+    asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+    asp-route-topicId="@Model.MaChuDe"
+    asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
+    asp-route-courseId="@Model.MaKhoaHoc" method="post">
+        <input type="hidden" name="noUse" />
+        <input type="submit" value="Đăng kí khoá học"/>
+    </form>
+}
+else
+{
+    <div>
+        Số lượng học viên được đăng kí đã đạt giới hạn.
+    </div>
+}

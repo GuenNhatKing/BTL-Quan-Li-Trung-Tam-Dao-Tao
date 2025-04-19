@@ -1,9 +1,5 @@
 ﻿@model QLTTDT.Models.DangKiKhoaHoc
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
 
 <html>
@@ -19,6 +15,7 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TienDo" value="0" class="form-control" />
             <div class="form-group">
                 <label asp-for="MaHocVien" class="control-label"></label>
                 <select asp-for="MaHocVien" class ="form-control" asp-items="ViewBag.MaHocVien"></select>
@@ -26,11 +23,6 @@
             <div class="form-group">
                 <label asp-for="MaKhoaHoc" class="control-label"></label>
                 <select asp-for="MaKhoaHoc" class ="form-control" asp-items="ViewBag.MaKhoaHoc"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="TienDo" class="control-label"></label>
-                <input asp-for="TienDo" class="form-control" />
-                <span asp-validation-for="TienDo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

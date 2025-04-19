@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QLTTDT.Migrations
 {
     /// <inheritdoc />
-    public partial class KhoiTao : Migration
+    public partial class Initialization : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,7 @@ namespace QLTTDT.Migrations
                 {
                     MaCapDo = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenCapDo = table.Column<string>(type: "varchar(512)", unicode: false, maxLength: 512, nullable: false)
+                    TenCapDo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,8 +30,9 @@ namespace QLTTDT.Migrations
                 {
                     MaChuDe = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenChuDe = table.Column<string>(type: "varchar(512)", unicode: false, maxLength: 512, nullable: false),
-                    MoTa = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false)
+                    TenChuDe = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    MoTa = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    UrlAnhChuDe = table.Column<string>(type: "varchar(1024)", unicode: false, maxLength: 1024, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -140,6 +141,7 @@ namespace QLTTDT.Migrations
                     MaHocVien = table.Column<int>(type: "int", nullable: false),
                     MaKhoaHoc = table.Column<int>(type: "int", nullable: false),
                     ThoiGianDangKi = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
+                    TienDo = table.Column<int>(type: "int", nullable: false),
                     DaHuy = table.Column<bool>(type: "bit", nullable: true, defaultValue: false)
                 },
                 constraints: table =>

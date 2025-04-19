@@ -72,5 +72,32 @@ namespace QLTTDT.Services
         {
             return await _context.NguoiDungs.AnyAsync(i => i.Email == email);
         }
+
+        public async Task<bool> IsRegisterCourseVaild(int? maHocVien, int? maKhoaHoc)
+        {
+            ErrorKey = "";
+            if (maHocVien == null || maKhoaHoc == null) 
+            {
+                Error = "Mã người dùng hoặc mã khoá học không hợp lệ";
+                return false; 
+            }
+            if (await _context.DangKiKhoaHocs
+            .AnyAsync(i => i.MaHocVien == maHocVien && i.MaKhoaHoc == maKhoaHoc)) 
+            { 
+                Error = "Học viên đã đăng kí khoá học này rồi";
+                return false; 
+            }
+            if ((await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == maKhoaHoc))?.SoLuongHocVienToiDa
+            <= (await _context.DangKiKhoaHocs.CountAsync(i => i.MaKhoaHoc == maKhoaHoc)))
+            {
+                Error = "Số lượng học viên đăng kí cho khoá học này đã đạt giới hạn";
+                return false;
+            }
+            return true;
+        }
+        public static bool IsProgressVaild(int progress)
+        {
+            return progress >= 0 && progress <= 100;
+        }
     }
 }

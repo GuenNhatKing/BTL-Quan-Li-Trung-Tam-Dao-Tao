@@ -75,6 +75,19 @@ namespace QLTTDT.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MaTaiKhoan,MaNguoiDung,MaVaiTro,TenDangNhap,MatKhau")] TaiKhoan taiKhoan)
         {
+            var nguoiDungList = _context.NguoiDungs
+            .Where(i => !_context.TaiKhoans.Any(j => j.MaNguoiDung == i.MaNguoiDung))
+            .Select(i => new {
+                MaNguoiDung = i.MaNguoiDung,
+                DisplayText = i.MaNguoiDung + " - " + i.Email
+            }).ToList();
+            var vaiTroList = _context.VaiTros
+            .Select(i => new {
+                MaVaiTro = i.MaVaiTro,
+                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
+            }).ToList();
+            ViewData["MaNguoiDung"] = new SelectList(nguoiDungList, "MaNguoiDung", "DisplayText");
+            ViewData["MaVaiTro"] = new SelectList(vaiTroList, "MaVaiTro", "DisplayText");
             if (taiKhoan.Salt == null)
             {
                 taiKhoan.Salt = Register.CreateSalt(_context);
@@ -93,37 +106,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            if (!ModelState.IsValid)
-            {
-                foreach (var state in ModelState)
-                {
-                    var key = state.Key; // Tên của field
-                    var errors = state.Value.Errors;
-
-                    if (errors.Count > 0)
-                    {
-                        Console.WriteLine($"Field '{key}' has errors:");
-
-                        foreach (var error in errors)
-                        {
-                            Console.WriteLine($" - {error.ErrorMessage}");
-                        }
-                    }
-                }
-            }
-            var nguoiDungList = _context.NguoiDungs
-            .Where(i => !_context.TaiKhoans.Any(j => j.MaNguoiDung == i.MaNguoiDung))
-            .Select(i => new {
-                MaNguoiDung = i.MaNguoiDung,
-                DisplayText = i.MaNguoiDung + " - " + i.Email
-            }).ToList();
-            var vaiTroList = _context.VaiTros
-            .Select(i => new {
-                MaVaiTro = i.MaVaiTro,
-                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
-            }).ToList();
-            ViewData["MaNguoiDung"] = new SelectList(nguoiDungList, "MaNguoiDung", "DisplayText", nguoiDungList.Find(i => i.MaNguoiDung == taiKhoan.MaNguoiDung).DisplayText);
-            ViewData["MaVaiTro"] = new SelectList(vaiTroList, "MaVaiTro", "DisplayText", vaiTroList.Find(i => i.MaVaiTro == taiKhoan.MaVaiTro).DisplayText);
             return View(taiKhoan);
         }
 
@@ -160,7 +142,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaTaiKhoan,MaNguoiDung,MaVaiTro,TenDangNhap,Salt,MatKhau")] TaiKhoan taiKhoan, string MatKhauMoi = null)
+        public async Task<IActionResult> Edit(int id, [Bind("MaTaiKhoan,TenDangNhap")] TaiKhoan taiKhoan, string MatKhauMoi = null)
         {
             if (id != taiKhoan.MaTaiKhoan)
             {
@@ -173,7 +155,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                 {
                     if(!string.IsNullOrEmpty(MatKhauMoi))
                     {
-                        Console.WriteLine($"Da cap nhat mat khau cho {taiKhoan.TenDangNhap}");
                         taiKhoan.MatKhau = Login.GetHashedPassword(taiKhoan.Salt, MatKhauMoi);
                     }
                     _context.Update(taiKhoan);

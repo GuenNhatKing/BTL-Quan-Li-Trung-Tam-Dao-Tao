@@ -1,9 +1,5 @@
 ﻿@model QLTTDT.Models.DangKiKhoaHoc
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
 
 <html>
@@ -47,6 +43,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MaKhoaHocNavigation.MaKhoaHoc)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HocPhi)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HocPhi)
         </dd>
     </dl>
     
