@@ -9,22 +9,15 @@
 
 <div class="admin-create-container">
     <form asp-action="Edit" enctype="multipart/form-data" class="admin-create-form">
-
         <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
         <input type="hidden" asp-for="MaNguoiDung" />
-
-        @* Hidden field for existing image URL to potentially handle cases where image is not updated but needed by controller *@
         <input type="hidden" asp-for="UrlAnhDaiDien" />
 
-        @* Image Upload Section - Combined existing display and new file upload/preview *@
         <div class="admin-create-image-wrapper">
-            @* Corrected Label for file input *@
             <label for="AnhDaiDien" class="admin-create-label">Ảnh đại diện</label>
             <div class="admin-create-image-container">
-                @* Assuming readImage function is available globally or via another script file *@
                 <input name="AnhDaiDien" type="file" onchange="readImage(this);" class="form-control" />
                 <div class="admin-create-preview-cover">
-                    @* Display existing image if available, or hide if not. Will be replaced by JS preview on new file select. *@
                     <img id="uploadedImage"
                          src="@Url.Content("~/images/" + Model.UrlAnhDaiDien)"
                          class="admin-create-preview"
@@ -32,7 +25,6 @@
                          alt="Ảnh đại diện" />
                 </div>
             </div>
-            @* Validation for the image URL property *@
             <span asp-validation-for="UrlAnhDaiDien" class="text-danger admin-create-validation"></span>
         </div>
 
@@ -59,8 +51,6 @@
             <input asp-for="Email" class="admin-create-input" />
             <span asp-validation-for="Email" class="text-danger admin-create-validation"></span>
         </div>
-
-        @* Assuming other properties like PasswordHash, SecurityStamp, etc. are handled separately (e.g., Identity) or not needed in this simple edit form *@
 
         <div class="form-group admin-create-group">
             <input type="submit" value="Lưu thay đổi" class="admin-create-submit" />

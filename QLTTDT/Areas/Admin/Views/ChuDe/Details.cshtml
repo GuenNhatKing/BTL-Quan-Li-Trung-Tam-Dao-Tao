@@ -10,12 +10,10 @@
 <div class="card bg-white shadow p-4 rounded">
     <dl class="row mb-0">
 
-        @* Display Image - Using Model.UrlAnhChuDe property *@
         <div class="row mb-3 border-bottom pb-2">
             <dt class="col-sm-3 fw-bold">Ảnh chủ đề</dt>
             <dd class="col-sm-9">
                 <div class="graphic-cover mb-2">
-                    @* Correct way to display image using Url.Content *@
                     <img src="@Url.Content("~/images/" + Model.UrlAnhChuDe)" alt="Ảnh chủ đề" class="img-thumbnail" style="max-width: 300px;" />
                 </div>
                 @Html.DisplayFor(model => model.UrlAnhChuDe)
@@ -23,13 +21,12 @@
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.TenChuDe)</dt>
+            <dt class="col-sm-3 fw-bold">Chủ đề</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.TenChuDe)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MoTa)</dt>
-            @* Use white-space-pre-line if you want to preserve line breaks from the description *@
+            <dt class="col-sm-3 fw-bold">Mô tả</dt>
             <dd class="col-sm-9 white-space-pre-line">@Html.DisplayFor(model => model.MoTa)</dd>
         </div>
 

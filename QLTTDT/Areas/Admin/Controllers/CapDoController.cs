@@ -90,9 +90,9 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaCapDo,TenCapDo")] CapDo capDo)
+        public async Task<IActionResult> Edit(int? id, [Bind("MaCapDo,TenCapDo")] CapDo capDo)
         {
-            if (id != capDo.MaCapDo)
+            if (id == null)
             {
                 return NotFound();
             }

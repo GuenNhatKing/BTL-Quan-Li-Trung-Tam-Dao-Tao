@@ -21,32 +21,32 @@
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.TenKhoaHoc)</dt>
+            <dt class="col-sm-3 fw-bold">Tên khoá học</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.TenKhoaHoc)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MoTa)</dt>
+            <dt class="col-sm-3 fw-bold">Mô tả</dt>
             <dd class="col-sm-9 white-space-pre-line">@Html.DisplayFor(model => model.MoTa)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.ThoiGianKhaiGiang)</dt>
+            <dt class="col-sm-3 fw-bold">Thời gian khai giảng</dt>
             <dd class="col-sm-9">@Model.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.HocPhi)</dt>
+            <dt class="col-sm-3 fw-bold">Học phí</dt>
             <dd class="col-sm-9">@String.Format("{0:N0} ₫", Model.HocPhi)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.SoLuongHocVienToiDa)</dt>
+            <dt class="col-sm-3 fw-bold">Số lượng học viên tối đa</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.SoLuongHocVienToiDa)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaCapDo)</dt>
+            <dt class="col-sm-3 fw-bold">Cấp độ</dt>
             <dd class="col-sm-9">
                 <a asp-controller="CapDo" asp-action="Details" asp-route-id="@Model.MaCapDoNavigation.MaCapDo"
                    class="dashboard-link--highlight">
@@ -56,7 +56,7 @@
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaChuDe)</dt>
+            <dt class="col-sm-3 fw-bold">Chủ đề</dt>
             <dd class="col-sm-9">
                 <a asp-controller="ChuDe" asp-action="Details" asp-route-id="@Model.MaChuDeNavigation.MaChuDe"
                    class="dashboard-link--highlight">
@@ -66,7 +66,7 @@
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaGiangVien)</dt>
+            <dt class="col-sm-3 fw-bold">Giảng viên</dt>
             <dd class="col-sm-9">
                 <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@Model.MaGiangVienNavigation.MaNguoiDung"
                    class="dashboard-link--highlight">
