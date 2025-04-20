@@ -1,61 +1,56 @@
 ﻿@model QLTTDT.Models.TaiKhoan
 
-@{
-
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-
-<div>
-    <h4>TaiKhoan</h4>
+<div class="mb-3">
+    <h4 class="fw-bold">Chi tiết tài khoản</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenDangNhap)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenDangNhap)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Salt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Salt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MatKhau)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MatKhau)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaNguoiDung)
-        </dt>
-        <dd class = "col-sm-10">
-            <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@Model.MaNguoiDungNavigation.MaNguoiDung">
-                @Html.DisplayFor(model => model.MaNguoiDungNavigation.Email)
-            </a>
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaVaiTro)
-        </dt>
-        <dd class = "col-sm-10">
-            <a asp-controller="VaiTro" asp-action="Details" asp-route-id="@Model.MaVaiTroNavigation.MaVaiTro">
-                @Html.DisplayFor(model => model.MaVaiTroNavigation.TenVaiTro)
-            </a>
-        </dd>
+</div>
+
+<div class="card bg-white shadow p-4 rounded">
+    <dl class="row mb-0">
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.TenDangNhap)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.TenDangNhap)</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Salt)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Salt)</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MatKhau)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.MatKhau)</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaNguoiDung)</dt>
+            <dd class="col-sm-9">
+                <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@Model.MaNguoiDungNavigation.MaNguoiDung"
+                   class="dashboard-link--highlight">
+                    @Html.DisplayFor(model => model.MaNguoiDungNavigation.Email)
+                </a>
+            </dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaVaiTro)</dt>
+            <dd class="col-sm-9">
+                <a asp-controller="VaiTro" asp-action="Details" asp-route-id="@Model.MaVaiTroNavigation.MaVaiTro"
+                   class="dashboard-link--highlight">
+                    @Html.DisplayFor(model => model.MaVaiTroNavigation.TenVaiTro)
+                </a>
+            </dd>
+        </div>
+
     </dl>
+
+    <div class="d-flex justify-content-end column-gap-2 mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.MaTaiKhoan" class="admin-create-submit">
+            Chỉnh sửa
+        </a>
+        <a asp-action="Index" class="admin-back-btn">
+            Quay lại danh sách
+        </a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaTaiKhoan">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-</body>
-</html>

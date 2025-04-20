@@ -1,67 +1,35 @@
 ﻿@model IEnumerable<QLTTDT.Models.NguoiDung>
-
-@{
-
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
+<h1 class="dashboard-title">Danh sách người dùng</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="dashboard-button">Tạo mới</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UrlAnhDaiDien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HoVaTen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgaySinh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SoDienThoai)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UrlAnhDaiDien)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HoVaTen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgaySinh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SoDienThoai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MaNguoiDung">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MaNguoiDung">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MaNguoiDung">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-</body>
-</html>
+
+<div class="dashboard-table-container">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th class="dashboard-table-header">Họ và tên</th>
+                <th class="dashboard-table-header">Email</th>
+                <th class="dashboard-table-header text-center width-12-5">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="dashboard-table-row">
+                    <td class="dashboard-table-cell">
+                        @Html.DisplayFor(modelItem => item.HoVaTen)
+                    </td>
+                    <td class="dashboard-table-cell">
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td class="dashboard-table-cell text-center width-12-5">
+                        <a asp-action="Edit" asp-route-id="@item.MaNguoiDung" class="dashboard-link dashboard-link--edit">Sửa</a>
+                        <a asp-action="Details" asp-route-id="@item.MaNguoiDung" class="dashboard-link dashboard-link--details">Chi tiết</a>
+                        <a asp-action="Delete" asp-route-id="@item.MaNguoiDung" class="dashboard-link dashboard-link--delete">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

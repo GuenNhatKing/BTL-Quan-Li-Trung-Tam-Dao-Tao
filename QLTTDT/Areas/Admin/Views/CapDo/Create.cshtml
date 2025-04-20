@@ -1,42 +1,30 @@
 ﻿@model QLTTDT.Models.CapDo
 
 @{
-
+    ViewData["Title"] = "Thêm mới cấp độ";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
-</head>
-<body>
-
-<h4>CapDo</h4>
+<h4 class="admin-create-title">Thêm mới cấp độ</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TenCapDo" class="control-label"></label>
-                <input asp-for="TenCapDo" class="form-control" />
-                <span asp-validation-for="TenCapDo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="admin-create-container">
+    <form asp-action="Create" class="admin-create-form">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="TenCapDo" class="admin-create-label">Tên cấp độ</label>
+            <input asp-for="TenCapDo" class="admin-create-input" />
+            <span asp-validation-for="TenCapDo" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <input type="submit" value="Tạo mới" class="admin-create-submit" />
+            <a asp-action="Index" class="admin-create-back">← Quay lại danh sách</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
-</body>
-</html>

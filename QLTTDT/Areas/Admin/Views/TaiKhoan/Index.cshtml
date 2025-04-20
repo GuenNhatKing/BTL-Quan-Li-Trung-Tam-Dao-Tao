@@ -1,71 +1,45 @@
 ﻿@model IEnumerable<QLTTDT.Models.TaiKhoan>
-
-@{
-
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
+<h1 class="dashboard-title">Danh sách tài khoản</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="dashboard-button">Tạo mới</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TenDangNhap)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Salt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MatKhau)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaNguoiDung)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaVaiTro)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenDangNhap)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Salt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MatKhau)
-            </td>
-            <td>
-                <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@item.MaNguoiDungNavigation.MaNguoiDung">
-                    @Html.DisplayFor(modelItem => item.MaNguoiDungNavigation.Email)
-                </a>
-            </td>
-            <td>
-                <a asp-controller="VaiTro" asp-action="Details" asp-route-id="@item.MaVaiTroNavigation.MaVaiTro">
-                    @Html.DisplayFor(modelItem => item.MaVaiTroNavigation.TenVaiTro)
-                </a>
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MaTaiKhoan">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MaTaiKhoan">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MaTaiKhoan">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-</body>
-</html>
+
+<div class="dashboard-table-container">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th class="dashboard-table-header">Tên đăng nhập</th>
+                <th class="dashboard-table-header">Người dùng</th>
+                <th class="dashboard-table-header">Vai trò</th>
+                <th class="dashboard-table-header text-center width-12-5">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="dashboard-table-row">
+                    <td class="dashboard-table-cell">
+                        @Html.DisplayFor(modelItem => item.TenDangNhap)
+                    </td>
+                    <td class="dashboard-table-cell">
+                        <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@item.MaNguoiDungNavigation.MaNguoiDung"
+                           class="dashboard-link--highlight">
+                            @Html.DisplayFor(modelItem => item.MaNguoiDungNavigation.Email)
+                        </a>
+                    </td>
+                    <td class="dashboard-table-cell">
+                        <a asp-controller="VaiTro" asp-action="Details" asp-route-id="@item.MaVaiTroNavigation.MaVaiTro"
+                           class="dashboard-link--highlight">
+                            @Html.DisplayFor(modelItem => item.MaVaiTroNavigation.TenVaiTro)
+                        </a>
+                    </td>
+                    <td class="dashboard-table-cell text-center width-12-5">
+                        <a asp-action="Edit" asp-route-id="@item.MaTaiKhoan" class="dashboard-link dashboard-link--edit">Sửa</a>
+                        <a asp-action="Details" asp-route-id="@item.MaTaiKhoan" class="dashboard-link dashboard-link--details">Chi tiết</a>
+                        <a asp-action="Delete" asp-route-id="@item.MaTaiKhoan" class="dashboard-link dashboard-link--delete">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

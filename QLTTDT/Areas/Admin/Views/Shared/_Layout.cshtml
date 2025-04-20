@@ -1,26 +1,41 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/x-icon" href="~/Icons/couratest32.ico" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - QLTTDT</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Couratest | Khoá học trực tuyến miễn phí</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/QLTTDT.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin-site.css" asp-append-version="true" />
 </head>
 <body>
-    <a asp-area="" asp-controller="Home" asp-action="Index">Quay về trang chủ</a>
-    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Statistics">Thống kê</a>
-    <a asp-area="Admin" asp-controller="CapDo" asp-action="Index">Cấp độ</a>
-    <a asp-area="Admin" asp-controller="ChuDe" asp-action="Index">Chủ đề</a>
-    <a asp-area="Admin" asp-controller="DangKiKhoaHoc" asp-action="Index">Đăng kí khoá học</a>
-    <a asp-area="Admin" asp-controller="KhoaHoc" asp-action="Index">Khoá học</a>
-    <a asp-area="Admin" asp-controller="NguoiDung" asp-action="Index">Người dùng</a>
-    <a asp-area="Admin" asp-controller="TaiKhoan" asp-action="Index">Tài khoản</a>
-    <a asp-area="Admin" asp-controller="VaiTro" asp-action="Index">Vai trò</a>
-    @RenderBody()
+    <div class="admin-grid">
+        <aside class="admin-sidebar">
+            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" title="Couratest" class="header__logo-link mb-3 d-block text-center">
+                <div class="header__logo">
+                    <img class="logo-xs" src="~/Icons/couratest128.png" alt="Couratest logo" />
+                    <span class="fw-bold">Couratest Admin</span>
+                </div>
+            </a>
+            <nav class="admin-nav">
+                <a class="tabs__link" asp-area="Admin" asp-controller="Dashboard" asp-action="Statistics">📈 Thống kê</a>
+                <a class="tabs__link" asp-area="Admin" asp-controller="CapDo" asp-action="Index">🎯 Cấp độ</a>
+                <a class="tabs__link" asp-area="Admin" asp-controller="ChuDe" asp-action="Index">📚 Chủ đề</a>
+                <a class="tabs__link" asp-area="Admin" asp-controller="DangKiKhoaHoc" asp-action="Index">📝 Đăng kí</a>
+                <a class="tabs__link" asp-area="Admin" asp-controller="KhoaHoc" asp-action="Index">📘 Khóa học</a>
+                <a class="tabs__link" asp-area="Admin" asp-controller="NguoiDung" asp-action="Index">👤 Người dùng</a>
+                <a class="tabs__link" asp-area="Admin" asp-controller="TaiKhoan" asp-action="Index">🔐 Tài khoản</a>
+                <a class="tabs__link" asp-area="Admin" asp-controller="VaiTro" asp-action="Index">🛡️ Vai trò</a>
+                <a class="tabs__link" asp-area="" asp-controller="Home" asp-action="Index">← Trang chủ</a>
+            </nav>
+        </aside>
+
+        <!-- Main content -->
+        <main class="admin-main p-4">
+            @RenderBody()
+        </main>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

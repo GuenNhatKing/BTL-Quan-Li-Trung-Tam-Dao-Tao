@@ -7,7 +7,7 @@
 		</div>
 		<div class="profiles-name">@Html.DisplayFor(model => model.HoVaTen)</div>
 		<div class="profiles-username">@Html.DisplayFor(model => model.Email)</div>
-		<a class="profiles-edit-button" asp-action="ChangeProfiles" asp-route-username="@User.Identity.Name" asp-route-id="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
+		<a class="profiles-edit-button" asp-action="ChangeProfiles" asp-route-username="@User.Identity?.Name" asp-route-id="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
 			Chỉnh sửa thông tin
 		</a>
 	</div>

@@ -1,92 +1,80 @@
 ﻿@model QLTTDT.Models.KhoaHoc
 
 @{
-
+    ViewData["Title"] = "Chỉnh sửa khoá học";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
-
-<h4>KhoaHoc</h4>
+<h4 class="admin-create-title">Chỉnh sửa khoá học</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MaKhoaHoc" />
-            <div class="form-group">
-                <label asp-for="MaGiangVien" class="control-label"></label>
-                <select asp-for="MaGiangVien" class="form-control" asp-items="ViewBag.MaGiangVien"></select>
-                <span asp-validation-for="MaGiangVien" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaChuDe" class="control-label"></label>
-                <select asp-for="MaChuDe" class="form-control" asp-items="ViewBag.MaChuDe"></select>
-                <span asp-validation-for="MaChuDe" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaCapDo" class="control-label"></label>
-                <select asp-for="MaCapDo" class="form-control" asp-items="ViewBag.MaCapDo"></select>
-                <span asp-validation-for="MaCapDo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UrlAnh" class="control-label"></label>
-                <input asp-for="UrlAnh" class="form-control" readonly />
-            </div>
-            <div class="graphic-cover">
-                <img src="~/images/@Html.DisplayFor(i => i.UrlAnh)" />
-            </div>
-            <div class="form-group">
-                <label name="AnhKhoaHoc" class="control-label"></label>
-                <input name="AnhKhoaHoc" type="file" onchange="readImage(this);" class="form-control" data-val="false" />
-            </div>
-            <div class="graphic-cover">
-                <img id="uploadedImage" src="#" style="display: none" />
-            </div>
-            <div class="form-group">
-                <label asp-for="TenKhoaHoc" class="control-label"></label>
-                <input asp-for="TenKhoaHoc" class="form-control" />
-                <span asp-validation-for="TenKhoaHoc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MoTa" class="control-label"></label>
-                <textarea asp-for="MoTa" style="resize: none;" rows="4" cols="50"></textarea>
-                <span asp-validation-for="MoTa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ThoiGianKhaiGiang" class="control-label"></label>
-                <input asp-for="ThoiGianKhaiGiang" class="form-control" />
-                <span asp-validation-for="ThoiGianKhaiGiang" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HocPhi" class="control-label"></label>
-                <input asp-for="HocPhi" class="form-control" />
-                <span asp-validation-for="HocPhi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SoLuongHocVienToiDa" class="control-label"></label>
-                <input asp-for="SoLuongHocVienToiDa" class="form-control" />
-                <span asp-validation-for="SoLuongHocVienToiDa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="admin-create-container">
+    <form asp-action="Edit" enctype="multipart/form-data" class="admin-create-form">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
+        <input type="hidden" asp-for="MaKhoaHoc" />
+
+        <div class="form-group admin-create-group">
+            <label asp-for="MaGiangVien" class="admin-create-label">Giảng viên</label>
+            <select asp-for="MaGiangVien" class="admin-create-select" asp-items="ViewBag.MaGiangVien"></select>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="MaChuDe" class="admin-create-label">Chủ đề</label>
+            <select asp-for="MaChuDe" class="admin-create-select" asp-items="ViewBag.MaChuDe"></select>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="MaCapDo" class="admin-create-label">Cấp độ</label>
+            <select asp-for="MaCapDo" class="admin-create-select" asp-items="ViewBag.MaCapDo"></select>
+        </div>
+        <div class="admin-create-image-wrapper">
+            <label for="AnhKhoaHoc" class="admin-create-label">Ảnh khoá học</label>
+            <div class="admin-create-image-container">
+                <input name="AnhKhoaHoc" type="file" onchange="readImage(this);" class="form-control" />
+                <div class="admin-create-preview-cover">
+                    <img id="uploadedImage" src="~/images/@Model.UrlAnh" class="admin-create-preview" style="@(string.IsNullOrEmpty(Model.UrlAnh) ? "display: none;" : "display: block;")" />
+                </div>
+            </div>
+            <span asp-validation-for="UrlAnh" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="TenKhoaHoc" class="admin-create-label">Tên khoá học</label>
+            <input asp-for="TenKhoaHoc" class="admin-create-input" />
+            <span asp-validation-for="TenKhoaHoc" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="MoTa" class="admin-create-label">Mô tả</label>
+            <textarea asp-for="MoTa" class="admin-create-textarea" rows="4"></textarea>
+            <span asp-validation-for="MoTa" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="ThoiGianKhaiGiang" class="admin-create-label">Thời gian khai giảng</label>
+            <input asp-for="ThoiGianKhaiGiang" type="date" class="admin-create-input" />
+            <span asp-validation-for="ThoiGianKhaiGiang" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="HocPhi" class="admin-create-label">Học phí</label>
+            <input asp-for="HocPhi" class="admin-create-input" />
+            <span asp-validation-for="HocPhi" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="SoLuongHocVienToiDa" class="admin-create-label">Số lượng học viên tối đa</label>
+            <input asp-for="SoLuongHocVienToiDa" class="admin-create-input" />
+            <span asp-validation-for="SoLuongHocVienToiDa" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <input type="submit" value="Lưu thay đổi" class="admin-create-submit" />
+            <a asp-action="Index" class="admin-create-back">← Quay lại danh sách</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
-</body>
-</html>

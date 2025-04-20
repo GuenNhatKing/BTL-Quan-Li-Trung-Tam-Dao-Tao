@@ -1,64 +1,66 @@
 ﻿@model QLTTDT.Models.NguoiDung
 
 @{
-
+    ViewData["Title"] = "Thêm mới người dùng";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
-</head>
-<body>
-
-<h4>NguoiDung</h4>
+<h4 class="admin-create-title">Thêm mới người dùng</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label name="AnhDaiDien" class="control-label"></label>
-                <input name="AnhDaiDien" type="file" onchange="readImage(this);" class="form-control" data-val="false" />
-            </div>
-            <div class="graphic-cover">
-                <img id="uploadedImage" src="#" style="display: none" />
-            </div>
-            <div class="form-group">
-                <label asp-for="HoVaTen" class="control-label"></label>
-                <input asp-for="HoVaTen" class="form-control" />
-                <span asp-validation-for="HoVaTen" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NgaySinh" class="control-label"></label>
-                <input asp-for="NgaySinh" type="date" class="form-control" />
-                <span asp-validation-for="NgaySinh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SoDienThoai" class="control-label"></label>
-                <input asp-for="SoDienThoai" class="form-control" />
-                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="admin-create-container">
+    <form asp-action="Create" enctype="multipart/form-data" class="admin-create-form">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
+
+        @* Image Upload Section *@
+        <div class="admin-create-image-wrapper">
+            @* Corrected Label for file input *@
+            <label for="AnhDaiDien" class="admin-create-label">Ảnh đại diện</label>
+            <div class="admin-create-image-container">
+                @* Assuming readImage function is available globally or via another script file *@
+                <input name="AnhDaiDien" type="file" onchange="readImage(this);" class="form-control" />
+                <div class="admin-create-preview-cover">
+                    @* Image element for preview *@
+                    <img id="uploadedImage" src="#" class="admin-create-preview" style="display: none;" />
+                </div>
+            </div>
+            @* Assuming NguoiDung model has a property like UrlAnhDaiDien for validation feedback *@
+            <span asp-validation-for="UrlAnhDaiDien" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="HoVaTen" class="admin-create-label">Họ và tên</label>
+            <input asp-for="HoVaTen" class="admin-create-input" />
+            <span asp-validation-for="HoVaTen" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="NgaySinh" class="admin-create-label">Ngày sinh</label>
+            <input asp-for="NgaySinh" type="date" class="admin-create-input" />
+            <span asp-validation-for="NgaySinh" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="SoDienThoai" class="admin-create-label">Số điện thoại</label>
+            <input asp-for="SoDienThoai" class="admin-create-input" />
+            <span asp-validation-for="SoDienThoai" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="Email" class="admin-create-label">Email</label>
+            <input asp-for="Email" class="admin-create-input" />
+            <span asp-validation-for="Email" class="text-danger admin-create-validation"></span>
+        </div>
+
+        @* Assuming other properties like PasswordHash, SecurityStamp, etc. are handled separately (e.g., Identity) or not needed in this simple create form *@
+
+        <div class="form-group admin-create-group">
+            <input type="submit" value="Tạo mới" class="admin-create-submit" />
+            <a asp-action="Index" class="admin-create-back">← Quay lại danh sách</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
-</body>
-</html>

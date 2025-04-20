@@ -1,43 +1,31 @@
 ﻿@model IEnumerable<QLTTDT.Models.CapDo>
 
-@{
+<h1 class="dashboard-title">Danh sách cấp độ</h1>
 
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="dashboard-button">Tạo mới</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TenCapDo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenCapDo)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MaCapDo">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MaCapDo">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MaCapDo">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-</body>
-</html>
+
+<div class="dashboard-table-container">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th class="dashboard-table-header">Cấp độ</th>
+                <th class="dashboard-table-header text-center width-12-5">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="dashboard-table-row">
+                    <td class="dashboard-table-cell">@Html.DisplayFor(modelItem => item.TenCapDo)</td>
+                    <td class="dashboard-table-cell text-center width-12-5">
+                        <a asp-action="Edit" asp-route-id="@item.MaCapDo" class="dashboard-link dashboard-link--edit">Sửa</a>
+                        <a asp-action="Details" asp-route-id="@item.MaCapDo" class="dashboard-link dashboard-link--details">Chi tiết</a>
+                        <a asp-action="Delete" asp-route-id="@item.MaCapDo" class="dashboard-link dashboard-link--delete">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

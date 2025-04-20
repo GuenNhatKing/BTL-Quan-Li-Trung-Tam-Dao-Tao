@@ -1,27 +1,29 @@
 ﻿@model IEnumerable<Statistics>;
 
-<h1>Thống kê khóa học</h1>
+<h1 class="dashboard-title">Thống kê khóa học</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã Khóa Học</th>
-            <th>Tên Khóa Học</th>
-            <th>Thời Gian</th>
-            <th>Số học viên đăng kí</th>
-            <th>Doanh Thu</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="dashboard-table-container">
+    <table class="dashboard-table">
+        <thead>
             <tr>
-                <td>@Html.DisplayFor(model => item.MaKhoaHoc)</td>
-                <td>@Html.DisplayFor(model => item.TenKhoaHoc)</td>
-                <td>@Html.DisplayFor(model => item.ThoiGian)</td>
-                <td>@Html.DisplayFor(model => item.SoHocVienDangKi)</td>
-                <td>@Html.DisplayFor(model => item.DoanhThu)</td>
+                <th class="dashboard-table-header">Mã Khóa Học</th>
+                <th class="dashboard-table-header">Tên Khóa Học</th>
+                <th class="dashboard-table-header">Thời Gian</th>
+                <th class="dashboard-table-header text-center">Số học viên</th>
+                <th class="dashboard-table-header text-center">Doanh Thu</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="dashboard-table-row">
+                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.MaKhoaHoc)</td>
+                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.TenKhoaHoc)</td>
+                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.ThoiGian)</td>
+                    <td class="dashboard-table-cell text-center">@Html.DisplayFor(model => item.SoHocVienDangKi)</td>
+                    <td class="dashboard-table-cell text-center">@string.Format("{0:N0} ₫", item.DoanhThu)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

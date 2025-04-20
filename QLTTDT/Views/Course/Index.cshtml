@@ -28,13 +28,13 @@
 			<div class="course-desc-item">
 				<strong class="course-desc-label">Học Phí:</strong>
 				<span class="course-desc-value-highlight">
-					@string.Format("{0:#,##0} ₫", Model.HocPhi)
+					@string.Format("{0:N0} ₫", Model.HocPhi)
 				</span>
 			</div>
 
 			<div class="course-desc-item">
 				<strong class="course-desc-label">Thời Gian Khai Giảng:</strong>
-				<span class="course-desc-value">@Html.DisplayFor(m => m.ThoiGianKhaiGiang)</span>
+				<span class="course-desc-value">@Model.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</span>
 			</div>
 
 

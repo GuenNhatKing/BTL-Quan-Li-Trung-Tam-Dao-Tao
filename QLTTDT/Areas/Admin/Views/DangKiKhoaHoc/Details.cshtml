@@ -1,63 +1,78 @@
 ﻿@model QLTTDT.Models.DangKiKhoaHoc
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-
-<div>
-    <h4>DangKiKhoaHoc</h4>
+<div class="mb-3">
+    <h4 class="fw-bold">Chi tiết đăng kí khoá học</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ThoiGianDangKi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ThoiGianDangKi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TienDo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TienDo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DaHuy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DaHuy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaHocVien)
-        </dt>
-        <dd class = "col-sm-10">
-            <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@Model.MaHocVienNavigation.MaNguoiDung">
-                @Html.DisplayFor(model => model.MaHocVienNavigation.Email)
-            </a>
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaKhoaHoc)
-        </dt>
-        <dd class = "col-sm-10">
-            <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@Model.MaKhoaHocNavigation.MaKhoaHoc">
-                @Html.DisplayFor(model => model.MaKhoaHocNavigation.TenKhoaHoc)
-            </a>
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HocPhi)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HocPhi)
-        </dd>
+</div>
+
+<div class="card bg-white shadow p-4 rounded">
+    <dl class="row mb-0">
+
+        @* Assuming MaHocVienNavigation is of type NguoiDung and has MaNguoiDung and Email *@
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaHocVien)</dt>
+            <dd class="col-sm-9">
+                @if (Model.MaHocVienNavigation != null)
+                {
+                    <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@Model.MaHocVienNavigation.MaNguoiDung"
+                       class="dashboard-link--highlight">
+                        @Html.DisplayFor(model => model.MaHocVienNavigation.Email)
+                    </a>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.MaHocVien) @* Fallback to ID if navigation property is null *@
+                }
+            </dd>
+        </div>
+
+        @* Assuming MaKhoaHocNavigation is of type KhoaHoc and has MaKhoaHoc and TenKhoaHoc *@
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaKhoaHoc)</dt>
+            <dd class="col-sm-9">
+                @if (Model.MaKhoaHocNavigation != null)
+                {
+                    <a asp-controller="KhoaHoc" asp-action="Details" asp-route-id="@Model.MaKhoaHocNavigation.MaKhoaHoc"
+                       class="dashboard-link--highlight">
+                        @Html.DisplayFor(model => model.MaKhoaHocNavigation.TenKhoaHoc)
+                    </a>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.MaKhoaHoc) @* Fallback to ID if navigation property is null *@
+                }
+            </dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.HocPhi)</dt>
+            @* Formatted currency display *@
+            <dd class="col-sm-9">@String.Format("{0:N0} ₫", Model.HocPhi)</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.ThoiGianDangKi)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.ThoiGianDangKi)</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.TienDo)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.TienDo)</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.DaHuy)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.DaHuy)</dd>
+        </div>
+
     </dl>
+
+    <div class="d-flex justify-content-end column-gap-2 mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.MaDangKi" class="admin-create-submit">
+            Chỉnh sửa
+        </a>
+        <a asp-action="Index" class="admin-back-btn">
+            Quay lại danh sách
+        </a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaDangKi">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-</body>
-</html>

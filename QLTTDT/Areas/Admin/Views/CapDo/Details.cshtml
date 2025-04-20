@@ -1,33 +1,26 @@
 ﻿@model QLTTDT.Models.CapDo
 
-@{
-
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-
-<div>
-    <h4>CapDo</h4>
+<div class="mb-3">
+    <h4 class="fw-bold">Chi tiết cấp độ</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenCapDo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenCapDo)
-        </dd>
+</div>
+
+<div class="card bg-white shadow p-4 rounded">
+    <dl class="row mb-0">
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.TenCapDo)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.TenCapDo)</dd>
+        </div>
+
     </dl>
+
+    <div class="d-flex justify-content-end column-gap-2 mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.MaCapDo" class="admin-create-submit">
+            <i class="fas fa-edit"></i> Chỉnh sửa
+        </a>
+        <a asp-action="Index" class="admin-back-btn">
+            <i class="fas fa-list"></i> Quay lại danh sách
+        </a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaCapDo">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-</body>
-</html>

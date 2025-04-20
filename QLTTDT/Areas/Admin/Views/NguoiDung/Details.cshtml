@@ -1,60 +1,56 @@
 ﻿@model QLTTDT.Models.NguoiDung
 
-@{
-
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-
-<div>
-    <h4>NguoiDung</h4>
+<div class="mb-3">
+    <h4 class="fw-bold">Chi tiết người dùng</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UrlAnhDaiDien)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UrlAnhDaiDien)
-            <div class="graphic-cover">
-                <img src="~/images/@Html.DisplayFor(model => model.UrlAnhDaiDien)" />
-            </div>
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HoVaTen)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HoVaTen)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NgaySinh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NgaySinh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SoDienThoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SoDienThoai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+</div>
+
+<div class="card bg-white shadow p-4 rounded">
+    <dl class="row mb-0">
+
+        @* Display Image - Using Model.UrlAnhDaiDien property *@
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">Ảnh đại diện</dt>
+            <dd class="col-sm-9">
+                <div class="graphic-cover mb-2">
+                    @* Correct way to display image using Url.Content *@
+                    <img src="@Url.Content("~/images/" + Model.UrlAnhDaiDien)" alt="Ảnh đại diện" class="img-thumbnail" style="max-width: 300px;" />
+                </div>
+                @Html.DisplayFor(model => model.UrlAnhDaiDien)
+            </dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.HoVaTen)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.HoVaTen)</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.NgaySinh)</dt>
+            @* Formatting Date *@
+            <dd class="col-sm-9">@Model.NgaySinh.ToString("dd/MM/yyyy")</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.SoDienThoai)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.SoDienThoai)</dd>
+        </div>
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+        </div>
+
+        @* Add other relevant properties if needed (e.g., VaiTro) *@
+
     </dl>
+
+    <div class="d-flex justify-content-end column-gap-2 mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.MaNguoiDung" class="admin-create-submit">
+            Chỉnh sửa
+        </a>
+        <a asp-action="Index" class="admin-back-btn">
+            Quay lại danh sách
+        </a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaNguoiDung">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-</body>
-</html>

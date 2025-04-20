@@ -1,60 +1,51 @@
 ﻿@model QLTTDT.Models.TaiKhoan
 
-@{
-
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Delete</title>
-</head>
-<body>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>TaiKhoan</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenDangNhap)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenDangNhap)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Salt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Salt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MatKhau)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MatKhau)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaNguoiDungNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaNguoiDungNavigation.MaNguoiDung)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaVaiTroNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaVaiTroNavigation.MaVaiTro)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="MaTaiKhoan" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<div class="mb-3">
+	<h4 class="fw-bold">Xoá tài khoản</h4>
+	<hr />
 </div>
-</body>
-</html>
+
+<div class="card bg-white shadow p-4 rounded">
+	<p class="text-danger fw-semibold">Bạn có chắc chắn muốn xoá tài khoản này không?</p>
+
+	<dl class="row mb-0">
+		<div class="row mb-3 border-bottom pb-2">
+			<dt class="col-sm-3 fw-bold">Tên đăng nhập</dt>
+			<dd class="col-sm-9">@Html.DisplayFor(model => model.TenDangNhap)</dd>
+		</div>
+
+		<div class="row mb-3 border-bottom pb-2">
+			<dt class="col-sm-3 fw-bold">Mật khẩu</dt>
+			<dd class="col-sm-9">@Html.DisplayFor(model => model.MatKhau)</dd>
+		</div>
+
+		<div class="row mb-3 border-bottom pb-2">
+			<dt class="col-sm-3 fw-bold">Salt</dt>
+			<dd class="col-sm-9">@Html.DisplayFor(model => model.Salt)</dd>
+		</div>
+
+		<div class="row mb-3 border-bottom pb-2">
+			<dt class="col-sm-3 fw-bold">Người dùng</dt>
+			<dd class="col-sm-9">
+				<a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@Model.MaNguoiDungNavigation.MaNguoiDung" class="dashboard-link--highlight">
+					@Model.MaNguoiDungNavigation.Email
+				</a>
+			</dd>
+		</div>
+
+		<div class="row mb-3 border-bottom pb-2">
+			<dt class="col-sm-3 fw-bold">Vai trò</dt>
+			<dd class="col-sm-9">
+				<a asp-controller="VaiTro" asp-action="Details" asp-route-id="@Model.MaVaiTroNavigation.MaVaiTro" class="dashboard-link--highlight">
+					@Model.MaVaiTroNavigation.TenVaiTro
+				</a>
+			</dd>
+		</div>
+	</dl>
+
+	<form asp-action="Delete" class="d-flex justify-content-end column-gap-2 mt-4">
+		<input type="hidden" asp-for="MaTaiKhoan" />
+		<button type="submit" class="admin-delete-submit">Xoá tài khoản</button>
+		<a asp-action="Index" class="admin-back-btn">Quay lại danh sách</a>
+	</form>
+</div>

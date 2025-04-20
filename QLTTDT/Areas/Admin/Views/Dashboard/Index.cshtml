@@ -1,23 +1,25 @@
-﻿@model IEnumerable<Statistics>;
+﻿@model IEnumerable<Statistics>
 
-<h1>Danh sách các khóa học</h1>
+<h1 class="dashboard-title">Danh sách các khóa học</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã Khóa Học</th>
-            <th>Tên Khóa Học</th>
-            <th>Số học viên đăng kí</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="dashboard-table-container">
+    <table class="dashboard-table">
+        <thead>
             <tr>
-                <td>@Html.DisplayFor(model => item.MaKhoaHoc)</td>
-                <td>@Html.DisplayFor(model => item.TenKhoaHoc)</td>
-                <td>@Html.DisplayFor(model => item.SoHocVienDangKi)</td>
+                <th class="dashboard-table-header">Mã Khóa Học</th>
+                <th class="dashboard-table-header">Tên Khóa Học</th>
+                <th class="dashboard-table-header text-center">Số học viên</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="dashboard-table-row">
+                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.MaKhoaHoc)</td>
+                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.TenKhoaHoc)</td>
+                    <td class="dashboard-table-cell text-center">@Html.DisplayFor(model => item.SoHocVienDangKi)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

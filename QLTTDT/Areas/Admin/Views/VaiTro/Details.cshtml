@@ -1,33 +1,26 @@
 ﻿@model QLTTDT.Models.VaiTro
 
-@{
-
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-
-<div>
-    <h4>VaiTro</h4>
+<div class="mb-3">
+    <h4 class="fw-bold">Chi tiết vai trò</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenVaiTro)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenVaiTro)
-        </dd>
+</div>
+
+<div class="card bg-white shadow p-4 rounded">
+    <dl class="row mb-0">
+
+        <div class="row mb-3 border-bottom pb-2">
+            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.TenVaiTro)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.TenVaiTro)</dd>
+        </div>
+
     </dl>
+
+    <div class="d-flex justify-content-end column-gap-2 mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.MaVaiTro" class="admin-create-submit">
+            Chỉnh sửa
+        </a>
+        <a asp-action="Index" class="admin-back-btn">
+            Quay lại danh sách
+        </a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaVaiTro">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-</body>
-</html>

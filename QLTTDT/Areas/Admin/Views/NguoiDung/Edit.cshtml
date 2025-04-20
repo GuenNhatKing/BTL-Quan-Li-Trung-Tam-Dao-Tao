@@ -1,72 +1,74 @@
 ﻿@model QLTTDT.Models.NguoiDung
 
 @{
-
+    ViewData["Title"] = "Chỉnh sửa người dùng";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
-
-<h4>NguoiDung</h4>
+<h4 class="admin-create-title">Chỉnh sửa người dùng</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MaNguoiDung" />
-            <div class="form-group">
-                <label asp-for="UrlAnhDaiDien" class="control-label"></label>
-                <input asp-for="UrlAnhDaiDien" class="form-control" readonly />
-            </div>
-            <div class="graphic-cover">
-                <img src="~/images/@Html.DisplayFor(i => i.UrlAnhDaiDien)" />
-            </div>
-            <div class="form-group">
-                <label name="AnhDaiDien" class="control-label"></label>
-                <input name="AnhDaiDien" type="file" onchange="readImage(this);" class="form-control" data-val="false" />
-            </div>
-            <div class="graphic-cover">
-                <img id="uploadedImage" src="#" style="display: none" />
-            </div>
-            <div class="form-group">
-                <label asp-for="HoVaTen" class="control-label"></label>
-                <input asp-for="HoVaTen" class="form-control" />
-                <span asp-validation-for="HoVaTen" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NgaySinh" class="control-label"></label>
-                <input asp-for="NgaySinh" type="date" class="form-control" />
-                <span asp-validation-for="NgaySinh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SoDienThoai" class="control-label"></label>
-                <input asp-for="SoDienThoai" class="form-control" />
-                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="admin-create-container">
+    <form asp-action="Edit" enctype="multipart/form-data" class="admin-create-form">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
+        <input type="hidden" asp-for="MaNguoiDung" />
+
+        @* Hidden field for existing image URL to potentially handle cases where image is not updated but needed by controller *@
+        <input type="hidden" asp-for="UrlAnhDaiDien" />
+
+        @* Image Upload Section - Combined existing display and new file upload/preview *@
+        <div class="admin-create-image-wrapper">
+            @* Corrected Label for file input *@
+            <label for="AnhDaiDien" class="admin-create-label">Ảnh đại diện</label>
+            <div class="admin-create-image-container">
+                @* Assuming readImage function is available globally or via another script file *@
+                <input name="AnhDaiDien" type="file" onchange="readImage(this);" class="form-control" />
+                <div class="admin-create-preview-cover">
+                    @* Display existing image if available, or hide if not. Will be replaced by JS preview on new file select. *@
+                    <img id="uploadedImage"
+                         src="@Url.Content("~/images/" + Model.UrlAnhDaiDien)"
+                         class="admin-create-preview"
+                         style="@(string.IsNullOrEmpty(Model.UrlAnhDaiDien) ? "display: none;" : "display: block;")"
+                         alt="Ảnh đại diện" />
+                </div>
+            </div>
+            @* Validation for the image URL property *@
+            <span asp-validation-for="UrlAnhDaiDien" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="HoVaTen" class="admin-create-label">Họ và tên</label>
+            <input asp-for="HoVaTen" class="admin-create-input" />
+            <span asp-validation-for="HoVaTen" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="NgaySinh" class="admin-create-label">Ngày sinh</label>
+            <input asp-for="NgaySinh" type="date" class="admin-create-input" />
+            <span asp-validation-for="NgaySinh" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="SoDienThoai" class="admin-create-label">Số điện thoại</label>
+            <input asp-for="SoDienThoai" class="admin-create-input" />
+            <span asp-validation-for="SoDienThoai" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="Email" class="admin-create-label">Email</label>
+            <input asp-for="Email" class="admin-create-input" />
+            <span asp-validation-for="Email" class="text-danger admin-create-validation"></span>
+        </div>
+
+        @* Assuming other properties like PasswordHash, SecurityStamp, etc. are handled separately (e.g., Identity) or not needed in this simple edit form *@
+
+        <div class="form-group admin-create-group">
+            <input type="submit" value="Lưu thay đổi" class="admin-create-submit" />
+            <a asp-action="Index" class="admin-create-back">← Quay lại danh sách</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
-</body>
-</html>

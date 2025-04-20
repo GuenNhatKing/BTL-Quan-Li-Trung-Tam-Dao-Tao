@@ -1,43 +1,30 @@
 ﻿@model QLTTDT.Models.VaiTro
 
 @{
-
+    ViewData["Title"] = "Chỉnh sửa vai trò";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
-
-<h4>VaiTro</h4>
+<h4 class="admin-create-title">Chỉnh sửa vai trò</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MaVaiTro" />
-            <div class="form-group">
-                <label asp-for="TenVaiTro" class="control-label"></label>
-                <input asp-for="TenVaiTro" class="form-control" />
-                <span asp-validation-for="TenVaiTro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="admin-create-container">
+    <form asp-action="Edit" class="admin-create-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
+        <input type="hidden" asp-for="MaVaiTro" />
+
+        <div class="form-group admin-create-group">
+            <label asp-for="TenVaiTro" class="admin-create-label">Tên vai trò</label>
+            <input asp-for="TenVaiTro" class="admin-create-input" />
+            <span asp-validation-for="TenVaiTro" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <input type="submit" value="Lưu thay đổi" class="admin-create-submit" />
+            <a asp-action="Index" class="admin-create-back">← Quay lại danh sách</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
-</body>
-</html>

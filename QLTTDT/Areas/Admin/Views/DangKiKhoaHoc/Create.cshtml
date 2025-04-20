@@ -1,42 +1,38 @@
 ﻿@model QLTTDT.Models.DangKiKhoaHoc
 
-<!DOCTYPE html>
+@{
+    ViewData["Title"] = "Đăng kí khoá học";
+}
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
-</head>
-<body>
-
-<h4>DangKiKhoaHoc</h4>
+<h4 class="admin-create-title">Đăng kí khoá học</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TienDo" value="0" class="form-control" />
-            <div class="form-group">
-                <label asp-for="MaHocVien" class="control-label"></label>
-                <select asp-for="MaHocVien" class ="form-control" asp-items="ViewBag.MaHocVien"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaKhoaHoc" class="control-label"></label>
-                <select asp-for="MaKhoaHoc" class ="form-control" asp-items="ViewBag.MaKhoaHoc"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="admin-create-container">
+    <form asp-action="Create" class="admin-create-form">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
+
+        <input type="hidden" asp-for="TienDo" value="0" />
+
+        <div class="form-group admin-create-group">
+            <label asp-for="MaHocVien" class="admin-create-label">Học viên</label>
+            <select asp-for="MaHocVien" class="admin-create-select" asp-items="ViewBag.MaHocVien"></select>
+            <span asp-validation-for="MaHocVien" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <label asp-for="MaKhoaHoc" class="admin-create-label">Khoá học</label>
+            <select asp-for="MaKhoaHoc" class="admin-create-select" asp-items="ViewBag.MaKhoaHoc"></select>
+            <span asp-validation-for="MaKhoaHoc" class="text-danger admin-create-validation"></span>
+        </div>
+
+        <div class="form-group admin-create-group">
+            <input type="submit" value="Đăng kí" class="admin-create-submit" />
+            <a asp-action="Index" class="admin-create-back">← Quay lại danh sách</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
-</body>
-</html>
