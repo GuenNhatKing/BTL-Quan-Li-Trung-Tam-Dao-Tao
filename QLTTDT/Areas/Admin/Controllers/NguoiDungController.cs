@@ -66,10 +66,10 @@ namespace QLTTDT.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var imageUpload = new ImageUpload(_webHost);
-                if (await imageUpload.SaveImageAs(AnhDaiDien))
+                if (await imageUpload.SaveImageAs(AnhDaiDien!))
                     nguoiDung.UrlAnhDaiDien = imageUpload.FileName;
                 var validation = new ValidCheck(_context);
-                if(!await validation.UserValidation(nguoiDung))
+                if (!await validation.UserValidation(nguoiDung))
                 {
                     ModelState.AddModelError(validation.ErrorKey, validation.Error);
                     return View(nguoiDung);
@@ -113,15 +113,16 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
+                    await _context.SaveChangesAsync();
                     var imageUpload = new ImageUpload(_webHost);
-                    if (await imageUpload.SaveImageAs(AnhDaiDien))
+                    if (await imageUpload.SaveImageAs(AnhDaiDien!))
                     {
-                        imageUpload.DeleteImage(nguoiDung.UrlAnhDaiDien);
+                        imageUpload.DeleteImage(nguoiDung.UrlAnhDaiDien!);
                         nguoiDung.UrlAnhDaiDien = imageUpload.FileName;
                     }
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!NguoiDungExists(nguoiDung.MaNguoiDung))
                     {
@@ -129,7 +130,8 @@ namespace QLTTDT.Areas.Admin.Controllers
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
+                        return BadRequest(ModelState);
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -163,12 +165,20 @@ namespace QLTTDT.Areas.Admin.Controllers
             var nguoiDung = await _context.NguoiDungs.FindAsync(id);
             if (nguoiDung != null)
             {
-                var imgDelete = new ImageUpload(_webHost);
-                imgDelete.DeleteImage(nguoiDung.UrlAnhDaiDien);
-                _context.NguoiDungs.Remove(nguoiDung);
-            }
+                try
+                {
+                    _context.NguoiDungs.Remove(nguoiDung);
+                    await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
+                    var imgDelete = new ImageUpload(_webHost);
+                    imgDelete.DeleteImage(nguoiDung.UrlAnhDaiDien!);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
+                    return BadRequest(ModelState);
+                }
+            }
             return RedirectToAction(nameof(Index));
         }
 
