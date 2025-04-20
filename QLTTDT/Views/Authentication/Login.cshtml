@@ -1,60 +1,60 @@
 ﻿@model LoginForm;
 @{
-    ViewData["Title"] = "Đăng nhập";
+	ViewData["Title"] = "Đăng nhập";
 }
 
 <div class="template__login-page">
-    <div class="d-flex justify-content-center">
-        <form asp-controller="Authentication" asp-action="Login" method="post" class="form">
-            <div>
-                <h3><strong class="text-color-tertiary">Couratest</strong></h3>
-                <h4>Đăng nhập tài khoản </h4>
-            </div>
-            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="d-flex justify-content-center">
+		<form asp-controller="Authentication" asp-action="Login" method="post" class="form">
+			<div>
+				<h3><strong class="text-color-tertiary">Couratest</strong></h3>
+				<h4>Đăng nhập tài khoản </h4>
+			</div>
+			<input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="flex-column">
-                <label asp-for="Username">Tên đăng nhập</label>
-            </div>
-            <div class="inputForm">
-                <input asp-for="Username" type="text" class="input" placeholder="Nhập tên đăng nhập" />
-            </div>
-            <span asp-validation-for="Username" class="text-danger"></span>
+			<div class="flex-column">
+				<label asp-for="Username">Tên đăng nhập</label>
+			</div>
+			<div class="inputForm">
+				<input asp-for="Username" type="text" class="input" placeholder="Nhập tên đăng nhập" />
+			</div>
+			<span asp-validation-for="Username" class="text-danger"></span>
 
-            <div class="flex-column">
-                <label asp-for="Password">Mật khẩu</label>
-            </div>
-            <div class="inputForm">
-                <input asp-for="Password" type="password" class="input" placeholder="Nhập mật khẩu" />
-            </div>
-            <span asp-validation-for="Password" class="text-danger"></span>
+			<div class="flex-column">
+				<label asp-for="Password">Mật khẩu</label>
+			</div>
+			<div class="inputForm">
+				<input asp-for="Password" type="password" class="input" placeholder="Nhập mật khẩu" />
+			</div>
+			<span asp-validation-for="Password" class="text-danger"></span>
 
-            <div class="flex-row">
-                <div>
-                    <label asp-for="RememberMe" class="custom-checkbox-container">
-                        <input asp-for="RememberMe" type="checkbox" />
-                        <span class="checkmark"></span>
-                        Ghi nhớ đăng nhập
-                    </label>
-                </div>
-                <span>
-                    <a href="#" class="tabs__link--tertiary">Quên mật khẩu?</a>
-                </span>
-            </div>
+			<div class="flex-row">
+				<div>
+					<label asp-for="RememberMe" class="custom-checkbox-container">
+						<input asp-for="RememberMe" type="checkbox" />
+						<span class="checkmark"></span>
+						Ghi nhớ đăng nhập
+					</label>
+				</div>
+				<span>
+					<a href="#" class="tabs__link--tertiary">Quên mật khẩu?</a>
+				</span>
+			</div>
 
-            <input type="submit" value="Đăng nhập" class="button-submit" />
+			<input type="submit" value="Đăng nhập" class="button-submit" />
 
-            <div class="padding-top-10px">
-                Chưa có tài khoản?
-                <a asp-controller="authentication" asp-action="Register" class="tabs__link--tertiary">Đăng ký ngay</a>
-            </div>
-        </form>
-    </div>
+			<div class="padding-top-10px">
+				Chưa có tài khoản?
+				<a asp-controller="authentication" asp-action="Register" class="tabs__link--tertiary">Đăng ký ngay</a>
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
 

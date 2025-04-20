@@ -1,51 +1,51 @@
-﻿@model TopicDescription;
+﻿@model TopicDescription
+@{
+	ViewData["Title"] = "Các khoá học";
+}
+<div class="topic-desc-header">
+	<div class="topic-desc-info">
+		<h1><strong>@Html.DisplayFor(m => m.TenChuDe)</strong></h1>
+		<p>@Html.DisplayFor(m => m.MoTa)</p>
+	</div>
+	<div class="topic-desc-image">
+		<img src="~/images/@Html.DisplayFor(m => m.UrlAnhChuDe)" alt="Ảnh chủ đề" />
+		<div class="image-overlay"></div>
+	</div>
+</div>
+<div class="template__homepage-content">
+	<div class="container">
+		<div class="course-grid">
+			@foreach (var item in Model.DanhSachKhoaHoc)
+			{
+				<a class="course-card"
+				   asp-controller="Course"
+				   asp-action="Index"
+				   asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+				   asp-route-topicId="@Model.MaChuDe"
+				   asp-route-courseSlug="@StrToSlug.Convert(item.TenKhoaHoc)"
+				   asp-route-courseId="@item.MaKhoaHoc">
 
-<div>
-	@Html.DisplayFor(Model => Model.TenChuDe)
-</div>
-<div class="graphic-cover">
-	<img src="~/images/@Html.DisplayFor(Model => Model.UrlAnhChuDe)" />
-</div>
-<div>
-	@Html.DisplayFor(Model => Model.MoTa)
-</div>
-<br />
-<div>
-	@foreach(var item in Model.DanhSachKhoaHoc)
-	{
-		<a asp-controller="Course" asp-action="Index" 
-		asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
-		asp-route-topicId="@Model.MaChuDe"
-		asp-route-courseSlug="@StrToSlug.Convert(item.TenKhoaHoc)"
-		asp-route-courseId="@item.MaKhoaHoc">
-			<div>
-				<strong>
-					Tên khoá học: 
-				</strong>
-				<div>
-					@Html.DisplayFor(modelItem => item.TenKhoaHoc)
-				</div>
-			</div>
-			<div class="graphic-cover">
-				<img src="~/images/@Html.DisplayFor(modelItem => item.UrlAnhKhoaHoc)" />
-			</div>
-			<div>
-				<strong>
-					Mô tả: 
-				</strong>
-				<div>
-					@Html.DisplayFor(modelItem => item.MoTa)
-				</div>
-			</div>
-			<div>
-				<strong>
-					Đã đăng kí: 
-				</strong>
-				<div>
-					@Html.DisplayFor(modelItem => item.DaDangKi)
-				</div>
-			</div>
-		</a>
-		<br />
-	}
+					<img src="~/images/@Html.DisplayFor(modelItem => item.UrlAnhKhoaHoc)" alt="Ảnh khoá học" />
+
+					<div class="d-flex flex-column box-padding-10 row-gap-1 course-content">
+						<div class="break-word min-height-custom-1 line-clamp-2">
+							<h3>@Html.DisplayFor(modelItem => item.TenKhoaHoc)</h3>
+						</div>
+						<div class="break-word min-height-custom-2 line-clamp-4">
+							@Html.DisplayFor(modelItem => item.MoTa)
+						</div>
+					</div>
+
+					<div class="course-tags-wrapper">
+						@if (item.DaDangKi)
+						{
+							<div class="course-registered">Đã đăng ký</div>
+						}
+						<div class="course-level">@Html.DisplayFor(modelItem => item.CapDo)</div>
+					</div>
+
+				</a>
+			}
+		</div>
+	</div>
 </div>

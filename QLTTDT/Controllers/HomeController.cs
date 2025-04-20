@@ -18,11 +18,6 @@ namespace QLTTDT.Controllers
         {
             return View();
         }
-        [Authorize("HocVien")]
-        public string Secret()
-        {
-            return "Hello world";
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

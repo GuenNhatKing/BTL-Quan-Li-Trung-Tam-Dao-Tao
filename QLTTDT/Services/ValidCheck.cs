@@ -97,6 +97,7 @@ namespace QLTTDT.Services
         }
         public static bool IsProgressVaild(int progress)
         {
+            Console.WriteLine($"Progess: {progress}");
             return progress >= 0 && progress <= 100;
         }
     }

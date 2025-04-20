@@ -1,45 +1,55 @@
-﻿@model Profiles;
+﻿@model Profiles
 
-<h1>Thông tin người dùng</h1>
+<div class="profiles-wrapper">
+	<div class="profiles-sidebar">
+		<div class="profiles-avatar-wrapper">
+			<img src="~/images/@Html.DisplayFor(model => model.UrlAnhDaiDien)" alt="Ảnh đại diện" class="profiles-avatar" />
+		</div>
+		<div class="profiles-name">@Html.DisplayFor(model => model.HoVaTen)</div>
+		<div class="profiles-username">@Html.DisplayFor(model => model.Email)</div>
+		<a class="profiles-edit-button" asp-action="ChangeProfiles" asp-route-username="@User.Identity.Name" asp-route-id="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
+			Chỉnh sửa thông tin
+		</a>
+	</div>
 
-<div class="graphic-cover">
-    <img src="~/images/@Html.DisplayFor(model => model.UrlAnhDaiDien)"/>
-</div>
+	<div class="profiles-main">
+		<div class="profiles-info-section">
+			<h2 class="profiles-section-title">
+				<strong>Thông tin cá nhân</strong>
+			</h2>
 
-<div>
-    <strong>Họ và Tên:</strong>
-    <div>@Html.DisplayFor(model => model.HoVaTen)</div>
-</div>
+			<div class="profiles-info-item">
+				<strong>Ngày Sinh:</strong>
+				<div>@Html.DisplayFor(model => model.NgaySinh)</div>
+			</div>
 
-<div>
-    <strong>Ngày Sinh:</strong>
-    <div>@Html.DisplayFor(model => model.NgaySinh)</div>
-</div>
+			<div class="profiles-info-item">
+				<strong>Số Điện Thoại:</strong>
+				<div>@Html.DisplayFor(model => model.SoDienThoai)</div>
+			</div>
+		</div>
 
-<div>
-    <strong>Số Điện Thoại:</strong>
-    <div>@Html.DisplayFor(model => model.SoDienThoai)</div>
-</div>
+		<div class="profiles-info-section">
+			<h2 class="profiles-section-title">
+				<strong>Khóa học</strong>
+			</h2>
 
-<div>
-    <strong>Email:</strong>
-    <div>@Html.DisplayFor(model => model.Email)</div>
-</div>
-<div>
-    <a asp-action="ChangeProfiles" asp-route-username="@User.Identity.Name" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Chỉnh sửa thông tin</a>
-</div>
-
-<div>
-    <strong>Số Khóa Học Đã Đăng Kí:</strong>
-    <div>@Html.DisplayFor(model => model.SoKhoaHocDaDangKi)</div>
-</div>
-
-<div>
-    <strong>Số Khóa Học Đang Học:</strong>
-    <div>@Html.DisplayFor(model => model.SoKhoaHocDangHoc)</div>
-</div>
-
-<div>
-    <strong>Số Khóa Học Đã Hoàn Thành:</strong>
-    <div>@Html.DisplayFor(model => model.SoKhoaHocDaHoanThanh)</div>
+			<table class="profiles-info-table">
+				<thead>
+					<tr>
+						<th>Đã đăng ký</th>
+						<th>Đang học</th>
+						<th>Đã hoàn thành</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>@Html.DisplayFor(model => model.SoKhoaHocDaDangKi)</td>
+						<td>@Html.DisplayFor(model => model.SoKhoaHocDangHoc)</td>
+						<td>@Html.DisplayFor(model => model.SoKhoaHocDaHoanThanh)</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>

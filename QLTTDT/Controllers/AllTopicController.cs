@@ -50,11 +50,13 @@ namespace QLTTDT.Controllers
                 MoTa = chuDe.MoTa,
                 UrlAnhChuDe = chuDe.UrlAnhChuDe,
                 DanhSachKhoaHoc = await _context.KhoaHocs
+                .Include(i => i.MaCapDoNavigation)
                 .Where(i => i.MaChuDe == chuDe.MaChuDe)
                 .Select(i => new CourseCard
                 {
                     MaKhoaHoc = i.MaKhoaHoc,
                     TenKhoaHoc = i.TenKhoaHoc,
+                    CapDo = i.MaCapDoNavigation.TenCapDo,
                     MoTa = i.MoTa,
                     UrlAnhKhoaHoc = i.UrlAnh,
                     DaDangKi = (userId == null) ? false : _context.DangKiKhoaHocs

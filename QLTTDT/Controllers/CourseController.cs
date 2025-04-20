@@ -53,7 +53,7 @@ namespace QLTTDT.Controllers
             return View(courseDesc);
         }
 
-        [Authorize("HocVien")]
+        [Authorize(Roles = "HocVien,Admin")]
         [HttpPost]
         public async Task<IActionResult> Index(string topicSlug, int? topicId, string courseSlug, int? courseId, bool noUse)
         {
@@ -108,7 +108,7 @@ namespace QLTTDT.Controllers
             if (dkkh == null) return 0;
             return dkkh.TienDo;
         }
-        [Authorize("HocVien")]
+        [Authorize(Roles = "HocVien,Admin")]
         [HttpPost]
         public async Task<IActionResult> IncreaseProgress(string topicSlug, int? topicId, string courseSlug, int? courseId)
         {
@@ -123,7 +123,7 @@ namespace QLTTDT.Controllers
                 return NotFound();
             }
             int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
-            var dkkh = await _context.DangKiKhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc);
+            var dkkh = await _context.DangKiKhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc && i.MaHocVien == userId);
             if(dkkh != null)
             {
                 if(ValidCheck.IsProgressVaild(dkkh.TienDo + 20))
@@ -142,7 +142,7 @@ namespace QLTTDT.Controllers
             }
              return RedirectToAction("Index", new { topicSlug, topicId, courseSlug, courseId });
         }
-        [Authorize("HocVien")]
+        [Authorize(Roles = "HocVien,Admin")]
         [HttpPost]
         public async Task<IActionResult> CancellCourse(string topicSlug, int? topicId, string courseSlug, int? courseId)
         {
