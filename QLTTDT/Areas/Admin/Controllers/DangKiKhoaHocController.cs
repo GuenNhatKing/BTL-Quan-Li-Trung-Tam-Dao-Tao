@@ -139,16 +139,16 @@ namespace QLTTDT.Areas.Admin.Controllers
                 MaHocVien = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.Email,
             })
-            .SingleAsync(i => i.MaHocVien == dangKiKhoaHoc.MaHocVien);
+            .FirstOrDefaultAsync(i => i.MaHocVien == dangKiKhoaHoc.MaHocVien);
             var khoaHoc = await _context.KhoaHocs
             .Select(i => new
             {
                 MaKhoaHoc = i.MaKhoaHoc,
                 DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc,
             })
-            .SingleAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc);
-            ViewData["MaHocVien"] = hocVien.DisplayText;
-            ViewData["MaKhoaHoc"] = khoaHoc.DisplayText;
+            .FirstOrDefaultAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc);
+            ViewData["MaHocVien"] = hocVien?.DisplayText;
+            ViewData["MaKhoaHoc"] = khoaHoc?.DisplayText;
             return View(dangKiKhoaHoc);
         }
 
@@ -177,16 +177,16 @@ namespace QLTTDT.Areas.Admin.Controllers
                  MaHocVien = i.MaNguoiDung,
                  DisplayText = i.MaNguoiDung + " - " + i.Email,
              })
-             .SingleAsync(i => i.MaHocVien == dangKiKhoaHoc.MaHocVien);
+             .FirstOrDefaultAsync(i => i.MaHocVien == courseRegister.MaHocVien);
             var khoaHoc = await _context.KhoaHocs
             .Select(i => new
             {
                 MaKhoaHoc = i.MaKhoaHoc,
                 DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc,
             })
-            .SingleAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc);
-            ViewData["MaHocVien"] = hocVien.DisplayText;
-            ViewData["MaKhoaHoc"] = khoaHoc.DisplayText;
+            .FirstOrDefaultAsync(i => i.MaKhoaHoc == courseRegister.MaKhoaHoc);
+            ViewData["MaHocVien"] = hocVien?.DisplayText;
+            ViewData["MaKhoaHoc"] = khoaHoc?.DisplayText;
 
             if (ModelState.IsValid)
             {

@@ -94,7 +94,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var imageUpload = new ImageUpload(_webHost);
-                if (await imageUpload.SaveImageAs(AnhKhoaHoc))
+                if (await imageUpload.SaveImageAs(AnhKhoaHoc!))
                 {
                     khoaHoc.UrlAnh = imageUpload.FileName;
                 }
@@ -144,9 +144,9 @@ namespace QLTTDT.Areas.Admin.Controllers
                 MaCapDo = i.MaCapDo,
                 DisplayText = i.MaCapDo + " - " + i.TenCapDo,
             }).ToList();
-            ViewData["MaCapDo"] = new SelectList(capDoList, "MaCapDo", "DisplayText", capDoList.Find(i => i.MaCapDo == khoaHoc.MaCapDo).DisplayText);
-            ViewData["MaChuDe"] = new SelectList(chuDeList, "MaChuDe", "DisplayText", chuDeList.Find(i => i.MaChuDe == khoaHoc.MaChuDe).DisplayText);
-            ViewData["MaGiangVien"] = new SelectList(giangVienList, "MaGiangVien", "DisplayText", giangVienList.Find(i => i.MaGiangVien == khoaHoc.MaGiangVien).DisplayText);
+            ViewData["MaCapDo"] = new SelectList(capDoList, "MaCapDo", "DisplayText", capDoList.Find(i => i.MaCapDo == khoaHoc.MaCapDo)?.DisplayText);
+            ViewData["MaChuDe"] = new SelectList(chuDeList, "MaChuDe", "DisplayText", chuDeList.Find(i => i.MaChuDe == khoaHoc.MaChuDe)?.DisplayText);
+            ViewData["MaGiangVien"] = new SelectList(giangVienList, "MaGiangVien", "DisplayText", giangVienList.Find(i => i.MaGiangVien == khoaHoc.MaGiangVien)?.DisplayText);
             return View(khoaHoc);
         }
 
@@ -190,9 +190,9 @@ namespace QLTTDT.Areas.Admin.Controllers
                 MaCapDo = i.MaCapDo,
                 DisplayText = i.MaCapDo + " - " + i.TenCapDo,
             }).ToList();
-            ViewData["MaCapDo"] = new SelectList(capDoList, "MaCapDo", "DisplayText", capDoList.Find(i => i.MaCapDo == khoaHoc.MaCapDo).DisplayText);
-            ViewData["MaChuDe"] = new SelectList(chuDeList, "MaChuDe", "DisplayText", chuDeList.Find(i => i.MaChuDe == khoaHoc.MaChuDe).DisplayText);
-            ViewData["MaGiangVien"] = new SelectList(giangVienList, "MaGiangVien", "DisplayText", giangVienList.Find(i => i.MaGiangVien == khoaHoc.MaGiangVien).DisplayText);
+            ViewData["MaCapDo"] = new SelectList(capDoList, "MaCapDo", "DisplayText", capDoList.Find(i => i.MaCapDo == course.MaCapDo)?.DisplayText);
+            ViewData["MaChuDe"] = new SelectList(chuDeList, "MaChuDe", "DisplayText", chuDeList.Find(i => i.MaChuDe == course.MaChuDe)?.DisplayText);
+            ViewData["MaGiangVien"] = new SelectList(giangVienList, "MaGiangVien", "DisplayText", giangVienList.Find(i => i.MaGiangVien == course.MaGiangVien)?.DisplayText);
 
             if (ModelState.IsValid)
             {
@@ -264,7 +264,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                     _context.KhoaHocs.Remove(khoaHoc);
                     await _context.SaveChangesAsync();
                     var imgDelete = new ImageUpload(_webHost);
-                    imgDelete.DeleteImage(khoaHoc.UrlAnh);
+                    imgDelete.DeleteImage(khoaHoc.UrlAnh!);
                 }
                 catch (Exception ex)
                 {

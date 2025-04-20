@@ -128,20 +128,20 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var nguoiDung = _context.NguoiDungs
+            var nguoiDung = await _context.NguoiDungs
             .Select(i => new
             {
                 MaNguoiDung = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.Email
-            }).Single(i => i.MaNguoiDung == taiKhoan.MaNguoiDung);
-            var vaiTro = _context.VaiTros
+            }).FirstOrDefaultAsync(i => i.MaNguoiDung == taiKhoan.MaNguoiDung);
+            var vaiTro = await _context.VaiTros
             .Select(i => new
             {
                 MaVaiTro = i.MaVaiTro,
                 DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
-            }).Single(i => i.MaVaiTro == taiKhoan.MaVaiTro);
-            ViewData["MaNguoiDung"] = nguoiDung.DisplayText;
-            ViewData["MaVaiTro"] = vaiTro.DisplayText;
+            }).FirstOrDefaultAsync(i => i.MaVaiTro == taiKhoan.MaVaiTro);
+            ViewData["MaNguoiDung"] = nguoiDung?.DisplayText;
+            ViewData["MaVaiTro"] = vaiTro?.DisplayText;
             return View(taiKhoan);
         }
 
@@ -150,7 +150,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaTaiKhoan,TenDangNhap")] TaiKhoan taiKhoan, string? MatKhauMoi = null)
+        public async Task<IActionResult> Edit(int? id, [Bind("MaTaiKhoan,TenDangNhap")] TaiKhoan taiKhoan, string? MatKhauMoi = null)
         {
             if (id == null)
             {
@@ -162,20 +162,20 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var nguoiDung = _context.NguoiDungs
+            var nguoiDung = await _context.NguoiDungs
             .Select(i => new
             {
                 MaNguoiDung = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.Email
-            }).Single(i => i.MaNguoiDung == taiKhoan.MaNguoiDung);
-            var vaiTro = _context.VaiTros
+            }).FirstOrDefaultAsync(i => i.MaNguoiDung == account.MaNguoiDung);
+            var vaiTro = await _context.VaiTros
             .Select(i => new
             {
                 MaVaiTro = i.MaVaiTro,
                 DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
-            }).Single(i => i.MaVaiTro == taiKhoan.MaVaiTro);
-            ViewData["MaNguoiDung"] = nguoiDung.DisplayText;
-            ViewData["MaVaiTro"] = vaiTro.DisplayText;
+            }).FirstOrDefaultAsync(i => i.MaVaiTro == account.MaVaiTro);
+            ViewData["MaNguoiDung"] = nguoiDung?.DisplayText;
+            ViewData["MaVaiTro"] = vaiTro?.DisplayText;
 
             if (ModelState.IsValid)
             {

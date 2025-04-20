@@ -12,8 +12,8 @@ namespace QLTTDT.Services
     {
         private QLTTDTDbContext _context;
         public RegisterForm RegisterForm { get; set; }
-        public string ErrorKey = "";
-        public string Error { get; set; }
+        public string ErrorKey { get; set; } = "";
+        public string Error { get; set; } = "";
 
         public Register(QLTTDTDbContext context, RegisterForm regForm)
         {
@@ -79,7 +79,7 @@ namespace QLTTDT.Services
                     await trans.CommitAsync();
                     transDone = true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     await trans.RollbackAsync();
                 }

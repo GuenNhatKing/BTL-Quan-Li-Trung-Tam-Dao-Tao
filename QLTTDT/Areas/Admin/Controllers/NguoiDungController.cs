@@ -140,8 +140,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
-                        return BadRequest(ModelState);
+                        return BadRequest(ex.Message);
                     }
                 }
                 return RedirectToAction(nameof(Index));
