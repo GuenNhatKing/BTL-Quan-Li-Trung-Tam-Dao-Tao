@@ -102,31 +102,38 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            var topic = await _context.ChuDes.FindAsync(id);
+            if (topic == null)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(chuDe);
+                    topic.TenChuDe = chuDe.TenChuDe;
+                    topic.MoTa = chuDe.MoTa;
+                    _context.Update(topic);
                     await _context.SaveChangesAsync();
                     var imageUpload = new ImageUpload(_webHost);
                     if (await imageUpload.SaveImageAs(AnhChuDe!))
                     {
-                        imageUpload.DeleteImage(chuDe.UrlAnhChuDe!);
-                        chuDe.UrlAnhChuDe = imageUpload.FileName;
+                        imageUpload.DeleteImage(topic.UrlAnhChuDe!);
+                        topic.UrlAnhChuDe = imageUpload.FileName;
                     }
-                    _context.Update(chuDe);
+                    _context.Update(topic);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!ChuDeExists(chuDe.MaChuDe))
+                    if (!ChuDeExists(topic.MaChuDe))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        return BadRequest(ex.Message);
                     }
                 }
                 return RedirectToAction(nameof(Index));

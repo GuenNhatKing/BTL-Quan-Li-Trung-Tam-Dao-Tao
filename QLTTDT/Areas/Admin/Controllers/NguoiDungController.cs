@@ -102,31 +102,39 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaNguoiDung,HoVaTen,NgaySinh,SoDienThoai,Email")] NguoiDung nguoiDung, IFormFile? AnhDaiDien = null)
+        public async Task<IActionResult> Edit(int? id, [Bind("MaNguoiDung,HoVaTen,NgaySinh,SoDienThoai,Email")] NguoiDung nguoiDung, IFormFile? AnhDaiDien = null)
         {
-            if (id != nguoiDung.MaNguoiDung)
+            if (id != null)
             {
                 return NotFound();
             }
-
+            var user = await _context.NguoiDungs.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(nguoiDung);
+                    user.HoVaTen = nguoiDung.HoVaTen;
+                    user.NgaySinh = nguoiDung.NgaySinh;
+                    user.SoDienThoai = nguoiDung.SoDienThoai;
+                    user.Email = nguoiDung.Email;
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                     var imageUpload = new ImageUpload(_webHost);
                     if (await imageUpload.SaveImageAs(AnhDaiDien!))
                     {
-                        imageUpload.DeleteImage(nguoiDung.UrlAnhDaiDien!);
-                        nguoiDung.UrlAnhDaiDien = imageUpload.FileName;
+                        imageUpload.DeleteImage(user.UrlAnhDaiDien!);
+                        user.UrlAnhDaiDien = imageUpload.FileName;
                     }
-                    _context.Update(nguoiDung);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!NguoiDungExists(nguoiDung.MaNguoiDung))
+                    if (!NguoiDungExists(user.MaNguoiDung))
                     {
                         return NotFound();
                     }

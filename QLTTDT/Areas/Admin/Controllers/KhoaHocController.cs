@@ -155,44 +155,78 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaKhoaHoc,MaGiangVien,MaChuDe,MaCapDo,UrlAnh,TenKhoaHoc,MoTa,ThoiGianKhaiGiang,HocPhi,SoLuongHocVienToiDa")] KhoaHoc khoaHoc, IFormFile? AnhKhoaHoc)
+        public async Task<IActionResult> Edit(int? id, [Bind("MaKhoaHoc,TenKhoaHoc,MoTa,ThoiGianKhaiGiang,HocPhi,SoLuongHocVienToiDa")] KhoaHoc khoaHoc, IFormFile? AnhKhoaHoc)
         {
-            if (id != khoaHoc.MaKhoaHoc)
+            if (id == null)
             {
                 return NotFound();
             }
+
+            var course = await _context.KhoaHocs.FindAsync(id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            var giangVienList = _context.TaiKhoans
+            .Include(i => i.MaNguoiDungNavigation)
+            .Include(i => i.MaVaiTroNavigation)
+            .Where(i => i.MaVaiTroNavigation.TenVaiTro == "GiangVien")
+            .Select(i => new
+            {
+                MaGiangVien = i.MaNguoiDung,
+                DisplayText = i.MaNguoiDung + " - " + i.MaNguoiDungNavigation.Email
+            })
+            .AsSplitQuery()
+            .ToList();
+            var chuDeList = _context.ChuDes
+            .Select(i => new
+            {
+                MaChuDe = i.MaChuDe,
+                DisplayText = i.MaChuDe + " - " + i.TenChuDe,
+            }).ToList();
+            var capDoList = _context.CapDos
+            .Select(i => new
+            {
+                MaCapDo = i.MaCapDo,
+                DisplayText = i.MaCapDo + " - " + i.TenCapDo,
+            }).ToList();
+            ViewData["MaCapDo"] = new SelectList(capDoList, "MaCapDo", "DisplayText", capDoList.Find(i => i.MaCapDo == khoaHoc.MaCapDo).DisplayText);
+            ViewData["MaChuDe"] = new SelectList(chuDeList, "MaChuDe", "DisplayText", chuDeList.Find(i => i.MaChuDe == khoaHoc.MaChuDe).DisplayText);
+            ViewData["MaGiangVien"] = new SelectList(giangVienList, "MaGiangVien", "DisplayText", giangVienList.Find(i => i.MaGiangVien == khoaHoc.MaGiangVien).DisplayText);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(khoaHoc);
+                    course.TenKhoaHoc = khoaHoc.TenKhoaHoc;
+                    course.ThoiGianKhaiGiang = khoaHoc.ThoiGianKhaiGiang;
+                    course.HocPhi = khoaHoc.HocPhi;
+                    course.SoLuongHocVienToiDa = khoaHoc.SoLuongHocVienToiDa;
+                    course.MoTa = khoaHoc.MoTa;
+                    _context.Update(course);
                     await _context.SaveChangesAsync();
                     var imageUpload = new ImageUpload(_webHost);
-                    if (await imageUpload.SaveImageAs(AnhKhoaHoc))
+                    if (await imageUpload.SaveImageAs(AnhKhoaHoc!))
                     {
-                        imageUpload.DeleteImage(khoaHoc.UrlAnh!);
-                        khoaHoc.UrlAnh = imageUpload.FileName;
+                        imageUpload.DeleteImage(course.UrlAnh!);
+                        course.UrlAnh = imageUpload.FileName;
                     }
-                    _context.Update(khoaHoc);
+                    _context.Update(course);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!KhoaHocExists(khoaHoc.MaKhoaHoc))
+                    if (!KhoaHocExists(course.MaKhoaHoc))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        return BadRequest(ex.Message);
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MaCapDo"] = new SelectList(_context.CapDos, "MaCapDo", "MaCapDo", khoaHoc.MaCapDo);
-            ViewData["MaChuDe"] = new SelectList(_context.ChuDes, "MaChuDe", "MaChuDe", khoaHoc.MaChuDe);
-            ViewData["MaGiangVien"] = new SelectList(_context.NguoiDungs, "MaNguoiDung", "MaNguoiDung", khoaHoc.MaGiangVien);
             return View(khoaHoc);
         }
 

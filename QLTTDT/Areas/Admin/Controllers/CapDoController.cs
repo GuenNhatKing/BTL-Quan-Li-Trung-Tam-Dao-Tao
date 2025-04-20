@@ -96,23 +96,29 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            var level = await _context.CapDos.FindAsync(id);
+            if (level == null)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(capDo);
+                    level.TenCapDo = capDo.TenCapDo;
+                    _context.Update(level);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!CapDoExists(capDo.MaCapDo))
+                    if (!CapDoExists(level.MaCapDo))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        return BadRequest(ex.Message);
                     }
                 }
                 return RedirectToAction(nameof(Index));

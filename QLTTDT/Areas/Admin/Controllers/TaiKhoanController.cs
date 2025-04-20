@@ -152,37 +152,56 @@ namespace QLTTDT.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MaTaiKhoan,TenDangNhap")] TaiKhoan taiKhoan, string? MatKhauMoi = null)
         {
-            if (id != taiKhoan.MaTaiKhoan)
+            if (id == null)
             {
                 return NotFound();
             }
+
+            var account = await _context.TaiKhoans.FindAsync(id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            var nguoiDung = _context.NguoiDungs
+            .Select(i => new
+            {
+                MaNguoiDung = i.MaNguoiDung,
+                DisplayText = i.MaNguoiDung + " - " + i.Email
+            }).Single(i => i.MaNguoiDung == taiKhoan.MaNguoiDung);
+            var vaiTro = _context.VaiTros
+            .Select(i => new
+            {
+                MaVaiTro = i.MaVaiTro,
+                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
+            }).Single(i => i.MaVaiTro == taiKhoan.MaVaiTro);
+            ViewData["MaNguoiDung"] = nguoiDung.DisplayText;
+            ViewData["MaVaiTro"] = vaiTro.DisplayText;
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    account.TenDangNhap = taiKhoan.TenDangNhap;
                     if (!string.IsNullOrEmpty(MatKhauMoi))
                     {
-                        taiKhoan.MatKhau = Login.GetHashedPassword(taiKhoan.Salt, MatKhauMoi);
+                        account.MatKhau = Login.GetHashedPassword(account.Salt, MatKhauMoi);
                     }
-                    _context.Update(taiKhoan);
+                    _context.Update(account);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!TaiKhoanExists(taiKhoan.MaTaiKhoan))
+                    if (!TaiKhoanExists(account.MaTaiKhoan))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        return BadRequest(ex.Message);
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MaNguoiDung"] = new SelectList(_context.NguoiDungs, "MaNguoiDung", "MaNguoiDung", taiKhoan.MaNguoiDung);
-            ViewData["MaVaiTro"] = new SelectList(_context.VaiTros, "MaVaiTro", "MaVaiTro", taiKhoan.MaVaiTro);
             return View(taiKhoan);
         }
 

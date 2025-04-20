@@ -157,56 +157,65 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaDangKi,ThoiGianDangKi,TienDo,DaHuy")] DangKiKhoaHoc dangKiKhoaHoc)
+        public async Task<IActionResult> Edit(int? id, [Bind("MaDangKi,ThoiGianDangKi,TienDo,DaHuy")] DangKiKhoaHoc dangKiKhoaHoc)
         {
-            if (id != dangKiKhoaHoc.MaDangKi)
+            if (id == null)
             {
                 return NotFound();
             }
+
+            var courseRegister = await _context.DangKiKhoaHocs
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(i => i.MaDangKi == id);
+            if (courseRegister == null)
+            {
+                return NotFound();
+            }
+            var hocVien = await _context.NguoiDungs
+             .Select(i => new
+             {
+                 MaHocVien = i.MaNguoiDung,
+                 DisplayText = i.MaNguoiDung + " - " + i.Email,
+             })
+             .SingleAsync(i => i.MaHocVien == dangKiKhoaHoc.MaHocVien);
+            var khoaHoc = await _context.KhoaHocs
+            .Select(i => new
+            {
+                MaKhoaHoc = i.MaKhoaHoc,
+                DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc,
+            })
+            .SingleAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc);
+            ViewData["MaHocVien"] = hocVien.DisplayText;
+            ViewData["MaKhoaHoc"] = khoaHoc.DisplayText;
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    courseRegister.ThoiGianDangKi = dangKiKhoaHoc.ThoiGianDangKi;
+                    courseRegister.TienDo = dangKiKhoaHoc.TienDo;
+                    courseRegister.DaHuy = dangKiKhoaHoc.DaHuy;
                     if (!ValidCheck.IsProgressVaild(dangKiKhoaHoc.TienDo))
                     {
                         ModelState.AddModelError("TienDo", "Tiến độ phải có giá trị từ 0 đến 100.");
-                        var hocVien = await _context.NguoiDungs
-                         .Select(i => new
-                         {
-                             MaHocVien = i.MaNguoiDung,
-                             DisplayText = i.MaNguoiDung + " - " + i.Email,
-                         })
-                         .SingleAsync(i => i.MaHocVien == dangKiKhoaHoc.MaHocVien);
-                        var khoaHoc = await _context.KhoaHocs
-                        .Select(i => new
-                        {
-                            MaKhoaHoc = i.MaKhoaHoc,
-                            DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc,
-                        })
-                        .SingleAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc);
-                        ViewData["MaHocVien"] = hocVien.DisplayText;
-                        ViewData["MaKhoaHoc"] = khoaHoc.DisplayText;
                         return View(dangKiKhoaHoc);
                     }
-                    _context.Update(dangKiKhoaHoc);
+                    _context.Update(courseRegister);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!DangKiKhoaHocExists(dangKiKhoaHoc.MaDangKi))
+                    if (!DangKiKhoaHocExists(courseRegister.MaDangKi))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        return BadRequest(ex.Message);
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MaHocVien"] = new SelectList(_context.NguoiDungs, "MaNguoiDung", "MaNguoiDung", dangKiKhoaHoc.MaHocVien);
-            ViewData["MaKhoaHoc"] = new SelectList(_context.KhoaHocs, "MaKhoaHoc", "MaKhoaHoc", dangKiKhoaHoc.MaKhoaHoc);
             return View(dangKiKhoaHoc);
         }
 

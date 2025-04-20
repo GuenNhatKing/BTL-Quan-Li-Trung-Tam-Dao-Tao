@@ -24,10 +24,12 @@ public partial class TaiKhoan
     public string TenDangNhap { get; set; } = null!;
 
     [MaxLength(32)]
+    [ValidateNever]
     public byte[] Salt { get; set; } = null!;
 
     [StringLength(512)]
     [Unicode(false)]
+    [ValidateNever]
     public string MatKhau { get; set; } = null!;
 
     [ForeignKey("MaNguoiDung")]

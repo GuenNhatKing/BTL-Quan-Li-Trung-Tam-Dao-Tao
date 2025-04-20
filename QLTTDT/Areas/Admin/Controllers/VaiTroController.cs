@@ -89,9 +89,15 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaVaiTro,TenVaiTro")] VaiTro vaiTro)
+        public async Task<IActionResult> Edit(int? id, [Bind("MaVaiTro,TenVaiTro")] VaiTro vaiTro)
         {
-            if (id != vaiTro.MaVaiTro)
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var role = await _context.VaiTros.FindAsync(id);
+            if (role == null)
             {
                 return NotFound();
             }
@@ -100,10 +106,11 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(vaiTro);
+                    role.TenVaiTro = vaiTro.TenVaiTro;
+                    _context.Update(role);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!VaiTroExists(vaiTro.MaVaiTro))
                     {
@@ -111,7 +118,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                     }
                     else
                     {
-                        throw;
+                        return BadRequest(ex.Message);
                     }
                 }
                 return RedirectToAction(nameof(Index));
