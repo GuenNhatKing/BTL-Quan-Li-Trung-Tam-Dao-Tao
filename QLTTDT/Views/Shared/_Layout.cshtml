@@ -22,9 +22,9 @@
 
 					<nav class="d-flex header__nav">
 						<a asp-controller="AllTopic" asp-action="Index" class="tabs__link">Tất cả chủ đề</a>
-						<a href="#" class="tabs__link">Đã đăng kí</a>
-						<a href="#" class="tabs__link">Đang học</a>
-						<a href="#" class="tabs__link">Đã hoàn thành</a>
+						<a asp-controller="Course" asp-action="RegisteredCourse" class="tabs__link">Đã đăng kí</a>
+						<a asp-controller="Course" asp-action="LearningCourse" class="tabs__link">Đang học</a>
+						<a asp-controller="Course" asp-action="CompletedCourse" class="tabs__link">Đã hoàn thành</a>
 					</nav>
 
 					<div class="d-flex u-margin-left-auto gap-3">

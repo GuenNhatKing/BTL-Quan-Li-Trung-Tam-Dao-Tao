@@ -169,8 +169,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
-                    return BadRequest(ModelState);
+                    return BadRequest(ex.Message);
                 }
             }
             return RedirectToAction(nameof(Index));

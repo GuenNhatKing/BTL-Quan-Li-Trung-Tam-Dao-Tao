@@ -173,5 +173,75 @@ namespace QLTTDT.Controllers
             }
              return RedirectToAction("Index", new { topicSlug, topicId, courseSlug, courseId });
         }
+        [Authorize(Roles = "HocVien,Admin")]
+        public async Task<IActionResult> RegisteredCourse()
+        {
+            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            var courses = await _context.KhoaHocs
+                .Include(i => i.MaChuDeNavigation)
+                .Include(i => i.MaCapDoNavigation)
+                .Where(i => _context.DangKiKhoaHocs.Any(j => j.MaKhoaHoc == i.MaKhoaHoc && j.MaHocVien == userId))
+                .Select(i => new CourseCardWithTopic
+                {
+                    MaChuDe = i.MaChuDe,
+                    TenChuDe = i.MaChuDeNavigation.TenChuDe,
+                    CapDo = i.MaCapDoNavigation.TenCapDo,
+                    MaKhoaHoc = i.MaKhoaHoc,
+                    MoTa = i.MoTa,
+                    TenKhoaHoc = i.TenKhoaHoc,
+                    UrlAnhKhoaHoc = i.UrlAnh,
+                })
+                .AsSplitQuery()
+                .ToListAsync();
+            return View(courses);
+        }
+        [Authorize(Roles = "HocVien,Admin")]
+        public async Task<IActionResult> LearningCourse()
+        {
+            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            var courses = await _context.KhoaHocs
+                .Include(i => i.MaChuDeNavigation)
+                .Include(i => i.MaCapDoNavigation)
+                .Where(i => i.ThoiGianKhaiGiang <= DateTime.Now && _context.DangKiKhoaHocs
+                .Any(j => j.MaKhoaHoc == i.MaKhoaHoc && j.MaHocVien == userId
+                && j.TienDo >= 0 && j.TienDo < 100))
+                .Select(i => new CourseCardWithTopic
+                {
+                    MaChuDe = i.MaChuDe,
+                    TenChuDe = i.MaChuDeNavigation.TenChuDe,
+                    CapDo = i.MaCapDoNavigation.TenCapDo,
+                    MaKhoaHoc = i.MaKhoaHoc,
+                    MoTa = i.MoTa,
+                    TenKhoaHoc = i.TenKhoaHoc,
+                    UrlAnhKhoaHoc = i.UrlAnh,
+                })
+                .AsSplitQuery()
+                .ToListAsync();
+            return View(courses);
+        }
+        [Authorize(Roles = "HocVien,Admin")]
+        public async Task<IActionResult> CompletedCourse()
+        {
+            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            var courses = await _context.KhoaHocs
+                .Include(i => i.MaChuDeNavigation)
+                .Include(i => i.MaCapDoNavigation)
+                .Where(i => i.ThoiGianKhaiGiang <= DateTime.Now && _context.DangKiKhoaHocs
+                .Any(j => j.MaKhoaHoc == i.MaKhoaHoc && j.MaHocVien == userId
+                && j.TienDo == 100))
+                .Select(i => new CourseCardWithTopic
+                {
+                    MaChuDe = i.MaChuDe,
+                    TenChuDe = i.MaChuDeNavigation.TenChuDe,
+                    CapDo = i.MaCapDoNavigation.TenCapDo,
+                    MaKhoaHoc = i.MaKhoaHoc,
+                    MoTa = i.MoTa,
+                    TenKhoaHoc = i.TenKhoaHoc,
+                    UrlAnhKhoaHoc = i.UrlAnh,
+                })
+                .AsSplitQuery()
+                .ToListAsync();
+            return View(courses);
+        }
     }
 }

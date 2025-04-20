@@ -1,0 +1,37 @@
+﻿@model IEnumerable<CourseCardWithTopic>;
+@{
+	ViewData["Title"] = "Khoá học đã hoàn thành";
+}
+
+<div class="template__homepage-content">
+	<div class="container">
+		<div class="course-grid">
+			@foreach (var item in Model)
+			{
+				<a class="course-card"
+				   asp-controller="Course"
+				   asp-action="Index"
+				   asp-route-topicSlug="@StrToSlug.Convert(item.TenChuDe)"
+				   asp-route-topicId="@item.MaChuDe"
+				   asp-route-courseSlug="@StrToSlug.Convert(item.TenKhoaHoc)"
+				   asp-route-courseId="@item.MaKhoaHoc">
+
+					<img src="~/images/@Html.DisplayFor(modelItem => item.UrlAnhKhoaHoc)" alt="Ảnh khoá học" />
+
+					<div class="d-flex flex-column box-padding-10 row-gap-1 course-content">
+						<div class="break-word min-height-custom-1 line-clamp-2">
+							<h3>@Html.DisplayFor(modelItem => item.TenKhoaHoc)</h3>
+						</div>
+						<div class="break-word min-height-custom-2 line-clamp-4">
+							@Html.DisplayFor(modelItem => item.MoTa)
+						</div>
+					</div>
+
+					<div class="course-tags-wrapper">
+						<div class="course-level">@Html.DisplayFor(modelItem => item.CapDo)</div>
+					</div>
+				</a>
+			}
+		</div>
+	</div>
+</div>
