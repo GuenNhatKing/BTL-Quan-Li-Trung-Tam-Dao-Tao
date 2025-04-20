@@ -11,22 +11,22 @@
     <dl class="row mb-0">
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.TenDangNhap)</dt>
+            <dt class="col-sm-3 fw-bold">Tên đăng nhập</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.TenDangNhap)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Salt)</dt>
+            <dt class="col-sm-3 fw-bold">Salt</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.Salt)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MatKhau)</dt>
+            <dt class="col-sm-3 fw-bold">Mật khẩu</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.MatKhau)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaNguoiDung)</dt>
+            <dt class="col-sm-3 fw-bold">Người dùng</dt>
             <dd class="col-sm-9">
                 <a asp-controller="NguoiDung" asp-action="Details" asp-route-id="@Model.MaNguoiDungNavigation.MaNguoiDung"
                    class="dashboard-link--highlight">
@@ -36,7 +36,7 @@
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.MaVaiTro)</dt>
+            <dt class="col-sm-3 fw-bold">Vai trò</dt>
             <dd class="col-sm-9">
                 <a asp-controller="VaiTro" asp-action="Details" asp-route-id="@Model.MaVaiTroNavigation.MaVaiTro"
                    class="dashboard-link--highlight">

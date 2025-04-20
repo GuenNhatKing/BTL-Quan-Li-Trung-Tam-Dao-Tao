@@ -11,8 +11,6 @@
     <p class="text-danger fw-semibold">Bạn có chắc chắn muốn xoá người dùng này không?</p>
 
     <dl class="row mb-0">
-
-        @* Display Image - Using Model.UrlAnhDaiDien property *@
         <div class="row mb-3 border-bottom pb-2">
             <dt class="col-sm-3 fw-bold">Ảnh đại diện</dt>
             <dd class="col-sm-9">
@@ -22,28 +20,24 @@
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(m => m.HoVaTen)</dt>
+            <dt class="col-sm-3 fw-bold">Họ và tên</dt>
             <dd class="col-sm-9">@Html.DisplayFor(m => m.HoVaTen)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(m => m.NgaySinh)</dt>
-            @* Formatting Date *@
+            <dt class="col-sm-3 fw-bold">Ngày sinh</dt>
             <dd class="col-sm-9">@Model.NgaySinh.ToString("dd/MM/yyyy")</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(m => m.SoDienThoai)</dt>
+            <dt class="col-sm-3 fw-bold">Số điện thoại</dt>
             <dd class="col-sm-9">@Html.DisplayFor(m => m.SoDienThoai)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(m => m.Email)</dt>
+            <dt class="col-sm-3 fw-bold">Email</dt>
             <dd class="col-sm-9">@Html.DisplayFor(m => m.Email)</dd>
         </div>
-
-        @* Add other relevant properties if needed (e.g., VaiTro) *@
-
     </dl>
 
     <form asp-action="Delete" class="d-flex justify-content-end column-gap-2 mt-4">

@@ -10,12 +10,10 @@
 <div class="card bg-white shadow p-4 rounded">
     <dl class="row mb-0">
 
-        @* Display Image - Using Model.UrlAnhDaiDien property *@
         <div class="row mb-3 border-bottom pb-2">
             <dt class="col-sm-3 fw-bold">Ảnh đại diện</dt>
             <dd class="col-sm-9">
                 <div class="graphic-cover mb-2">
-                    @* Correct way to display image using Url.Content *@
                     <img src="@Url.Content("~/images/" + Model.UrlAnhDaiDien)" alt="Ảnh đại diện" class="img-thumbnail" style="max-width: 300px;" />
                 </div>
                 @Html.DisplayFor(model => model.UrlAnhDaiDien)
@@ -23,28 +21,24 @@
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.HoVaTen)</dt>
+            <dt class="col-sm-3 fw-bold">Họ và tên</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.HoVaTen)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.NgaySinh)</dt>
-            @* Formatting Date *@
+            <dt class="col-sm-3 fw-bold">Ngày sinh</dt>
             <dd class="col-sm-9">@Model.NgaySinh.ToString("dd/MM/yyyy")</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.SoDienThoai)</dt>
+            <dt class="col-sm-3 fw-bold">Số điện thoại</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.SoDienThoai)</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
-            <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dt class="col-sm-3 fw-bold">Email</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
         </div>
-
-        @* Add other relevant properties if needed (e.g., VaiTro) *@
-
     </dl>
 
     <div class="d-flex justify-content-end column-gap-2 mt-4">
