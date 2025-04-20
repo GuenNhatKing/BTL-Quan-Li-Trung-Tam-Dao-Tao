@@ -145,10 +145,17 @@ namespace QLTTDT.Areas.Admin.Controllers
             var vaiTro = await _context.VaiTros.FindAsync(id);
             if (vaiTro != null)
             {
-                _context.VaiTros.Remove(vaiTro);
+                try
+                {
+                    _context.VaiTros.Remove(vaiTro);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
+                    return BadRequest(ModelState);
+                }
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

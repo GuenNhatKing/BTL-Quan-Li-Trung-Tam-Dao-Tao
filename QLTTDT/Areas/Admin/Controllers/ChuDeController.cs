@@ -66,7 +66,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var imageUpload = new ImageUpload(_webHost);
-                if (await imageUpload.SaveImageAs(AnhChuDe))
+                if (await imageUpload.SaveImageAs(AnhChuDe!))
                     chuDe.UrlAnhChuDe = imageUpload.FileName;
                 _context.Add(chuDe);
                 await _context.SaveChangesAsync();
@@ -107,10 +107,12 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
+                    _context.Update(chuDe);
+                    await _context.SaveChangesAsync();
                     var imageUpload = new ImageUpload(_webHost);
-                    if (await imageUpload.SaveImageAs(AnhChuDe))
+                    if (await imageUpload.SaveImageAs(AnhChuDe!))
                     {
-                        imageUpload.DeleteImage(chuDe.UrlAnhChuDe);
+                        imageUpload.DeleteImage(chuDe.UrlAnhChuDe!);
                         chuDe.UrlAnhChuDe = imageUpload.FileName;
                     }
                     _context.Update(chuDe);
@@ -158,12 +160,19 @@ namespace QLTTDT.Areas.Admin.Controllers
             var chuDe = await _context.ChuDes.FindAsync(id);
             if (chuDe != null)
             {
-                var imgDelete = new ImageUpload(_webHost);
-                imgDelete.DeleteImage(chuDe.UrlAnhChuDe);
-                _context.ChuDes.Remove(chuDe);
+                try
+                {
+                    _context.ChuDes.Remove(chuDe);
+                    await _context.SaveChangesAsync();
+                    var imgDelete = new ImageUpload(_webHost);
+                    imgDelete.DeleteImage(chuDe.UrlAnhChuDe!);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
+                    return BadRequest(ModelState);
+                }
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

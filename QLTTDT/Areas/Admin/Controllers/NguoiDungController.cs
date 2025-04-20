@@ -113,6 +113,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
+                    _context.Update(nguoiDung);
                     await _context.SaveChangesAsync();
                     var imageUpload = new ImageUpload(_webHost);
                     if (await imageUpload.SaveImageAs(AnhDaiDien!))
@@ -120,6 +121,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                         imageUpload.DeleteImage(nguoiDung.UrlAnhDaiDien!);
                         nguoiDung.UrlAnhDaiDien = imageUpload.FileName;
                     }
+                    _context.Update(nguoiDung);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -169,7 +171,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                 {
                     _context.NguoiDungs.Remove(nguoiDung);
                     await _context.SaveChangesAsync();
-
                     var imgDelete = new ImageUpload(_webHost);
                     imgDelete.DeleteImage(nguoiDung.UrlAnhDaiDien!);
                 }

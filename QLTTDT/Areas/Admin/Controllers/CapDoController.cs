@@ -145,10 +145,17 @@ namespace QLTTDT.Areas.Admin.Controllers
             var capDo = await _context.CapDos.FindAsync(id);
             if (capDo != null)
             {
-                _context.CapDos.Remove(capDo);
+                try
+                {
+                    _context.CapDos.Remove(capDo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
+                    return BadRequest(ModelState);
+                }
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

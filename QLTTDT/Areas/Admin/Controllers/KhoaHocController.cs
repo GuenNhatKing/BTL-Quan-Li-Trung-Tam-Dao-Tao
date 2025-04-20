@@ -166,10 +166,12 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
+                    _context.Update(khoaHoc);
+                    await _context.SaveChangesAsync();
                     var imageUpload = new ImageUpload(_webHost);
                     if (await imageUpload.SaveImageAs(AnhKhoaHoc))
                     {
-                        imageUpload.DeleteImage(khoaHoc.UrlAnh);
+                        imageUpload.DeleteImage(khoaHoc.UrlAnh!);
                         khoaHoc.UrlAnh = imageUpload.FileName;
                     }
                     _context.Update(khoaHoc);
@@ -223,12 +225,19 @@ namespace QLTTDT.Areas.Admin.Controllers
             var khoaHoc = await _context.KhoaHocs.FindAsync(id);
             if (khoaHoc != null)
             {
-                var imgDelete = new ImageUpload(_webHost);
-                imgDelete.DeleteImage(khoaHoc.UrlAnh);
-                _context.KhoaHocs.Remove(khoaHoc);
+                try
+                {
+                    _context.KhoaHocs.Remove(khoaHoc);
+                    await _context.SaveChangesAsync();
+                    var imgDelete = new ImageUpload(_webHost);
+                    imgDelete.DeleteImage(khoaHoc.UrlAnh);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
+                    return BadRequest(ModelState);
+                }
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

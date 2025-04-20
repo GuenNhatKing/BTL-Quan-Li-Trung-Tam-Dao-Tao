@@ -56,12 +56,14 @@ namespace QLTTDT.Areas.Admin.Controllers
         {
             var nguoiDungList = _context.NguoiDungs
             .Where(i => !_context.TaiKhoans.Any(j => j.MaNguoiDung == i.MaNguoiDung))
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaNguoiDung = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.Email
             }).ToList();
             var vaiTroList = _context.VaiTros
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaVaiTro = i.MaVaiTro,
                 DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
             }).ToList();
@@ -79,12 +81,14 @@ namespace QLTTDT.Areas.Admin.Controllers
         {
             var nguoiDungList = _context.NguoiDungs
             .Where(i => !_context.TaiKhoans.Any(j => j.MaNguoiDung == i.MaNguoiDung))
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaNguoiDung = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.Email
             }).ToList();
             var vaiTroList = _context.VaiTros
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaVaiTro = i.MaVaiTro,
                 DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
             }).ToList();
@@ -125,12 +129,14 @@ namespace QLTTDT.Areas.Admin.Controllers
                 return NotFound();
             }
             var nguoiDung = _context.NguoiDungs
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaNguoiDung = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.Email
             }).Single(i => i.MaNguoiDung == taiKhoan.MaNguoiDung);
             var vaiTro = _context.VaiTros
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaVaiTro = i.MaVaiTro,
                 DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
             }).Single(i => i.MaVaiTro == taiKhoan.MaVaiTro);
@@ -144,7 +150,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaTaiKhoan,TenDangNhap")] TaiKhoan taiKhoan, string MatKhauMoi = null)
+        public async Task<IActionResult> Edit(int id, [Bind("MaTaiKhoan,TenDangNhap")] TaiKhoan taiKhoan, string? MatKhauMoi = null)
         {
             if (id != taiKhoan.MaTaiKhoan)
             {
@@ -155,7 +161,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
-                    if(!string.IsNullOrEmpty(MatKhauMoi))
+                    if (!string.IsNullOrEmpty(MatKhauMoi))
                     {
                         taiKhoan.MatKhau = Login.GetHashedPassword(taiKhoan.Salt, MatKhauMoi);
                     }
@@ -208,10 +214,19 @@ namespace QLTTDT.Areas.Admin.Controllers
             var taiKhoan = await _context.TaiKhoans.FindAsync(id);
             if (taiKhoan != null)
             {
-                _context.TaiKhoans.Remove(taiKhoan);
+                try
+                {
+                    _context.TaiKhoans.Remove(taiKhoan);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
+                    return BadRequest(ModelState);
+                }
             }
 
-            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

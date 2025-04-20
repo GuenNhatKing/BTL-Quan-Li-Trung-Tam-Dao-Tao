@@ -58,14 +58,16 @@ namespace QLTTDT.Areas.Admin.Controllers
             .Include(i => i.MaNguoiDungNavigation)
             .Include(i => i.MaVaiTroNavigation)
             .Where(i => i.MaVaiTroNavigation.TenVaiTro == "HocVien")
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaHocVien = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.MaNguoiDungNavigation.Email,
             })
             .AsSplitQuery()
             .ToList();
             var khoaHocList = _context.KhoaHocs
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaKhoaHoc = i.MaKhoaHoc,
                 DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc
             }).ToList();
@@ -85,14 +87,16 @@ namespace QLTTDT.Areas.Admin.Controllers
             .Include(i => i.MaNguoiDungNavigation)
             .Include(i => i.MaVaiTroNavigation)
             .Where(i => i.MaVaiTroNavigation.TenVaiTro == "HocVien")
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaHocVien = i.MaNguoiDung,
                 DisplayText = i.MaNguoiDung + " - " + i.MaNguoiDungNavigation.Email,
             })
             .AsSplitQuery()
             .ToList();
             var khoaHocList = _context.KhoaHocs
-            .Select(i => new {
+            .Select(i => new
+            {
                 MaKhoaHoc = i.MaKhoaHoc,
                 DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc
             }).ToList();
@@ -101,7 +105,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var validation = new ValidCheck(_context);
-                if(!await validation.IsRegisterCourseVaild(dangKiKhoaHoc.MaHocVien, dangKiKhoaHoc.MaKhoaHoc))
+                if (!await validation.IsRegisterCourseVaild(dangKiKhoaHoc.MaHocVien, dangKiKhoaHoc.MaKhoaHoc))
                 {
                     ModelState.AddModelError("", validation.Error);
                     return View(dangKiKhoaHoc);
@@ -164,7 +168,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
-                    if(!ValidCheck.IsProgressVaild(dangKiKhoaHoc.TienDo))
+                    if (!ValidCheck.IsProgressVaild(dangKiKhoaHoc.TienDo))
                     {
                         ModelState.AddModelError("TienDo", "Tiến độ phải có giá trị từ 0 đến 100.");
                         var hocVien = await _context.NguoiDungs
@@ -235,10 +239,17 @@ namespace QLTTDT.Areas.Admin.Controllers
             var dangKiKhoaHoc = await _context.DangKiKhoaHocs.IgnoreQueryFilters().FirstOrDefaultAsync(i => i.MaDangKi == id);
             if (dangKiKhoaHoc != null)
             {
-                _context.DangKiKhoaHocs.Remove(dangKiKhoaHoc);
+                try
+                {
+                    _context.DangKiKhoaHocs.Remove(dangKiKhoaHoc);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Đã xảy ra lỗi: " + ex.Message);
+                    return BadRequest(ModelState);
+                }
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
