@@ -23,8 +23,14 @@ namespace QLTTDT.Areas.Admin.Controllers
         }
 
         // GET: Admin/VaiTro
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
+            var vaiTros = _context.VaiTros.Select(i => i);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                vaiTros = vaiTros.Where(i => i.TenVaiTro.ToUpper().Contains(searchString));
+            }
             return View(await _context.VaiTros.ToListAsync());
         }
 

@@ -27,9 +27,16 @@ namespace QLTTDT.Areas.Admin.Controllers
         }
 
         // GET: Admin/NguoiDung
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.NguoiDungs.ToListAsync());
+            var nguoiDungs = _context.NguoiDungs.Select(i => i);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                nguoiDungs = nguoiDungs.Where(i => i.HoVaTen.ToUpper().Contains(searchString)
+                || i.Email.ToUpper().Contains(searchString));
+            }
+            return View(await nguoiDungs.ToListAsync());
         }
 
         // GET: Admin/NguoiDung/Details/5

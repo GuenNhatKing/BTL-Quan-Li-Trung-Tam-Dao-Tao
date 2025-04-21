@@ -24,10 +24,18 @@ namespace QLTTDT.Areas.Admin.Controllers
         }
 
         // GET: Admin/DangKiKhoaHoc
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var qLTTDTDbContext = _context.DangKiKhoaHocs.IgnoreQueryFilters().Include(d => d.MaHocVienNavigation).Include(d => d.MaKhoaHocNavigation);
-            return View(await qLTTDTDbContext.ToListAsync());
+            var dkkhs = _context.DangKiKhoaHocs.IgnoreQueryFilters().Include(d => d.MaHocVienNavigation)
+                .Include(d => d.MaKhoaHocNavigation).Select(i => i);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                dkkhs = dkkhs.Where(i => i.ThoiGianDangKi.ToString().ToUpper().Contains(searchString)
+                || i.MaHocVienNavigation.Email.ToUpper().Contains(searchString)
+                || i.MaKhoaHocNavigation.TenKhoaHoc.ToUpper().Contains(searchString));
+            }
+            return View(await dkkhs.ToListAsync());
         }
 
         // GET: Admin/DangKiKhoaHoc/Details/5

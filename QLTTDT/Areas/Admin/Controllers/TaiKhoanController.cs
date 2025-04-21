@@ -25,10 +25,19 @@ namespace QLTTDT.Areas.Admin.Controllers
         }
 
         // GET: Admin/TaiKhoan
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var qLTTDTDbContext = _context.TaiKhoans.Include(t => t.MaNguoiDungNavigation).Include(t => t.MaVaiTroNavigation);
-            return View(await qLTTDTDbContext.ToListAsync());
+            //var taiKhoans = from i in _context.TaiKhoans select i;
+            var taiKhoans = _context.TaiKhoans.Include(t => t.MaNguoiDungNavigation)
+                .Include(t => t.MaVaiTroNavigation).Select(i => i);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                taiKhoans = taiKhoans.Where(i => i.TenDangNhap.ToUpper().Contains(searchString)
+                || i.MaNguoiDungNavigation.Email.ToUpper().Contains(searchString)
+                || i.MaVaiTroNavigation.TenVaiTro.ToUpper().Contains(searchString));
+            }
+            return View(await taiKhoans.ToListAsync());
         }
 
         // GET: Admin/TaiKhoan/Details/5

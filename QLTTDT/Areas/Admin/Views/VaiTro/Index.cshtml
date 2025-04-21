@@ -6,6 +6,12 @@
 <p>
     <a asp-action="Create" class="dashboard-button">Tạo mới</a>
 </p>
+<form asp-controller="VaiTro" asp-action="Index" method="get" class="dashboard-search-form">
+    <input type="text" name="searchString" value="@Context.Request.Query["searchString"]"
+           placeholder="Tìm kiếm vai trò"
+           class="dashboard-search-input" />
+    <button type="submit" class="dashboard-search-button">Tìm</button>
+</form>
 
 <div class="dashboard-table-container">
     <table class="dashboard-table">

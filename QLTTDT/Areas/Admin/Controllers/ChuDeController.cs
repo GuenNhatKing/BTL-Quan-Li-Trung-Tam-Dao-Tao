@@ -27,9 +27,15 @@ namespace QLTTDT.Areas.Admin.Controllers
         }
 
         // GET: Admin/ChuDe
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.ChuDes.ToListAsync());
+            var chuDes = _context.ChuDes.Select(i => i);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                chuDes = chuDes.Where(i => i.TenChuDe.ToUpper().Contains(searchString));
+            }
+            return View(await chuDes.ToListAsync());
         }
 
         // GET: Admin/ChuDe/Details/5

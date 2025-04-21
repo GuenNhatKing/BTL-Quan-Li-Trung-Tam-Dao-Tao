@@ -25,10 +25,19 @@ namespace QLTTDT.Areas.Admin.Controllers
         }
 
         // GET: Admin/KhoaHoc
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var qLTTDTDbContext = _context.KhoaHocs.Include(k => k.MaCapDoNavigation).Include(k => k.MaChuDeNavigation).Include(k => k.MaGiangVienNavigation);
-            return View(await qLTTDTDbContext.ToListAsync());
+            var khoaHocs = _context.KhoaHocs.Include(k => k.MaCapDoNavigation)
+                .Include(k => k.MaChuDeNavigation).Include(k => k.MaGiangVienNavigation)
+                .Select(i => i);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                khoaHocs = khoaHocs.Where(i => i.TenKhoaHoc.ToUpper().Contains(searchString)
+                || i.MaCapDoNavigation.TenCapDo.ToUpper().Contains(searchString)
+                || i.MaChuDeNavigation.TenChuDe.ToUpper().Contains(searchString));
+            }
+            return View(await khoaHocs.ToListAsync());
         }
 
         // GET: Admin/KhoaHoc/Details/5

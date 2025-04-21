@@ -24,9 +24,15 @@ namespace QLTTDT.Areas.Admin.Controllers
         }
 
         // GET: Admin/CapDo
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.CapDos.ToListAsync());
+            var capDos = _context.CapDos.Select(i => i);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                capDos = capDos.Where(i => i.TenCapDo.ToUpper().Contains(searchString));
+            }
+            return View(await capDos.ToListAsync());
         }
 
         // GET: Admin/CapDo/Details/5

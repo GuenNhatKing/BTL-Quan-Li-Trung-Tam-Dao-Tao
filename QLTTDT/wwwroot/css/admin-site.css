@@ -27,6 +27,7 @@
     --box-shadow-header: 0 4px 10px rgba(0, 0, 0, 0.25);
     --z-index-header: 100;
 }
+
 .admin-grid {
     display: grid;
     grid-template-columns: 1fr 4fr;
@@ -67,24 +68,25 @@
 }
 
 .tabs__link {
-    display: inline-block; 
-    background-color: white; 
-    color: #333; 
-    padding: 10px 16px; 
-    border: 1px solid #ccc; 
-    border-radius: 4px; 
-    text-decoration: none; 
-    font-weight: 500; 
-    transition: background-color 0.3s, color 0.3s; 
+    display: inline-block;
+    background-color: white;
+    color: #333;
+    padding: 10px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
 }
 
     .tabs__link:hover {
-        background-color: #f0f0f0; 
-        color: #000; 
+        background-color: #f0f0f0;
+        color: #000;
     }
+
     .tabs__link:active {
         background-color: #dcdcdc;
-        transform: scale(0.98); 
+        transform: scale(0.98);
     }
 
 .header__logo {
@@ -108,7 +110,7 @@
         color: var(--color-foreground-tertiary)
     }
 
-/*----------------------------------------------------------------*/
+/*-------------------------------------------------------------------*/
 
 .dashboard-title {
     font-size: 1.5rem;
@@ -119,7 +121,7 @@
 
 .dashboard-table-container {
     width: 100%;
-    overflow-x: auto; 
+    overflow-x: auto;
     margin-bottom: 1.5rem;
     border-radius: var(--border-radius-default);
     box-shadow: var(--box-shadow-header);
@@ -198,7 +200,6 @@
     text-decoration: none;
 }
 
-/* Sửa */
 .dashboard-link--edit {
     background-color: #90C67C;
 }
@@ -213,7 +214,6 @@
         transform: scale(0.98);
     }
 
-/* Chi tiết */
 .dashboard-link--details {
     background-color: #5C9EFF;
 }
@@ -228,7 +228,6 @@
         transform: scale(0.98);
     }
 
-/* Xóa */
 .dashboard-link--delete {
     background-color: #FF6B6B;
 }
@@ -270,7 +269,6 @@
     color: var(--color-foreground-primary);
 }
 
-/* Tiêu đề */
 .admin-create-title {
     font-size: 1.5rem;
     font-weight: bold;
@@ -278,14 +276,12 @@
     color: var(--color-foreground-primary);
 }
 
-/* Form chính */
 .admin-create-form {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-grid);
 }
 
-/* Nhóm trường */
 .admin-create-group {
     display: flex;
     flex-direction: column;
@@ -298,7 +294,6 @@
     font-size: 1rem;
 }
 
-/* Input, select, textarea */
 .admin-create-input,
 .admin-create-textarea,
 .admin-create-select {
@@ -375,7 +370,6 @@
     object-fit: cover;
 }
 
-/* Nút Tạo mới màu tím giống trang index */
 .admin-create-submit {
     padding: 0.6rem 1.5rem;
     background-color: #6C63FF;
@@ -402,7 +396,7 @@
 
 .admin-create-back {
     margin-top: 20px;
-    color: #6b7280; 
+    color: #6b7280;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
@@ -438,7 +432,7 @@
 
 .admin-delete-submit {
     padding: 0.6rem 1.5rem;
-    background-color: #e74c3c; 
+    background-color: #e74c3c;
     color: white;
     font-weight: bold;
     font-size: var(--font-size-base);
@@ -458,4 +452,51 @@
     .admin-delete-submit:active {
         background-color: #a93226;
         transform: translateY(0);
+    }
+
+/*-------------------------------------------------------------------*/
+.dashboard-search-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.dashboard-search-input {
+    flex-grow: 1;
+    padding: 0.5rem 1rem;
+    font-size: var(--font-size-base);
+    border: 1px solid var(--color-gray-10);
+    border-radius: var(--border-radius-default);
+    background-color: white;
+    font-family: var(--font-family-base);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+    .dashboard-search-input:focus {
+        outline: none;
+        border-color: var(--color-foreground-tertiary);
+        box-shadow: 0 0 0 4px rgba(144, 198, 124, 0.3);
+    }
+
+.dashboard-search-button {
+    padding: 0.5rem 1.25rem;
+    background-color: #6C63FF;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-default);
+    font-size: 0.875rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .dashboard-search-button:hover {
+        background-color: #574fd6;
+        transform: scale(1.03);
+    }
+
+    .dashboard-search-button:active {
+        background-color: #443cb3;
+        transform: scale(0.98);
     }
