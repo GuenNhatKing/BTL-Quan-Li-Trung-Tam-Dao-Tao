@@ -19,6 +19,21 @@ namespace QLTTDT.Controllers
             return View();
         }
 
+        public IActionResult TermsOfUse()
+        {
+            return View();
+        }
+
+        public IActionResult PrivacyPolicy()
+        {
+            return View();
+        }
+
+        public IActionResult ContactAndSupport()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

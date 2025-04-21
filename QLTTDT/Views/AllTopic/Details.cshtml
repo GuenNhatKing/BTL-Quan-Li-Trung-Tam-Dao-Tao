@@ -14,6 +14,12 @@
 </div>
 <div class="template__homepage-content">
 	<div class="container">
+		<form asp-controller="AllTopic" asp-action="Details" method="get" class="user-search-form">
+			<input type="text" name="searchString" value="@Context.Request.Query["searchString"]"
+				   placeholder="Tìm kiếm khoá học, cấp độ..."
+				   class="user-search-input" />
+			<button type="submit" class="user-search-button">Tìm</button>
+		</form>
 		<div class="course-grid">
 			@foreach (var item in Model.DanhSachKhoaHoc)
 			{

@@ -2,8 +2,15 @@
 @{
 	ViewData["Title"] = "Chủ đề";
 }
+
 <div class="template__homepage-content">
 	<div class="topic-container">
+		<form asp-controller="AllTopic" asp-action="Index" method="get" class="user-search-form">
+			<input type="text" name="searchString" value="@Context.Request.Query["searchString"]"
+				   placeholder="Tìm kiếm chủ đề"
+				   class="user-search-input" />
+			<button type="submit" class="user-search-button">Tìm</button>
+		</form>
 		@foreach (var item in Model)
 		{
 			<a class="topic-card"

@@ -1,5 +1,7 @@
 ﻿@model Profiles
-
+@{
+	ViewData["Title"] = "Chỉnh sửa thông tin cá nhân";
+}
 <div class="profiles-edit-container">
 	<form asp-action="ChangeProfiles"
 		  asp-route-username="@User.Identity?.Name"
