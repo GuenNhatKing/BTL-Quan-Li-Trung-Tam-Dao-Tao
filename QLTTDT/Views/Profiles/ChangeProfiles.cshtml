@@ -50,6 +50,10 @@
 		</div>
 
 		<div class="profiles-edit-actions">
+			<a asp-controller="Profiles" asp-action="Index"
+			   asp-route-username="@User.Identity.Name"
+			   asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value"
+			   class="profiles-cancel-button">Huỷ</a>
 			<input type="submit" value="Lưu Thay Đổi" class="profiles-save-button" />
 		</div>
 	</form>
