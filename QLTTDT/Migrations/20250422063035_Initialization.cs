@@ -48,6 +48,7 @@ namespace QLTTDT.Migrations
                     UrlAnhDaiDien = table.Column<string>(type: "varchar(1024)", unicode: false, maxLength: 1024, nullable: true),
                     HoVaTen = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
                     NgaySinh = table.Column<DateOnly>(type: "date", nullable: false),
+                    ThoiGianCompute = table.Column<string>(type: "varchar(10)", nullable: true, computedColumnSql: "CONVERT(varchar(10), [NgaySinh], 103)", stored: true),
                     SoDienThoai = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false),
                     Email = table.Column<string>(type: "varchar(512)", unicode: false, maxLength: 512, nullable: false)
                 },
@@ -82,6 +83,7 @@ namespace QLTTDT.Migrations
                     TenKhoaHoc = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
                     MoTa = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
                     ThoiGianKhaiGiang = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ThoiGianCompute = table.Column<string>(type: "varchar(19)", nullable: true, computedColumnSql: "CONVERT(varchar(8), [ThoiGianKhaiGiang], 108) + ' ' + CONVERT(varchar(10), [ThoiGianKhaiGiang], 103)", stored: true),
                     HocPhi = table.Column<int>(type: "int", nullable: false),
                     SoLuongHocVienToiDa = table.Column<int>(type: "int", nullable: false)
                 },
@@ -140,7 +142,9 @@ namespace QLTTDT.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MaHocVien = table.Column<int>(type: "int", nullable: false),
                     MaKhoaHoc = table.Column<int>(type: "int", nullable: false),
-                    ThoiGianDangKi = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
+                    ThoiGianDangKi = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    ThoiGianCompute = table.Column<string>(type: "varchar(19)", nullable: true, computedColumnSql: "CONVERT(varchar(8), [ThoiGianDangKi], 108) + ' ' + CONVERT(varchar(10), [ThoiGianDangKi], 103)", stored: true),
+                    HocPhi = table.Column<int>(type: "int", nullable: false),
                     TienDo = table.Column<int>(type: "int", nullable: false),
                     DaHuy = table.Column<bool>(type: "bit", nullable: true, defaultValue: false)
                 },

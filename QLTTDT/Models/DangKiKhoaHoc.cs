@@ -18,8 +18,9 @@ public partial class DangKiKhoaHoc
     public int MaKhoaHoc { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime? ThoiGianDangKi { get; set; }
-    public int? HocPhi { get; set; }
+    public DateTime ThoiGianDangKi { get; set; }
+    public string? ThoiGianCompute { get; set; }
+    public int HocPhi { get; set; }
     public int TienDo { get; set; }
 
     public bool? DaHuy { get; set; }

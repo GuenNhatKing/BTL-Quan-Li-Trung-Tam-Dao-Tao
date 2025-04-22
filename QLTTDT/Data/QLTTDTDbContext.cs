@@ -53,6 +53,11 @@ public partial class QLTTDTDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DangKiKhoaHoc_KhoaHoc");
             entity.HasQueryFilter(i => i.DaHuy == null || i.DaHuy == false);
+            // 108: HH:mm:ss, 103: dd/MM/yyyy
+            entity.Property(i => i.ThoiGianCompute)
+            .HasColumnType("varchar(19)")
+            .HasComputedColumnSql("CONVERT(varchar(8), [ThoiGianDangKi], 108) + ' ' + CONVERT(varchar(10), [ThoiGianDangKi], 103)",
+            stored: true);
         });
 
         modelBuilder.Entity<KhoaHoc>(entity =>
@@ -70,11 +75,21 @@ public partial class QLTTDTDbContext : DbContext
             entity.HasOne(d => d.MaGiangVienNavigation).WithMany(p => p.KhoaHocs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_KhoaHoc_NguoiDung");
+            // 108: HH:mm:ss, 103: dd/MM/yyyy
+            entity.Property(i => i.ThoiGianCompute)
+            .HasColumnType("varchar(19)")
+            .HasComputedColumnSql("CONVERT(varchar(8), [ThoiGianKhaiGiang], 108) + ' ' + CONVERT(varchar(10), [ThoiGianKhaiGiang], 103)",
+            stored: true);
         });
 
         modelBuilder.Entity<NguoiDung>(entity =>
         {
             entity.HasKey(e => e.MaNguoiDung).HasName("PK__NguoiDun__C539D762DEB4CD35");
+            // 108: HH:mm:ss, 103: dd/MM/yyyy
+            entity.Property(i => i.ThoiGianCompute)
+            .HasColumnType("varchar(10)")
+            .HasComputedColumnSql("CONVERT(varchar(10), [NgaySinh], 103)",
+            stored: true);
         });
 
         modelBuilder.Entity<TaiKhoan>(entity =>

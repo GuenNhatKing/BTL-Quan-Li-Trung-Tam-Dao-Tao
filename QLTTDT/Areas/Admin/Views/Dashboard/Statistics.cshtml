@@ -4,6 +4,13 @@
 }
 <h1 class="dashboard-title">Thống kê khóa học</h1>
 
+<form asp-controller="Dashboard" asp-action="Statistics" method="get" class="dashboard-search-form">
+    <input type="text" name="searchString" value="@Context.Request.Query["searchString"]"
+           placeholder="Tìm kiếm tên khoá học, thời gian..."
+           class="dashboard-search-input" />
+    <button type="submit" class="dashboard-search-button">Tìm</button>
+</form>
+
 <div class="dashboard-table-container">
     <table class="dashboard-table">
         <thead>
@@ -21,7 +28,7 @@
                 <tr class="dashboard-table-row">
                     <td class="dashboard-table-cell">@Html.DisplayFor(model => item.MaKhoaHoc)</td>
                     <td class="dashboard-table-cell">@Html.DisplayFor(model => item.TenKhoaHoc)</td>
-                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.ThoiGian)</td>
+                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.ThoiGianStr)</td>
                     <td class="dashboard-table-cell text-center">@Html.DisplayFor(model => item.SoHocVienDangKi)</td>
                     <td class="dashboard-table-cell text-center">@string.Format("{0:N0} ₫", item.DoanhThu)</td>
                 </tr>

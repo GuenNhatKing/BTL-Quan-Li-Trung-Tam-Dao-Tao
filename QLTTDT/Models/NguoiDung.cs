@@ -22,6 +22,7 @@ public partial class NguoiDung
     public string HoVaTen { get; set; } = null!;
 
     public DateOnly NgaySinh { get; set; }
+    public string? ThoiGianCompute { get; set; }
 
     [StringLength(10)]
     [Unicode(false)]

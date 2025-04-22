@@ -41,6 +41,7 @@ namespace QLTTDT.Controllers
                 HocPhi = khoaHoc.HocPhi,
                 SoLuongHocVienToiDa = khoaHoc.SoLuongHocVienToiDa,
                 ThoiGianKhaiGiang = khoaHoc.ThoiGianKhaiGiang,
+                ThoiGianCompute = khoaHoc.ThoiGianCompute,
                 UrlAnh = khoaHoc.UrlAnh,
                 TenCapDo = (await _context.CapDos.FirstOrDefaultAsync(i => i.MaCapDo == khoaHoc.MaCapDo))?.TenCapDo,
                 TenChuDe = (await _context.ChuDes.FirstOrDefaultAsync(i => i.MaChuDe == khoaHoc.MaChuDe))?.TenChuDe,
@@ -75,7 +76,7 @@ namespace QLTTDT.Controllers
                 if(dkkh != null)
                 {
                     dkkh.DaHuy = false;
-                    dkkh.HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == courseId))?.HocPhi;
+                    dkkh.HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == courseId)).HocPhi;
                     dkkh.ThoiGianDangKi = DateTime.Now;
                     try
                     {
@@ -93,7 +94,7 @@ namespace QLTTDT.Controllers
                     {
                         MaHocVien = (int)userId,
                         MaKhoaHoc = (int)courseId,
-                        HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == courseId))?.HocPhi,
+                        HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == courseId)).HocPhi,
                     };
                     _context.Add(register);
                     await _context.SaveChangesAsync();

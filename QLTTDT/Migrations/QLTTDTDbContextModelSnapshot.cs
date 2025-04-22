@@ -83,7 +83,7 @@ namespace QLTTDT.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int?>("HocPhi")
+                    b.Property<int>("HocPhi")
                         .HasColumnType("int");
 
                     b.Property<int>("MaHocVien")
@@ -92,7 +92,12 @@ namespace QLTTDT.Migrations
                     b.Property<int>("MaKhoaHoc")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ThoiGianDangKi")
+                    b.Property<string>("ThoiGianCompute")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("varchar(19)")
+                        .HasComputedColumnSql("CONVERT(varchar(8), [ThoiGianDangKi], 108) + ' ' + CONVERT(varchar(10), [ThoiGianDangKi], 103)", true);
+
+                    b.Property<DateTime>("ThoiGianDangKi")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
@@ -143,6 +148,11 @@ namespace QLTTDT.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<string>("ThoiGianCompute")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("varchar(19)")
+                        .HasComputedColumnSql("CONVERT(varchar(8), [ThoiGianKhaiGiang], 108) + ' ' + CONVERT(varchar(10), [ThoiGianKhaiGiang], 103)", true);
+
                     b.Property<DateTime>("ThoiGianKhaiGiang")
                         .HasColumnType("datetime");
 
@@ -190,6 +200,11 @@ namespace QLTTDT.Migrations
                         .HasMaxLength(10)
                         .IsUnicode(false)
                         .HasColumnType("varchar(10)");
+
+                    b.Property<string>("ThoiGianCompute")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("varchar(10)")
+                        .HasComputedColumnSql("CONVERT(varchar(10), [NgaySinh], 103)", true);
 
                     b.Property<string>("UrlAnhDaiDien")
                         .HasMaxLength(1024)

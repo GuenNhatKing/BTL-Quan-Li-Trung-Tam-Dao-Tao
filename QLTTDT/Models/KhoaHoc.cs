@@ -31,6 +31,7 @@ public partial class KhoaHoc
 
     [Column(TypeName = "datetime")]
     public DateTime ThoiGianKhaiGiang { get; set; }
+    public string? ThoiGianCompute { get; set; }
 
     public int HocPhi { get; set; }
 

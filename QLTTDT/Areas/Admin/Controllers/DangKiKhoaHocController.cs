@@ -31,7 +31,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToUpper();
-                dkkhs = dkkhs.Where(i => i.ThoiGianDangKi.ToString().ToUpper().Contains(searchString)
+                dkkhs = dkkhs.Where(i => i.ThoiGianCompute!.ToUpper().Contains(searchString)
                 || i.MaHocVienNavigation.Email.ToUpper().Contains(searchString)
                 || i.MaKhoaHocNavigation.TenKhoaHoc.ToUpper().Contains(searchString));
             }
@@ -118,7 +118,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                     ModelState.AddModelError("", validation.Error);
                     return View(dangKiKhoaHoc);
                 }
-                dangKiKhoaHoc.HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc))?.HocPhi;
+                dangKiKhoaHoc.HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc)).HocPhi;
                 _context.Add(dangKiKhoaHoc);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

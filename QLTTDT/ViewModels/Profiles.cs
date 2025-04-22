@@ -6,6 +6,7 @@
         public string? UrlAnhDaiDien { get; set; }
         public string HoVaTen { get; set; } = null!;
         public DateOnly NgaySinh { get; set; }
+        public string? NgaySinhCompute { get; set; }
         public string SoDienThoai { get; set; } = null!;
         public string Email { get; set; } = null!;
         public int SoKhoaHocDaDangKi { get; set; }

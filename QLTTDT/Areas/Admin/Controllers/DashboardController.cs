@@ -34,15 +34,13 @@ namespace QLTTDT.Areas.Admin.Controllers
                 .ToListAsync();
             return View(statistics);
         }
-        public async Task<IActionResult> Statistics()
+        public async Task<IActionResult> Statistics(string searchString)
         {
-            var statistics = await _context.DangKiKhoaHocs
+            var statistics = _context.DangKiKhoaHocs
                 .Include(i => i.MaKhoaHocNavigation)
                 .GroupBy(i => new
                 {
-                    ThoiGian = i.ThoiGianDangKi.HasValue
-                    ? DateOnly.FromDateTime(i.ThoiGianDangKi.Value)
-                    : (DateOnly?)null,
+                    ThoiGian = DateOnly.FromDateTime(i.ThoiGianDangKi),
                     MaKhoaHoc = i.MaKhoaHoc,
                     TenKhoaHoc = i.MaKhoaHocNavigation.TenKhoaHoc
                 })
@@ -53,11 +51,18 @@ namespace QLTTDT.Areas.Admin.Controllers
                     MaKhoaHoc = i.Key.MaKhoaHoc,
                     TenKhoaHoc = i.Key.TenKhoaHoc,
                     ThoiGian = i.Key.ThoiGian,
+                    ThoiGianStr = i.Key.ThoiGian.Day.ToString() + "/" + i.Key.ThoiGian.Month.ToString() + "/" + i.Key.ThoiGian.Year.ToString(),
                     SoHocVienDangKi = i.Count(i => true),
                     DoanhThu = i.Sum(i => i.HocPhi),
-                })
-                .ToListAsync();
-            return View(statistics);
+                });
+
+            if(!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                statistics = statistics.Where(i => i.TenKhoaHoc.ToUpper().Contains(searchString)
+                || i.ThoiGianStr.ToUpper().Contains(searchString.ToString()));
+            }
+            return View(await statistics.ToListAsync());
         }
     }
 }
