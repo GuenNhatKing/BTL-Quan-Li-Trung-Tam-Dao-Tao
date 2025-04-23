@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
@@ -25,13 +26,19 @@ namespace QLTTDT.Controllers
             var user = await _context.NguoiDungs.FirstOrDefaultAsync(i => i.MaNguoiDung == id);
             if (user == null)
                 return NotFound();
+            int currUserId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            string currUsername = HttpContext.User.Identity.Name;
+            if (username != currUsername || currUserId != id)
+            {
+                return RedirectToAction("AccessDenied", "Authentication", new { area = "" });
+            }
             var profiles = new Profiles
             {
                 MaNguoiDung = user.MaNguoiDung,
                 Email = user.Email,
                 HoVaTen = user.HoVaTen,
                 NgaySinh = user.NgaySinh,
-                //NgaySinhCompute = user.ThoiGianCompute,
+                NgaySinhCompute = user.ThoiGianCompute,
                 SoDienThoai = user.SoDienThoai,
                 UrlAnhDaiDien = user.UrlAnhDaiDien,
                 SoKhoaHocDaDangKi = await _context.DangKiKhoaHocs.CountAsync(i => i.MaHocVien == user.MaNguoiDung),
@@ -48,6 +55,12 @@ namespace QLTTDT.Controllers
             var user = await _context.NguoiDungs.FirstOrDefaultAsync(i => i.MaNguoiDung == id);
             if (user == null)
                 return NotFound();
+            int currUserId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            string currUsername = HttpContext.User.Identity.Name;
+            if (username != currUsername || currUserId != id)
+            {
+                return RedirectToAction("AccessDenied", "Authentication", new { area = "" });
+            }
             var profiles = new Profiles
             {
                 MaNguoiDung = user.MaNguoiDung,
@@ -72,7 +85,12 @@ namespace QLTTDT.Controllers
             var user = await _context.NguoiDungs.FirstOrDefaultAsync(i => i.MaNguoiDung == id);
             if (user == null)
                 return NotFound();
-
+            int currUserId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            string currUsername = HttpContext.User.Identity.Name;
+            if (username != currUsername || currUserId != id)
+            {
+                return RedirectToAction("AccessDenied", "Authentication", new { area = "" });
+            }
             if (ModelState.IsValid)
             {
                 try

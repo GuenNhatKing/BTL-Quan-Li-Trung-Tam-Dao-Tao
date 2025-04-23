@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
 using QLTTDT.Models;
+using QLTTDT.ViewModels;
 
 namespace QLTTDT.Services
 {
@@ -16,6 +17,12 @@ namespace QLTTDT.Services
         }
         public async Task<bool> AccountValidation(TaiKhoan taiKhoan)
         {
+            if (taiKhoan.MatKhau.Length < 6)
+            {
+                ErrorKey = "MatKhau";
+                Error = "Mật khẩu quá ngắn.";
+                return false;
+            }
             if (await IsUsernameExist(taiKhoan.TenDangNhap))
             {
                 ErrorKey = "TenDangNhap";

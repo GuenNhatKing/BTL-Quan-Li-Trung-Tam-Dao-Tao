@@ -49,13 +49,19 @@ namespace QLTTDT.Services
                 Error = "Địa chỉ email đã tồn tại";
                 return false;
             }
-            if(RegisterForm.Password != RegisterForm.RePassword)
+            if (RegisterForm.Password.Length < 6)
+            {
+                ErrorKey = "Password";
+                Error = "Mật khẩu quá ngắn.";
+                return false;
+            }
+            if (RegisterForm.Password != RegisterForm.RePassword)
             {
                 ErrorKey = "RePassword";
                 Error = "Không khớp với mật khẩu đã nhập";
                 return false;
             }
-            
+
             if (await validation.IsUsernameExist(RegisterForm.Username))
             {
                 ErrorKey = "Username";
@@ -66,7 +72,7 @@ namespace QLTTDT.Services
             string hashedPassword = Login.GetHashedPassword(saltBytes, RegisterForm.Password);
             var vaiTro = await _context.VaiTros.FirstOrDefaultAsync(i => i.TenVaiTro == "HocVien");
             bool transDone = false;
-            using(var trans = _context.Database.BeginTransaction())
+            using (var trans = _context.Database.BeginTransaction())
             {
                 try
                 {
