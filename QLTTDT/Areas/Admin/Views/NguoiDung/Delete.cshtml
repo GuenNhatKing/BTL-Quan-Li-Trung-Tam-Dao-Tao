@@ -41,6 +41,7 @@
     </dl>
 
     <form asp-action="Delete" class="d-flex justify-content-end column-gap-2 mt-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
         <input type="hidden" asp-for="MaNguoiDung" />
 
         <button type="submit" class="admin-delete-submit">

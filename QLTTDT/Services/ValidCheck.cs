@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
 using QLTTDT.Models;
 
@@ -37,7 +38,18 @@ namespace QLTTDT.Services
         }
         public async Task<bool> UserValidation(NguoiDung nguoiDung)
         {
-            Console.WriteLine("Goi ham user checking");
+            if (!Regex.IsMatch(nguoiDung.SoDienThoai, "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$"))
+            {
+                ErrorKey = "SoDienThoai";
+                Error = "Số điện thoại không đúng định dạng.";
+                return false;
+            }
+            if (!Regex.IsMatch(nguoiDung.Email, "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
+            {
+                ErrorKey = "Email";
+                Error = "Địa chỉ email không đúng định dạng.";
+                return false;
+            }
             if (await IsPhoneNumberExist(nguoiDung.SoDienThoai))
             {
                 ErrorKey = "SoDienThoai";
@@ -76,16 +88,16 @@ namespace QLTTDT.Services
         public async Task<bool> IsRegisterCourseVaild(int? maHocVien, int? maKhoaHoc)
         {
             ErrorKey = "";
-            if (maHocVien == null || maKhoaHoc == null) 
+            if (maHocVien == null || maKhoaHoc == null)
             {
                 Error = "Mã người dùng hoặc mã khoá học không hợp lệ";
-                return false; 
+                return false;
             }
             if (await _context.DangKiKhoaHocs
-            .AnyAsync(i => i.MaHocVien == maHocVien && i.MaKhoaHoc == maKhoaHoc)) 
-            { 
+            .AnyAsync(i => i.MaHocVien == maHocVien && i.MaKhoaHoc == maKhoaHoc))
+            {
                 Error = "Học viên đã đăng kí khoá học này rồi";
-                return false; 
+                return false;
             }
             if ((await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == maKhoaHoc))?.SoLuongHocVienToiDa
             <= (await _context.DangKiKhoaHocs.CountAsync(i => i.MaKhoaHoc == maKhoaHoc)))

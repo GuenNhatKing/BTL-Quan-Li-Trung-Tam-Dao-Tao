@@ -8,7 +8,7 @@ using QLTTDT.ViewModels;
 
 namespace QLTTDT.Controllers
 {
-    [Authorize(Roles = "HocVien,Admin")]
+    [Authorize(Roles = "HocVien, Admin")]
     public class ProfilesController : Controller
     {
         private QLTTDTDbContext _context;

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
@@ -24,6 +25,18 @@ namespace QLTTDT.Services
         public async Task<bool> CreateUser()
         {
             var validation = new ValidCheck(_context);
+            if (!Regex.IsMatch(RegisterForm.SoDienThoai, "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$"))
+            {
+                ErrorKey = "SoDienThoai";
+                Error = "Số điện thoại không đúng định dạng.";
+                return false;
+            }
+            if (!Regex.IsMatch(RegisterForm.Email, "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
+            {
+                ErrorKey = "Email";
+                Error = "Địa chỉ email không đúng định dạng.";
+                return false;
+            }
             if (await validation.IsPhoneNumberExist(RegisterForm.SoDienThoai))
             {
                 ErrorKey = "SoDienThoai";

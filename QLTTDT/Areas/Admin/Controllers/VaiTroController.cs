@@ -165,6 +165,11 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
+                    if (_context.TaiKhoans.Any(i => i.MaVaiTro == vaiTro.MaVaiTro))
+                    {
+                        ModelState.AddModelError("", "Vai trò đã được sử dụng cho ít nhất một tài khoản.");
+                        return View(vaiTro);
+                    }
                     return BadRequest(ex.Message);
                 }
             }

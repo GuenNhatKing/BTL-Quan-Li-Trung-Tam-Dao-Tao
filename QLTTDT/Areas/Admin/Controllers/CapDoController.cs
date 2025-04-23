@@ -165,6 +165,11 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
+                    if (_context.KhoaHocs.Any(i => i.MaCapDo == capDo.MaCapDo))
+                    {
+                        ModelState.AddModelError("", "Cấp độ đã được sử dụng cho ít nhất một khoá học.");
+                        return View(capDo);
+                    }
                     return BadRequest(ex.Message);
                 }
             }

@@ -330,15 +330,17 @@
     min-height: 100px;
 }
 
-/* Thông báo lỗi chung */
 .admin-create-validation {
     font-size: 0.875rem;
     color: var(--color-highlight);
 }
+    .admin-create-validation ul {
+        list-style: none;
+    }
 
-.admin-create-image-wrapper {
-    margin-bottom: 20px;
-}
+    .admin-create-image-wrapper {
+        margin-bottom: 20px;
+    }
 
 .admin-create-image-container {
     margin-top: 20px;

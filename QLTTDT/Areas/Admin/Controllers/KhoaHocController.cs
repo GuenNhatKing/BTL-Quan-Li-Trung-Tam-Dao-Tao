@@ -164,7 +164,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("MaKhoaHoc,TenKhoaHoc,MoTa,ThoiGianKhaiGiang,HocPhi,SoLuongHocVienToiDa")] KhoaHoc khoaHoc, IFormFile? AnhKhoaHoc)
+        public async Task<IActionResult> Edit(int? id, [Bind("MaKhoaHoc, MaGiangVien, MaChuDe, MaCapDo, TenKhoaHoc,MoTa,ThoiGianKhaiGiang,HocPhi,SoLuongHocVienToiDa")] KhoaHoc khoaHoc, IFormFile? AnhKhoaHoc)
         {
             if (id == null)
             {
@@ -207,6 +207,9 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
+                    course.MaCapDo = khoaHoc.MaCapDo;
+                    course.MaChuDe = khoaHoc.MaChuDe;
+                    course.MaGiangVien = khoaHoc.MaGiangVien;
                     course.TenKhoaHoc = khoaHoc.TenKhoaHoc;
                     course.ThoiGianKhaiGiang = khoaHoc.ThoiGianKhaiGiang;
                     course.HocPhi = khoaHoc.HocPhi;
@@ -277,6 +280,11 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
+                    if (_context.DangKiKhoaHocs.Any(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc))
+                    {
+                        ModelState.AddModelError("", "Khoá học đã được đăng ký bởi ít nhất một người dùng.");
+                        return View(khoaHoc);
+                    }
                     return BadRequest(ex.Message);
                 }
             }

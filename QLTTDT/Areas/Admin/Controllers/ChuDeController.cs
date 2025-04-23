@@ -182,6 +182,11 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
+                    if (_context.KhoaHocs.Any(i => i.MaChuDe == chuDe.MaChuDe))
+                    {
+                        ModelState.AddModelError("", "Chủ đề đã được sử dụng bởi ít nhất một khoá học.");
+                        return View(chuDe);
+                    }
                     return BadRequest(ex.Message);
                 }
             }

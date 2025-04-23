@@ -60,9 +60,9 @@ namespace QLTTDT.Areas.Admin.Controllers
         }
 
         // GET: Admin/DangKiKhoaHoc/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var hocVienList = _context.TaiKhoans
+            var hocVienList = await _context.TaiKhoans
             .Include(i => i.MaNguoiDungNavigation)
             .Include(i => i.MaVaiTroNavigation)
             .Where(i => i.MaVaiTroNavigation.TenVaiTro == "HocVien")
@@ -72,13 +72,13 @@ namespace QLTTDT.Areas.Admin.Controllers
                 DisplayText = i.MaNguoiDung + " - " + i.MaNguoiDungNavigation.Email,
             })
             .AsSplitQuery()
-            .ToList();
-            var khoaHocList = _context.KhoaHocs
+            .ToListAsync();
+            var khoaHocList = await _context.KhoaHocs
             .Select(i => new
             {
                 MaKhoaHoc = i.MaKhoaHoc,
                 DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc
-            }).ToList();
+            }).ToListAsync();
             ViewData["MaHocVien"] = new SelectList(hocVienList, "MaHocVien", "DisplayText");
             ViewData["MaKhoaHoc"] = new SelectList(khoaHocList, "MaKhoaHoc", "DisplayText");
             return View();
@@ -91,7 +91,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MaDangKi,MaHocVien,MaKhoaHoc,ThoiGianDangKi,TienDo,DaHuy")] DangKiKhoaHoc dangKiKhoaHoc)
         {
-            var hocVienList = _context.TaiKhoans
+            var hocVienList = await _context.TaiKhoans
             .Include(i => i.MaNguoiDungNavigation)
             .Include(i => i.MaVaiTroNavigation)
             .Where(i => i.MaVaiTroNavigation.TenVaiTro == "HocVien")
@@ -101,7 +101,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                 DisplayText = i.MaNguoiDung + " - " + i.MaNguoiDungNavigation.Email,
             })
             .AsSplitQuery()
-            .ToList();
+            .ToListAsync();
             var khoaHocList = _context.KhoaHocs
             .Select(i => new
             {

@@ -190,6 +190,21 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
+                    if (_context.TaiKhoans.Any(i => i.MaNguoiDung == nguoiDung.MaNguoiDung))
+                    {
+                        ModelState.AddModelError("", "Người dùng đã được sử dụng cho 1 tài khoản.");
+                        return View(nguoiDung);
+                    }
+                    if (_context.DangKiKhoaHocs.Any(i => i.MaHocVien == nguoiDung.MaNguoiDung))
+                    {
+                        ModelState.AddModelError("", "Người dùng đã đăng ký ít nhất một khoá học.");
+                        return View(nguoiDung);
+                    }
+                    if (_context.KhoaHocs.Any(i => i.MaGiangVien == nguoiDung.MaNguoiDung))
+                    {
+                        ModelState.AddModelError("", "Người dùng đã làm giảng viên cho ít nhất một khoá học.");
+                        return View(nguoiDung);
+                    }
                     return BadRequest(ex.Message);
                 }
             }

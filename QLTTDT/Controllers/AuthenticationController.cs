@@ -62,7 +62,6 @@ namespace QLTTDT.Controllers
             if (ModelState.IsValid)
             {
                 var register = new Register(_context, registerForm);
-                Console.WriteLine(register.RegisterForm.HoVaTen);
                 if(await register.CreateUser())
                 {
                     return RedirectToAction("Index", "Home", new { area = "" });
