@@ -9,11 +9,7 @@
 
 <div class="admin-create-container">
     <form asp-action="Create" class="admin-create-form">
-
         <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
-
-        <input type="hidden" asp-for="TienDo" value="0" />
-
         <div class="form-group admin-create-group">
             <label asp-for="MaHocVien" class="admin-create-label">Học viên</label>
             <select asp-for="MaHocVien" class="admin-create-select" asp-items="ViewBag.MaHocVien"></select>

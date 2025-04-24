@@ -9,15 +9,12 @@
 
 <div class="admin-create-container">
     <form asp-action="Create" class="admin-create-form">
-
         <div asp-validation-summary="ModelOnly" class="text-danger admin-create-validation"></div>
-
         <div class="form-group admin-create-group">
             <label asp-for="TenCapDo" class="admin-create-label">Tên cấp độ</label>
             <input asp-for="TenCapDo" class="admin-create-input" />
             <span asp-validation-for="TenCapDo" class="text-danger admin-create-validation"></span>
         </div>
-
         <div class="form-group admin-create-group">
             <input type="submit" value="Tạo mới" class="admin-create-submit" />
             <a asp-action="Index" class="admin-create-back">← Quay lại danh sách</a>

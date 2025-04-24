@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
@@ -23,22 +24,25 @@ namespace QLTTDT.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/DangKiKhoaHoc
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string? searchString)
         {
-            var dkkhs = _context.DangKiKhoaHocs.IgnoreQueryFilters().Include(d => d.MaHocVienNavigation)
-                .Include(d => d.MaKhoaHocNavigation).Select(i => i);
+            var dkkhs = _context.DangKiKhoaHocs
+            .IgnoreQueryFilters()
+            .Include(d => d.MaHocVienNavigation)
+            .Include(d => d.MaKhoaHocNavigation)
+            .Select(i => i);
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToUpper();
-                dkkhs = dkkhs.Where(i => i.ThoiGianCompute!.ToUpper().Contains(searchString)
+                dkkhs = dkkhs
+                .Where(i => i.ThoiGianCompute!.ToUpper().Contains(searchString)
                 || i.MaHocVienNavigation.Email.ToUpper().Contains(searchString)
                 || i.MaKhoaHocNavigation.TenKhoaHoc.ToUpper().Contains(searchString));
             }
             return View(await dkkhs.ToListAsync());
         }
 
-        // GET: Admin/DangKiKhoaHoc/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,10 +51,10 @@ namespace QLTTDT.Areas.Admin.Controllers
             }
 
             var dangKiKhoaHoc = await _context.DangKiKhoaHocs
-                .IgnoreQueryFilters()
-                .Include(d => d.MaHocVienNavigation)
-                .Include(d => d.MaKhoaHocNavigation)
-                .FirstOrDefaultAsync(m => m.MaDangKi == id);
+            .IgnoreQueryFilters()
+            .Include(d => d.MaHocVienNavigation)
+            .Include(d => d.MaKhoaHocNavigation)
+            .FirstOrDefaultAsync(m => m.MaDangKi == id);
             if (dangKiKhoaHoc == null)
             {
                 return NotFound();
@@ -59,66 +63,34 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(dangKiKhoaHoc);
         }
 
-        // GET: Admin/DangKiKhoaHoc/Create
         public async Task<IActionResult> Create()
         {
-            var hocVienList = await _context.TaiKhoans
-            .Include(i => i.MaNguoiDungNavigation)
-            .Include(i => i.MaVaiTroNavigation)
-            .Where(i => i.MaVaiTroNavigation.TenVaiTro == "HocVien")
-            .Select(i => new
-            {
-                MaHocVien = i.MaNguoiDung,
-                DisplayText = i.MaNguoiDung + " - " + i.MaNguoiDungNavigation.Email,
-            })
-            .AsSplitQuery()
-            .ToListAsync();
-            var khoaHocList = await _context.KhoaHocs
-            .Select(i => new
-            {
-                MaKhoaHoc = i.MaKhoaHoc,
-                DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc
-            }).ToListAsync();
-            ViewData["MaHocVien"] = new SelectList(hocVienList, "MaHocVien", "DisplayText");
-            ViewData["MaKhoaHoc"] = new SelectList(khoaHocList, "MaKhoaHoc", "DisplayText");
+            await LoadDataList();
             return View();
         }
 
-        // POST: Admin/DangKiKhoaHoc/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MaDangKi,MaHocVien,MaKhoaHoc,ThoiGianDangKi,TienDo,DaHuy")] DangKiKhoaHoc dangKiKhoaHoc)
         {
-            var hocVienList = await _context.TaiKhoans
-            .Include(i => i.MaNguoiDungNavigation)
-            .Include(i => i.MaVaiTroNavigation)
-            .Where(i => i.MaVaiTroNavigation.TenVaiTro == "HocVien")
-            .Select(i => new
-            {
-                MaHocVien = i.MaNguoiDung,
-                DisplayText = i.MaNguoiDung + " - " + i.MaNguoiDungNavigation.Email,
-            })
-            .AsSplitQuery()
-            .ToListAsync();
-            var khoaHocList = _context.KhoaHocs
-            .Select(i => new
-            {
-                MaKhoaHoc = i.MaKhoaHoc,
-                DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc
-            }).ToList();
-            ViewData["MaHocVien"] = new SelectList(hocVienList, "MaHocVien", "DisplayText");
-            ViewData["MaKhoaHoc"] = new SelectList(khoaHocList, "MaKhoaHoc", "DisplayText");
+            await LoadDataList();
             if (ModelState.IsValid)
             {
                 var validation = new ValidCheck(_context);
                 if (!await validation.IsRegisterCourseVaild(dangKiKhoaHoc.MaHocVien, dangKiKhoaHoc.MaKhoaHoc))
                 {
-                    ModelState.AddModelError("", validation.Error);
+                    ModelState.AddModelError(validation.ErrorKey, validation.Error);
                     return View(dangKiKhoaHoc);
                 }
-                dangKiKhoaHoc.HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc)).HocPhi;
+                var khoaHoc = await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc);
+                if (khoaHoc == null)
+                {
+                    ModelState.AddModelError("MaKhoaHoc", "Khoá học không tồn tại");
+                }
+                else
+                {
+                    dangKiKhoaHoc.HocPhi = khoaHoc.HocPhi;
+                }
                 _context.Add(dangKiKhoaHoc);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -126,7 +98,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(dangKiKhoaHoc);
         }
 
-        // GET: Admin/DangKiKhoaHoc/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -141,28 +112,10 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var hocVien = await _context.NguoiDungs
-            .Select(i => new
-            {
-                MaHocVien = i.MaNguoiDung,
-                DisplayText = i.MaNguoiDung + " - " + i.Email,
-            })
-            .FirstOrDefaultAsync(i => i.MaHocVien == dangKiKhoaHoc.MaHocVien);
-            var khoaHoc = await _context.KhoaHocs
-            .Select(i => new
-            {
-                MaKhoaHoc = i.MaKhoaHoc,
-                DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc,
-            })
-            .FirstOrDefaultAsync(i => i.MaKhoaHoc == dangKiKhoaHoc.MaKhoaHoc);
-            ViewData["MaHocVien"] = hocVien?.DisplayText;
-            ViewData["MaKhoaHoc"] = khoaHoc?.DisplayText;
+            await LoadData(dangKiKhoaHoc);
             return View(dangKiKhoaHoc);
         }
 
-        // POST: Admin/DangKiKhoaHoc/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, [Bind("MaDangKi,ThoiGianDangKi,TienDo,DaHuy")] DangKiKhoaHoc dangKiKhoaHoc)
@@ -173,28 +126,13 @@ namespace QLTTDT.Areas.Admin.Controllers
             }
 
             var courseRegister = await _context.DangKiKhoaHocs
-                .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(i => i.MaDangKi == id);
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(i => i.MaDangKi == id);
             if (courseRegister == null)
             {
                 return NotFound();
             }
-            var hocVien = await _context.NguoiDungs
-             .Select(i => new
-             {
-                 MaHocVien = i.MaNguoiDung,
-                 DisplayText = i.MaNguoiDung + " - " + i.Email,
-             })
-             .FirstOrDefaultAsync(i => i.MaHocVien == courseRegister.MaHocVien);
-            var khoaHoc = await _context.KhoaHocs
-            .Select(i => new
-            {
-                MaKhoaHoc = i.MaKhoaHoc,
-                DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc,
-            })
-            .FirstOrDefaultAsync(i => i.MaKhoaHoc == courseRegister.MaKhoaHoc);
-            ViewData["MaHocVien"] = hocVien?.DisplayText;
-            ViewData["MaKhoaHoc"] = khoaHoc?.DisplayText;
+            await LoadData(courseRegister);
 
             if (ModelState.IsValid)
             {
@@ -213,21 +151,12 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!DangKiKhoaHocExists(courseRegister.MaDangKi))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        return BadRequest(ex.Message);
-                    }
+                    return BadRequest(ex.Message);
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(dangKiKhoaHoc);
         }
-
-        // GET: Admin/DangKiKhoaHoc/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -248,7 +177,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(dangKiKhoaHoc);
         }
 
-        // POST: Admin/DangKiKhoaHoc/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -269,9 +197,50 @@ namespace QLTTDT.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DangKiKhoaHocExists(int id)
+        private async Task LoadDataList()
         {
-            return _context.DangKiKhoaHocs.IgnoreQueryFilters().Any(e => e.MaDangKi == id);
+            var hocVienList = await _context.TaiKhoans
+            .Include(i => i.MaNguoiDungNavigation)
+            .Include(i => i.MaVaiTroNavigation)
+            .Where(i => i.MaVaiTroNavigation.TenVaiTro == "HocVien")
+            .Select(i => new
+            {
+                MaHocVien = i.MaNguoiDung,
+                DisplayText = i.MaNguoiDung + " - " + i.MaNguoiDungNavigation.Email,
+            })
+            .AsSplitQuery()
+            .ToListAsync();
+
+            var khoaHocList = await _context.KhoaHocs
+            .Select(i => new
+            {
+                MaKhoaHoc = i.MaKhoaHoc,
+                DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc
+            }).ToListAsync();
+
+            ViewData["MaHocVien"] = new SelectList(hocVienList, "MaHocVien", "DisplayText");
+            ViewData["MaKhoaHoc"] = new SelectList(khoaHocList, "MaKhoaHoc", "DisplayText");
+        }
+        private async Task LoadData(DangKiKhoaHoc dkkh)
+        {
+            var hocVien = await _context.NguoiDungs
+            .Select(i => new
+            {
+                MaHocVien = i.MaNguoiDung,
+                DisplayText = i.MaNguoiDung + " - " + i.Email,
+            })
+            .FirstOrDefaultAsync(i => i.MaHocVien == dkkh.MaHocVien);
+
+            var khoaHoc = await _context.KhoaHocs
+            .Select(i => new
+            {
+                MaKhoaHoc = i.MaKhoaHoc,
+                DisplayText = i.MaKhoaHoc + " - " + i.TenKhoaHoc,
+            })
+            .FirstOrDefaultAsync(i => i.MaKhoaHoc == dkkh.MaKhoaHoc);
+
+            ViewData["MaHocVien"] = hocVien?.DisplayText;
+            ViewData["MaKhoaHoc"] = khoaHoc?.DisplayText;
         }
     }
 }

@@ -22,7 +22,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/VaiTro
         public async Task<IActionResult> Index(string searchString)
         {
             var vaiTros = _context.VaiTros.Select(i => i);
@@ -34,7 +33,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(await _context.VaiTros.ToListAsync());
         }
 
-        // GET: Admin/VaiTro/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -52,15 +50,11 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(vaiTro);
         }
 
-        // GET: Admin/VaiTro/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/VaiTro/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MaVaiTro,TenVaiTro")] VaiTro vaiTro)
@@ -74,7 +68,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(vaiTro);
         }
 
-        // GET: Admin/VaiTro/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,9 +83,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(vaiTro);
         }
 
-        // POST: Admin/VaiTro/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, [Bind("MaVaiTro,TenVaiTro")] VaiTro vaiTro)
@@ -118,21 +108,13 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!VaiTroExists(vaiTro.MaVaiTro))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        return BadRequest(ex.Message);
-                    }
+                    return BadRequest(ex.Message);
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(vaiTro);
         }
 
-        // GET: Admin/VaiTro/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -150,7 +132,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(vaiTro);
         }
 
-        // POST: Admin/VaiTro/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -174,11 +155,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool VaiTroExists(int id)
-        {
-            return _context.VaiTros.Any(e => e.MaVaiTro == id);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
+using QLTTDT.Models;
 using QLTTDT.ViewModels;
 
 namespace QLTTDT.Areas.Admin.Controllers
@@ -29,38 +30,103 @@ namespace QLTTDT.Areas.Admin.Controllers
                 {
                     MaKhoaHoc = i.Key.MaKhoaHoc,
                     TenKhoaHoc = i.Key.TenKhoaHoc,
-                    SoHocVienDangKi = i.Count(i => true),
+                    SoHocVienDangKi = i.Count(),
                 })
                 .ToListAsync();
             return View(statistics);
         }
-        public async Task<IActionResult> Statistics(string searchString)
+        public async Task<IActionResult> Statistics(string searchString, MyDateType? startTime = null, MyDateType? endTime = null, bool statistic = false)
         {
-            var statistics = _context.DangKiKhoaHocs
-                .Include(i => i.MaKhoaHocNavigation)
-                .GroupBy(i => new
+            DateTypes type = (startTime != null && endTime != null) ? startTime.Type : DateTypes.DATE;
+            var dkkh = _context.DangKiKhoaHocs.AsQueryable();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                dkkh = dkkh.Where(i => i.MaKhoaHocNavigation.TenKhoaHoc.ToUpper().Contains(searchString));
+            }
+            if (statistic && startTime != null && endTime != null)
+            {
+                dkkh = dkkh
+                .Where(i => i.ThoiGianDangKi >= (DateTime)startTime && i.ThoiGianDangKi < (DateTime)endTime);
+            }
+            IQueryable<Statistics> statistics;
+            if (type == DateTypes.YEAR)
+            {
+                statistics = dkkh.GroupBy(i => new
                 {
-                    ThoiGian = DateOnly.FromDateTime(i.ThoiGianDangKi),
                     MaKhoaHoc = i.MaKhoaHoc,
-                    TenKhoaHoc = i.MaKhoaHocNavigation.TenKhoaHoc
+                    TenKhoaHoc = i.MaKhoaHocNavigation.TenKhoaHoc,
+                    Year = i.ThoiGianDangKi.Year,
                 })
                 .OrderBy(i => i.Key.MaKhoaHoc)
-                .ThenBy(i => i.Key.ThoiGian)
+                .ThenBy(i => i.Key.Year)
                 .Select(i => new Statistics
                 {
                     MaKhoaHoc = i.Key.MaKhoaHoc,
                     TenKhoaHoc = i.Key.TenKhoaHoc,
-                    ThoiGian = i.Key.ThoiGian,
-                    ThoiGianStr = i.Key.ThoiGian.Day.ToString() + "/" + i.Key.ThoiGian.Month.ToString() + "/" + i.Key.ThoiGian.Year.ToString(),
+                    ThoiGian = new MyDateType
+                    {
+                        Year = i.Key.Year,
+                        Type = type
+                    },
                     SoHocVienDangKi = i.Count(i => true),
                     DoanhThu = i.Sum(i => i.HocPhi),
                 });
-
-            if(!String.IsNullOrEmpty(searchString))
+            }
+            else if (type == DateTypes.MONTH)
             {
-                searchString = searchString.ToUpper();
-                statistics = statistics.Where(i => i.TenKhoaHoc.ToUpper().Contains(searchString)
-                || i.ThoiGianStr.ToUpper().Contains(searchString.ToString()));
+                statistics = dkkh.GroupBy(i => new
+                {
+                    MaKhoaHoc = i.MaKhoaHoc,
+                    TenKhoaHoc = i.MaKhoaHocNavigation.TenKhoaHoc,
+                    Year = i.ThoiGianDangKi.Year,
+                    Month = i.ThoiGianDangKi.Month,
+                })
+                .OrderBy(i => i.Key.MaKhoaHoc)
+                .ThenBy(i => i.Key.Year)
+                .ThenBy(i => i.Key.Month)
+                .Select(i => new Statistics
+                {
+                    MaKhoaHoc = i.Key.MaKhoaHoc,
+                    TenKhoaHoc = i.Key.TenKhoaHoc,
+                    ThoiGian = new MyDateType
+                    {
+                        Year = i.Key.Year,
+                        Month = i.Key.Month,
+                        Type = type
+                    },
+                    SoHocVienDangKi = i.Count(i => true),
+                    DoanhThu = i.Sum(i => i.HocPhi),
+                });
+            }
+            else
+            {
+                statistics = dkkh.GroupBy(i => new
+                {
+                    MaKhoaHoc = i.MaKhoaHoc,
+                    TenKhoaHoc = i.MaKhoaHocNavigation.TenKhoaHoc,
+                    Year = i.ThoiGianDangKi.Year,
+                    Month = i.ThoiGianDangKi.Month,
+                    Day = i.ThoiGianDangKi.Day,
+                })
+                .OrderBy(i => i.Key.MaKhoaHoc)
+                .ThenBy(i => i.Key.Year)
+                .ThenBy(i => i.Key.Month)
+                .ThenBy(i => i.Key.Day)
+                .Select(i => new Statistics
+                {
+                    MaKhoaHoc = i.Key.MaKhoaHoc,
+                    TenKhoaHoc = i.Key.TenKhoaHoc,
+                    ThoiGian = new MyDateType
+                    {
+                        Year = i.Key.Year,
+                        Month = i.Key.Month,
+                        Day = i.Key.Day,
+                        Type = type
+                    },
+                    SoHocVienDangKi = i.Count(i => true),
+                    DoanhThu = i.Sum(i => i.HocPhi),
+                });
             }
             return View(await statistics.ToListAsync());
         }

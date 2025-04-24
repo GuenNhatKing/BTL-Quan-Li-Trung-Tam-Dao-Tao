@@ -25,9 +25,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             _context = context;
             _webHost = webHost;
         }
-
-        // GET: Admin/ChuDe
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string? searchString)
         {
             var chuDes = _context.ChuDes.Select(i => i);
             if (!String.IsNullOrEmpty(searchString))
@@ -38,7 +36,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(await chuDes.ToListAsync());
         }
 
-        // GET: Admin/ChuDe/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,7 +44,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             }
 
             var chuDe = await _context.ChuDes
-                .FirstOrDefaultAsync(m => m.MaChuDe == id);
+            .FirstOrDefaultAsync(m => m.MaChuDe == id);
             if (chuDe == null)
             {
                 return NotFound();
@@ -56,24 +53,22 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(chuDe);
         }
 
-        // GET: Admin/ChuDe/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/ChuDe/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaChuDe,TenChuDe,MoTa")] ChuDe chuDe, IFormFile? AnhChuDe = null)
+        public async Task<IActionResult> Create([Bind("MaChuDe, TenChuDe, MoTa")] ChuDe chuDe, IFormFile? AnhChuDe = null)
         {
             if (ModelState.IsValid)
             {
                 var imageUpload = new ImageUpload(_webHost);
                 if (await imageUpload.SaveImageAs(AnhChuDe!))
+                {
                     chuDe.UrlAnhChuDe = imageUpload.FileName;
+                }
                 _context.Add(chuDe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -81,7 +76,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(chuDe);
         }
 
-        // GET: Admin/ChuDe/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,7 +83,8 @@ namespace QLTTDT.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var chuDe = await _context.ChuDes.FindAsync(id);
+            var chuDe = await _context.ChuDes
+            .FirstOrDefaultAsync(i => i.MaChuDe == id);
             if (chuDe == null)
             {
                 return NotFound();
@@ -97,9 +92,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(chuDe);
         }
 
-        // POST: Admin/ChuDe/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, [Bind("MaChuDe,TenChuDe,MoTa")] ChuDe chuDe, IFormFile? AnhChuDe = null)
@@ -108,7 +100,8 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var topic = await _context.ChuDes.FindAsync(id);
+            var topic = await _context.ChuDes
+            .FirstOrDefaultAsync(i => i.MaChuDe == id);
             if (topic == null)
             {
                 return NotFound();
@@ -120,34 +113,29 @@ namespace QLTTDT.Areas.Admin.Controllers
                 {
                     topic.TenChuDe = chuDe.TenChuDe;
                     topic.MoTa = chuDe.MoTa;
+
                     _context.Update(topic);
                     await _context.SaveChangesAsync();
+
                     var imageUpload = new ImageUpload(_webHost);
                     if (await imageUpload.SaveImageAs(AnhChuDe!))
                     {
                         imageUpload.DeleteImage(topic.UrlAnhChuDe!);
                         topic.UrlAnhChuDe = imageUpload.FileName;
                     }
+
                     _context.Update(topic);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!ChuDeExists(topic.MaChuDe))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        return BadRequest(ex.Message);
-                    }
+                    return BadRequest(ex.Message);
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(chuDe);
         }
 
-        // GET: Admin/ChuDe/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -156,7 +144,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             }
 
             var chuDe = await _context.ChuDes
-                .FirstOrDefaultAsync(m => m.MaChuDe == id);
+            .FirstOrDefaultAsync(m => m.MaChuDe == id);
             if (chuDe == null)
             {
                 return NotFound();
@@ -165,7 +153,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(chuDe);
         }
 
-        // POST: Admin/ChuDe/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -191,11 +178,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ChuDeExists(int id)
-        {
-            return _context.ChuDes.Any(e => e.MaChuDe == id);
         }
     }
 }

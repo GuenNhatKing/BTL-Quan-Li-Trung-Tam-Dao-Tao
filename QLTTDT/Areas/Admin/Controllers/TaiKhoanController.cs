@@ -24,10 +24,8 @@ namespace QLTTDT.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/TaiKhoan
         public async Task<IActionResult> Index(string searchString)
         {
-            //var taiKhoans = from i in _context.TaiKhoans select i;
             var taiKhoans = _context.TaiKhoans.Include(t => t.MaNguoiDungNavigation)
                 .Include(t => t.MaVaiTroNavigation).Select(i => i);
             if (!String.IsNullOrEmpty(searchString))
@@ -40,7 +38,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(await taiKhoans.ToListAsync());
         }
 
-        // GET: Admin/TaiKhoan/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -60,49 +57,17 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(taiKhoan);
         }
 
-        // GET: Admin/TaiKhoan/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var nguoiDungList = _context.NguoiDungs
-            .Where(i => !_context.TaiKhoans.Any(j => j.MaNguoiDung == i.MaNguoiDung))
-            .Select(i => new
-            {
-                MaNguoiDung = i.MaNguoiDung,
-                DisplayText = i.MaNguoiDung + " - " + i.Email
-            }).ToList();
-            var vaiTroList = _context.VaiTros
-            .Select(i => new
-            {
-                MaVaiTro = i.MaVaiTro,
-                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
-            }).ToList();
-            ViewData["MaNguoiDung"] = new SelectList(nguoiDungList, "MaNguoiDung", "DisplayText");
-            ViewData["MaVaiTro"] = new SelectList(vaiTroList, "MaVaiTro", "DisplayText");
+            await LoadDataList();
             return View();
         }
 
-        // POST: Admin/TaiKhoan/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MaTaiKhoan,MaNguoiDung,MaVaiTro,TenDangNhap,MatKhau")] TaiKhoan taiKhoan)
         {
-            var nguoiDungList = _context.NguoiDungs
-            .Where(i => !_context.TaiKhoans.Any(j => j.MaNguoiDung == i.MaNguoiDung))
-            .Select(i => new
-            {
-                MaNguoiDung = i.MaNguoiDung,
-                DisplayText = i.MaNguoiDung + " - " + i.Email
-            }).ToList();
-            var vaiTroList = _context.VaiTros
-            .Select(i => new
-            {
-                MaVaiTro = i.MaVaiTro,
-                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
-            }).ToList();
-            ViewData["MaNguoiDung"] = new SelectList(nguoiDungList, "MaNguoiDung", "DisplayText");
-            ViewData["MaVaiTro"] = new SelectList(vaiTroList, "MaVaiTro", "DisplayText");
+            await LoadDataList();
             if (taiKhoan.Salt == null)
             {
                 taiKhoan.Salt = Register.CreateSalt(_context);
@@ -111,7 +76,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var validation = new ValidCheck(_context);
-                if (!await validation.AccountValidation(taiKhoan))
+                if (!await validation.AccountValidation(taiKhoan.TenDangNhap, taiKhoan.MatKhau, taiKhoan.MaVaiTro, taiKhoan.MaNguoiDung))
                 {
                     ModelState.AddModelError(validation.ErrorKey, validation.Error);
                     return View(taiKhoan);
@@ -124,7 +89,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(taiKhoan);
         }
 
-        // GET: Admin/TaiKhoan/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -137,26 +101,10 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var nguoiDung = await _context.NguoiDungs
-            .Select(i => new
-            {
-                MaNguoiDung = i.MaNguoiDung,
-                DisplayText = i.MaNguoiDung + " - " + i.Email
-            }).FirstOrDefaultAsync(i => i.MaNguoiDung == taiKhoan.MaNguoiDung);
-            var vaiTro = await _context.VaiTros
-            .Select(i => new
-            {
-                MaVaiTro = i.MaVaiTro,
-                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
-            }).FirstOrDefaultAsync(i => i.MaVaiTro == taiKhoan.MaVaiTro);
-            ViewData["MaNguoiDung"] = nguoiDung?.DisplayText;
-            ViewData["MaVaiTro"] = vaiTro?.DisplayText;
+            await LoadData(taiKhoan);
             return View(taiKhoan);
         }
 
-        // POST: Admin/TaiKhoan/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, [Bind("MaTaiKhoan,TenDangNhap")] TaiKhoan taiKhoan, string? MatKhauMoi = null)
@@ -171,20 +119,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var nguoiDung = await _context.NguoiDungs
-            .Select(i => new
-            {
-                MaNguoiDung = i.MaNguoiDung,
-                DisplayText = i.MaNguoiDung + " - " + i.Email
-            }).FirstOrDefaultAsync(i => i.MaNguoiDung == account.MaNguoiDung);
-            var vaiTro = await _context.VaiTros
-            .Select(i => new
-            {
-                MaVaiTro = i.MaVaiTro,
-                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
-            }).FirstOrDefaultAsync(i => i.MaVaiTro == account.MaVaiTro);
-            ViewData["MaNguoiDung"] = nguoiDung?.DisplayText;
-            ViewData["MaVaiTro"] = vaiTro?.DisplayText;
+            await LoadData(account);
 
             if (ModelState.IsValid)
             {
@@ -200,21 +135,13 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!TaiKhoanExists(account.MaTaiKhoan))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        return BadRequest(ex.Message);
-                    }
+                    return BadRequest(ex.Message);
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(taiKhoan);
         }
 
-        // GET: Admin/TaiKhoan/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -234,7 +161,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(taiKhoan);
         }
 
-        // POST: Admin/TaiKhoan/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -252,14 +178,45 @@ namespace QLTTDT.Areas.Admin.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-
-
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TaiKhoanExists(int id)
+        private async Task LoadDataList()
         {
-            return _context.TaiKhoans.Any(e => e.MaTaiKhoan == id);
+             var nguoiDungList = await _context.NguoiDungs
+            .Where(i => !_context.TaiKhoans.Any(j => j.MaNguoiDung == i.MaNguoiDung))
+            .Select(i => new
+            {
+                MaNguoiDung = i.MaNguoiDung,
+                DisplayText = i.MaNguoiDung + " - " + i.Email
+            }).ToListAsync();
+            var vaiTroList = await _context.VaiTros
+            .Select(i => new
+            {
+                MaVaiTro = i.MaVaiTro,
+                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
+            }).ToListAsync();
+            ViewData["MaNguoiDung"] = new SelectList(nguoiDungList, "MaNguoiDung", "DisplayText");
+            ViewData["MaVaiTro"] = new SelectList(vaiTroList, "MaVaiTro", "DisplayText");
+        }
+        private async Task LoadData(TaiKhoan taiKhoan)
+        {
+            var nguoiDung = await _context.NguoiDungs
+            .Select(i => new
+            {
+                MaNguoiDung = i.MaNguoiDung,
+                DisplayText = i.MaNguoiDung + " - " + i.Email
+            }).FirstOrDefaultAsync(i => i.MaNguoiDung == taiKhoan.MaNguoiDung);
+
+            var vaiTro = await _context.VaiTros
+            .Select(i => new
+            {
+                MaVaiTro = i.MaVaiTro,
+                DisplayText = i.MaVaiTro + " - " + i.TenVaiTro
+            }).FirstOrDefaultAsync(i => i.MaVaiTro == taiKhoan.MaVaiTro);
+
+            ViewData["MaNguoiDung"] = nguoiDung?.DisplayText;
+            ViewData["MaVaiTro"] = vaiTro?.DisplayText;
         }
     }
 }

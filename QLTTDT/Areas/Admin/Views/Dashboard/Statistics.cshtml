@@ -1,38 +1,58 @@
 ﻿@model IEnumerable<Statistics>;
 @{
-    ViewData["Title"] = "Thống kê khoá học";
+	ViewData["Title"] = "Thống kê khoá học";
 }
 <h1 class="dashboard-title">Thống kê khóa học</h1>
 
 <form asp-controller="Dashboard" asp-action="Statistics" method="get" class="dashboard-search-form">
-    <input type="text" name="searchString" value="@Context.Request.Query["searchString"]"
-           placeholder="Tìm kiếm tên khoá học, thời gian..."
-           class="dashboard-search-input" />
-    <button type="submit" class="dashboard-search-button">Tìm</button>
+	<input id="searchStringForm1" type="text" name="searchString" value="@Context.Request.Query["searchString"]"
+		   placeholder="Tìm kiếm tên khoá học"
+		   class="dashboard-search-input" />
+	<button type="submit" class="dashboard-search-button">Tìm</button>
+</form>
+
+<form asp-controller="Dashboard" asp-action="Statistics" method="get"
+	  class="dashboard-search-form" onsubmit="copySearchString()">
+	<input id="searchStringForm2" type="hidden" name="searchString" value="" />
+	<input type="hidden" name="statistic" value="True" />
+
+	<input type="date" id="startTime" name="startTime" value="@Context.Request.Query["startTime"]"
+		   placeholder="Thời gian bắt đầu"
+		   class="dashboard-search-input" />
+
+	<input type="date" id="endTime" name="endTime" value="@Context.Request.Query["endTime"]"
+		   placeholder="Thời gian kết thúc"
+		   class="dashboard-search-input" />
+	
+	<button type="button" onclick="changeToDay()" class="dashboard-search-button">Ngày</button>
+	<button type="button" onclick="changeToMonth()" class="dashboard-search-button">Tháng</button>
+	<button type="button" onclick="changeToYear()" class="dashboard-search-button">Năm</button>
+	
+	<button type="submit" class="dashboard-search-button">Thống kê</button>
 </form>
 
 <div class="dashboard-table-container">
-    <table class="dashboard-table">
-        <thead>
-            <tr>
-                <th class="dashboard-table-header">Mã Khóa Học</th>
-                <th class="dashboard-table-header">Tên Khóa Học</th>
-                <th class="dashboard-table-header">Thời Gian</th>
-                <th class="dashboard-table-header text-center">Số học viên</th>
-                <th class="dashboard-table-header text-center">Doanh Thu</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="dashboard-table-row">
-                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.MaKhoaHoc)</td>
-                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.TenKhoaHoc)</td>
-                    <td class="dashboard-table-cell">@Html.DisplayFor(model => item.ThoiGianStr)</td>
-                    <td class="dashboard-table-cell text-center">@Html.DisplayFor(model => item.SoHocVienDangKi)</td>
-                    <td class="dashboard-table-cell text-center">@string.Format("{0:N0} ₫", item.DoanhThu)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+	<table class="dashboard-table">
+		<thead>
+			<tr>
+				<th class="dashboard-table-header">Mã Khóa Học</th>
+				<th class="dashboard-table-header">Tên Khóa Học</th>
+				<th class="dashboard-table-header">Thời Gian</th>
+				<th class="dashboard-table-header text-center">Số học viên</th>
+				<th class="dashboard-table-header text-center">Doanh Thu</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr class="dashboard-table-row">
+					<td class="dashboard-table-cell">@Html.DisplayFor(model => item.MaKhoaHoc)</td>
+					<td class="dashboard-table-cell">@Html.DisplayFor(model => item.TenKhoaHoc)</td>
+					<td class="dashboard-table-cell">@item.ThoiGian.ToString()</td>
+					<td class="dashboard-table-cell text-center">@Html.DisplayFor(model => item.SoHocVienDangKi)</td>
+					<td class="dashboard-table-cell text-center">@string.Format("{0:N0} ₫", item.DoanhThu)</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 </div>

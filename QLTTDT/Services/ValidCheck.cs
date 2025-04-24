@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
 using QLTTDT.Models;
@@ -9,33 +10,33 @@ namespace QLTTDT.Services
     public class ValidCheck
     {
         private QLTTDTDbContext _context;
-        public string ErrorKey { get; set; }
-        public string Error { get; set; }
+        public string ErrorKey { get; set; } = null!;
+        public string Error { get; set; } = null!;
         public ValidCheck(QLTTDTDbContext context)
         {
             _context = context;
         }
-        public async Task<bool> AccountValidation(TaiKhoan taiKhoan)
+        public async Task<bool> AccountValidation(string username, string password, int role, int userId)
         {
-            if (taiKhoan.MatKhau.Length < 6)
+            if (password.Length < 6)
             {
                 ErrorKey = "MatKhau";
                 Error = "Mật khẩu quá ngắn.";
                 return false;
             }
-            if (await IsUsernameExist(taiKhoan.TenDangNhap))
+            if (await IsUsernameExist(username))
             {
                 ErrorKey = "TenDangNhap";
                 Error = "Tên đăng nhập đã tồn tại.";
                 return false;
             }
-            if (!await IsRoleExist(taiKhoan.MaVaiTro))
+            if (!await IsRoleExist(role))
             {
                 ErrorKey = "MaVaiTro";
                 Error = "Vai trò không tồn tại.";
                 return false;
             }
-            if (!await IsUserExist(taiKhoan.MaNguoiDung))
+            if (!await IsUserExist(userId))
             {
                 ErrorKey = "MaNguoiDung";
                 Error = "Người dùng không tồn tại.";
@@ -43,27 +44,27 @@ namespace QLTTDT.Services
             }
             return true;
         }
-        public async Task<bool> UserValidation(NguoiDung nguoiDung)
+        public async Task<bool> UserValidation(string phone, string email)
         {
-            if (!Regex.IsMatch(nguoiDung.SoDienThoai, "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$"))
+            if (!Regex.IsMatch(phone, "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$"))
             {
                 ErrorKey = "SoDienThoai";
                 Error = "Số điện thoại không đúng định dạng.";
                 return false;
             }
-            if (!Regex.IsMatch(nguoiDung.Email, "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
+            if (!Regex.IsMatch(email, "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
             {
                 ErrorKey = "Email";
                 Error = "Địa chỉ email không đúng định dạng.";
                 return false;
             }
-            if (await IsPhoneNumberExist(nguoiDung.SoDienThoai))
+            if (await IsPhoneNumberExist(phone))
             {
                 ErrorKey = "SoDienThoai";
                 Error = "Số điện thoại đã tồn tại.";
                 return false;
             }
-            if (await IsEmailExist(nguoiDung.Email))
+            if (await IsEmailExist(email))
             {
                 ErrorKey = "Email";
                 Error = "Địa chỉ email đã tồn tại.";

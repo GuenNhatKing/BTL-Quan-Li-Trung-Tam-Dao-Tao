@@ -26,7 +26,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             _webHost = webHost;
         }
 
-        // GET: Admin/NguoiDung
         public async Task<IActionResult> Index(string searchString)
         {
             var nguoiDungs = _context.NguoiDungs.Select(i => i);
@@ -39,7 +38,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(await nguoiDungs.ToListAsync());
         }
 
-        // GET: Admin/NguoiDung/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,29 +55,27 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(nguoiDung);
         }
 
-        // GET: Admin/NguoiDung/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/NguoiDung/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MaNguoiDung,HoVaTen,NgaySinh,SoDienThoai,Email")] NguoiDung nguoiDung, IFormFile? AnhDaiDien = null)
         {
             if (ModelState.IsValid)
             {
-                var imageUpload = new ImageUpload(_webHost);
-                if (await imageUpload.SaveImageAs(AnhDaiDien!))
-                    nguoiDung.UrlAnhDaiDien = imageUpload.FileName;
                 var validation = new ValidCheck(_context);
-                if (!await validation.UserValidation(nguoiDung))
+                if (!await validation.UserValidation(nguoiDung.SoDienThoai, nguoiDung.Email))
                 {
                     ModelState.AddModelError(validation.ErrorKey, validation.Error);
                     return View(nguoiDung);
+                }
+                var imageUpload = new ImageUpload(_webHost);
+                if (await imageUpload.SaveImageAs(AnhDaiDien!))
+                {
+                    nguoiDung.UrlAnhDaiDien = imageUpload.FileName;
                 }
                 _context.Add(nguoiDung);
                 await _context.SaveChangesAsync();
@@ -88,7 +84,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(nguoiDung);
         }
 
-        // GET: Admin/NguoiDung/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,9 +99,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(nguoiDung);
         }
 
-        // POST: Admin/NguoiDung/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, [Bind("MaNguoiDung,HoVaTen,NgaySinh,SoDienThoai,Email")] NguoiDung nguoiDung, IFormFile? AnhDaiDien = null)
@@ -128,34 +120,29 @@ namespace QLTTDT.Areas.Admin.Controllers
                     user.NgaySinh = nguoiDung.NgaySinh;
                     user.SoDienThoai = nguoiDung.SoDienThoai;
                     user.Email = nguoiDung.Email;
+
                     _context.Update(user);
                     await _context.SaveChangesAsync();
+
                     var imageUpload = new ImageUpload(_webHost);
                     if (await imageUpload.SaveImageAs(AnhDaiDien!))
                     {
                         imageUpload.DeleteImage(user.UrlAnhDaiDien!);
                         user.UrlAnhDaiDien = imageUpload.FileName;
                     }
+
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!NguoiDungExists(user.MaNguoiDung))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        return BadRequest(ex.Message);
-                    }
+                    return BadRequest(ex.Message);
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(nguoiDung);
         }
 
-        // GET: Admin/NguoiDung/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -173,7 +160,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(nguoiDung);
         }
 
-        // POST: Admin/NguoiDung/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -209,11 +195,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool NguoiDungExists(int id)
-        {
-            return _context.NguoiDungs.Any(e => e.MaNguoiDung == id);
         }
     }
 }

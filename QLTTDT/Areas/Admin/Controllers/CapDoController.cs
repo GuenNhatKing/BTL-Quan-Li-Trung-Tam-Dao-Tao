@@ -17,16 +17,15 @@ namespace QLTTDT.Areas.Admin.Controllers
     public class CapDoController : Controller
     {
         private readonly QLTTDTDbContext _context;
-
         public CapDoController(QLTTDTDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/CapDo
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string? searchString)
         {
-            var capDos = _context.CapDos.Select(i => i);
+            var capDos = _context.CapDos
+            .Select(i => i);
             if (!String.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToUpper();
@@ -35,7 +34,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(await capDos.ToListAsync());
         }
 
-        // GET: Admin/CapDo/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,8 +41,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var capDo = await _context.CapDos
-                .FirstOrDefaultAsync(m => m.MaCapDo == id);
+            var capDo = await _context.CapDos.FirstOrDefaultAsync(m => m.MaCapDo == id);
             if (capDo == null)
             {
                 return NotFound();
@@ -53,15 +50,11 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(capDo);
         }
 
-        // GET: Admin/CapDo/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admin/CapDo/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MaCapDo,TenCapDo")] CapDo capDo)
@@ -74,8 +67,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             }
             return View(capDo);
         }
-
-        // GET: Admin/CapDo/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,10 +81,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             }
             return View(capDo);
         }
-
-        // POST: Admin/CapDo/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, [Bind("MaCapDo,TenCapDo")] CapDo capDo)
@@ -118,21 +105,12 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!CapDoExists(level.MaCapDo))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        return BadRequest(ex.Message);
-                    }
+                    return BadRequest(ex.Message);
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(capDo);
         }
-
-        // GET: Admin/CapDo/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +119,7 @@ namespace QLTTDT.Areas.Admin.Controllers
             }
 
             var capDo = await _context.CapDos
-                .FirstOrDefaultAsync(m => m.MaCapDo == id);
+            .FirstOrDefaultAsync(m => m.MaCapDo == id);
             if (capDo == null)
             {
                 return NotFound();
@@ -150,7 +128,6 @@ namespace QLTTDT.Areas.Admin.Controllers
             return View(capDo);
         }
 
-        // POST: Admin/CapDo/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -174,11 +151,6 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CapDoExists(int id)
-        {
-            return _context.CapDos.Any(e => e.MaCapDo == id);
         }
     }
 }
