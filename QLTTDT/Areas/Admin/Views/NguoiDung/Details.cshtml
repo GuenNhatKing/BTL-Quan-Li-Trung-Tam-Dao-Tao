@@ -14,7 +14,14 @@
             <dt class="col-sm-3 fw-bold">Ảnh đại diện</dt>
             <dd class="col-sm-9">
                 <div class="graphic-cover mb-2">
-                    <img src="@Url.Content("~/images/" + Model.UrlAnhDaiDien)" alt="Ảnh đại diện" class="img-thumbnail" style="max-width: 300px;" />
+                    @if (Model.UrlAnhDaiDien != null)
+                    {
+                        <img src="~/images/Model.UrlAnhDaiDien" class="img-thumbnail" style="max-width: 300px;" />
+                    }
+                    else
+                    {
+                        <img src="~/Resource/user.png" class="img-thumbnail" style="max-width: 300px;" />
+                    }
                 </div>
                 @Html.DisplayFor(model => model.UrlAnhDaiDien)
             </dd>

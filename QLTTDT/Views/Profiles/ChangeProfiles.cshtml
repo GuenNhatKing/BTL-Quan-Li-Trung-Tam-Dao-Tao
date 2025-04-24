@@ -11,9 +11,15 @@
 
 		<input type="hidden" asp-for="MaNguoiDung" />
 		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
 		<div class="profiles-edit-avatar-wrapper">
-			<img src="~/images/@Html.DisplayFor(i => i.UrlAnhDaiDien)" alt="Ảnh đại diện" class="profiles-edit-avatar" />
+			@if (Model.UrlAnhDaiDien != null)
+			{
+				<img src="~/images/Model.UrlAnhDaiDien" class="profiles-edit-avatar" />
+			}
+			else
+			{
+				<img src="~/Resource/user.png" class="profiles-edit-avatar" />
+			}
 		</div>
 
 		<div class="profiles-edit-field">
@@ -51,7 +57,7 @@
 
 		<div class="profiles-edit-actions">
 			<a asp-controller="Profiles" asp-action="Index"
-			   asp-route-username="@User.Identity.Name"
+			   asp-route-username="@User.Identity?.Name"
 			   asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value"
 			   class="profiles-cancel-button">Huỷ</a>
 			<input type="submit" value="Lưu Thay Đổi" class="profiles-save-button" />
