@@ -128,6 +128,8 @@ namespace QLTTDT.Areas.Admin.Controllers
                     DoanhThu = i.Sum(i => i.HocPhi),
                 });
             }
+            ViewBag.startTime = (startTime != null) ? ("Thời gian bắt đầu: " + startTime?.ToString()) : null;
+            ViewBag.endTime = (endTime != null) ? ("Thời gian kết thúc: " + endTime?.ToString()) : null;
             return View(await statistics.ToListAsync());
         }
     }

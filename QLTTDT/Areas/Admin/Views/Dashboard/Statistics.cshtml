@@ -16,13 +16,13 @@
 	<input id="searchStringForm2" type="hidden" name="searchString" value="" />
 	<input type="hidden" name="statistic" value="True" />
 
-	<input type="date" id="startTime" name="startTime" value="@Context.Request.Query["startTime"]"
+	<input type="text" id="startTime" name="startTime" value="@ViewBag.startTime"
 		   placeholder="Thời gian bắt đầu"
-		   class="dashboard-search-input" />
+		   class="dashboard-search-input" readonly/>
 
-	<input type="date" id="endTime" name="endTime" value="@Context.Request.Query["endTime"]"
+	<input type="text" id="endTime" name="endTime" value="@ViewBag.endTime"
 		   placeholder="Thời gian kết thúc"
-		   class="dashboard-search-input" />
+		   class="dashboard-search-input" readonly />
 	
 	<button type="button" onclick="changeToDay()" class="dashboard-search-button">Ngày</button>
 	<button type="button" onclick="changeToMonth()" class="dashboard-search-button">Tháng</button>

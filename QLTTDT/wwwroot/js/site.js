@@ -16,14 +16,21 @@ function copySearchString() {
 }
 
 function changeToDay() {
+    removeReadonly();
     document.getElementById("startTime").type = "date";
     document.getElementById("endTime").type = "date";
 }
 function changeToMonth() {
+    removeReadonly();
     document.getElementById("startTime").type = "month";
     document.getElementById("endTime").type = "month";
 }
 function changeToYear() {
+    removeReadonly();
     document.getElementById("startTime").type = "number";
     document.getElementById("endTime").type = "number";
+}
+function removeReadonly() {
+    document.getElementById("startTime").removeAttribute("readonly");
+    document.getElementById("endTime").removeAttribute("readonly");
 }
