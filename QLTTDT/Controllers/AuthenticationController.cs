@@ -34,6 +34,10 @@ namespace QLTTDT.Controllers
                 if (await login.IsLoginVaild())
                 {
                     var account = _context.TaiKhoans.FirstOrDefault(i => i.TenDangNhap == loginForm.Username);
+                    if(account == null)
+                    {
+                        return View(new {loginForm = loginForm, ReturnUrl = ReturnUrl});
+                    }
                     await _context.Entry(account).Reference(i => i.MaVaiTroNavigation).LoadAsync();
                     var role = account.MaVaiTroNavigation.TenVaiTro;
                     await HttpContext.SignInAsync("AuthenticationSchema",

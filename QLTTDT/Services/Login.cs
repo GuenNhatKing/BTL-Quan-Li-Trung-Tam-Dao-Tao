@@ -11,7 +11,7 @@ namespace QLTTDT.Services
     {
         private QLTTDTDbContext _context;
         public string ErrorKey = "";
-        public string Error { get; set; }
+        public string Error { get; set; } = null!;
         public LoginForm LoginForm { get; set; }
 
         public Login(QLTTDTDbContext context, LoginForm loginForm)

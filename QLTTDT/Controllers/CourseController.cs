@@ -17,9 +17,10 @@ namespace QLTTDT.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string topicSlug, int? topicId, string courseSlug, int? courseId)
+        public async Task<IActionResult> Index(string? topicSlug, int? topicId, string? courseSlug, int? courseId)
         {
-            if (courseId == null)
+            var slugCheck = new SlugCheck(_context);
+            if (!await slugCheck.CheckTopicCourseSlug(topicSlug, topicId, courseSlug, courseId))
             {
                 return NotFound();
             }
@@ -29,7 +30,7 @@ namespace QLTTDT.Controllers
             {
                 return NotFound();
             }
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            int? userId = GetUserId();
             var courseDesc = new CourseDescription
             {
                 MaKhoaHoc = khoaHoc.MaKhoaHoc,
@@ -58,34 +59,34 @@ namespace QLTTDT.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string topicSlug, int? topicId, string courseSlug, int? courseId, bool noUse)
         {
-            if (courseId == null)
+            var slugCheck = new SlugCheck(_context);
+            if (!await slugCheck.CheckTopicCourseSlug(topicSlug, topicId, courseSlug, courseId))
             {
                 return NotFound();
             }
-            var khoaHoc = await _context.KhoaHocs
-                .FirstOrDefaultAsync(m => m.MaKhoaHoc == courseId);
+            var khoaHoc = await _context.KhoaHocs.FirstOrDefaultAsync(m => m.MaKhoaHoc == courseId);
             if (khoaHoc == null)
             {
                 return NotFound();
             }
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            int? userId = GetUserId();
             var validation = new ValidCheck(_context);
-            if (await validation.IsRegisterCourseVaild(userId, courseId))
+            if (userId != null && courseId != null && await validation.IsRegisterCourseVaild(userId, courseId))
             {
                 var dkkh = await _context.DangKiKhoaHocs.IgnoreQueryFilters().FirstOrDefaultAsync(i => i.MaHocVien == userId && i.MaKhoaHoc == courseId && i.DaHuy == true);
-                if(dkkh != null)
+                if (dkkh != null)
                 {
                     dkkh.DaHuy = false;
-                    dkkh.HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == courseId)).HocPhi;
+                    dkkh.HocPhi = khoaHoc.HocPhi;
                     dkkh.ThoiGianDangKi = DateTime.Now;
                     try
                     {
                         _context.Update(dkkh);
                         await _context.SaveChangesAsync();
                     }
-                    catch (DbUpdateConcurrencyException)
+                    catch (DbUpdateConcurrencyException ex)
                     {
-                        throw;
+                        return BadRequest(ex.Message);
                     }
                 }
                 else
@@ -94,7 +95,7 @@ namespace QLTTDT.Controllers
                     {
                         MaHocVien = (int)userId,
                         MaKhoaHoc = (int)courseId,
-                        HocPhi = (await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == courseId)).HocPhi,
+                        HocPhi = khoaHoc.HocPhi,
                     };
                     _context.Add(register);
                     await _context.SaveChangesAsync();
@@ -113,21 +114,21 @@ namespace QLTTDT.Controllers
         [HttpPost]
         public async Task<IActionResult> IncreaseProgress(string topicSlug, int? topicId, string courseSlug, int? courseId)
         {
-            if (courseId == null)
+            var slugCheck = new SlugCheck(_context);
+            if (!await slugCheck.CheckTopicCourseSlug(topicSlug, topicId, courseSlug, courseId))
             {
                 return NotFound();
             }
-            var khoaHoc = await _context.KhoaHocs
-                .FirstOrDefaultAsync(m => m.MaKhoaHoc == courseId);
+            var khoaHoc = await _context.KhoaHocs.FirstOrDefaultAsync(m => m.MaKhoaHoc == courseId);
             if (khoaHoc == null)
             {
                 return NotFound();
             }
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            int? userId = GetUserId();
             var dkkh = await _context.DangKiKhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc && i.MaHocVien == userId);
-            if(dkkh != null)
+            if (dkkh != null)
             {
-                if(ValidCheck.IsProgressVaild(dkkh.TienDo + 20))
+                if (ValidCheck.IsProgressVaild(dkkh.TienDo + 20))
                 {
                     dkkh.TienDo += 20;
                 }
@@ -136,12 +137,12 @@ namespace QLTTDT.Controllers
                     _context.Update(dkkh);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    throw;
+                    return BadRequest(ex.Message);
                 }
             }
-             return RedirectToAction("Index", new { topicSlug, topicId, courseSlug, courseId });
+            return RedirectToAction("Index", new { topicSlug, topicId, courseSlug, courseId });
         }
         [Authorize(Roles = "HocVien,Admin")]
         [HttpPost]
@@ -151,15 +152,14 @@ namespace QLTTDT.Controllers
             {
                 return NotFound();
             }
-            var khoaHoc = await _context.KhoaHocs
-                .FirstOrDefaultAsync(m => m.MaKhoaHoc == courseId);
+            var khoaHoc = await _context.KhoaHocs.FirstOrDefaultAsync(m => m.MaKhoaHoc == courseId);
             if (khoaHoc == null)
             {
                 return NotFound();
             }
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
-            var dkkh = await _context.DangKiKhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc);
-            if(dkkh != null)
+            int? userId = GetUserId();
+            var dkkh = await _context.DangKiKhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc && i.MaHocVien == userId);
+            if (dkkh != null)
             {
                 try
                 {
@@ -167,17 +167,17 @@ namespace QLTTDT.Controllers
                     _context.Update(dkkh);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    throw;
+                    return BadRequest(ex.Message);
                 }
             }
-             return RedirectToAction("Index", new { topicSlug, topicId, courseSlug, courseId });
+            return RedirectToAction("Index", new { topicSlug, topicId, courseSlug, courseId });
         }
         [Authorize(Roles = "HocVien,Admin")]
         public async Task<IActionResult> RegisteredCourse()
         {
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            int? userId = GetUserId();
             var courses = await _context.KhoaHocs
                 .Include(i => i.MaChuDeNavigation)
                 .Include(i => i.MaCapDoNavigation)
@@ -199,7 +199,7 @@ namespace QLTTDT.Controllers
         [Authorize(Roles = "HocVien,Admin")]
         public async Task<IActionResult> LearningCourse()
         {
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            int? userId = GetUserId();
             var courses = await _context.KhoaHocs
                 .Include(i => i.MaChuDeNavigation)
                 .Include(i => i.MaCapDoNavigation)
@@ -223,7 +223,7 @@ namespace QLTTDT.Controllers
         [Authorize(Roles = "HocVien,Admin")]
         public async Task<IActionResult> CompletedCourse()
         {
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
+            int? userId = GetUserId();
             var courses = await _context.KhoaHocs
                 .Include(i => i.MaChuDeNavigation)
                 .Include(i => i.MaCapDoNavigation)
@@ -243,6 +243,10 @@ namespace QLTTDT.Controllers
                 .AsSplitQuery()
                 .ToListAsync();
             return View(courses);
+        }
+        private int? GetUserId()
+        {
+            return Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
         }
     }
 }

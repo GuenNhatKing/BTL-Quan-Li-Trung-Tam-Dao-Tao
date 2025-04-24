@@ -9,7 +9,7 @@ namespace QLTTDT.Services
         public static string Convert(string str)
         {
             str = RemoveAccent(str).ToLower();
-            str = Regex.Replace(str, @"[^a-z0-9\s-]", ""); 
+            str = Regex.Replace(str, @"[^a-z0-9\s-]", "");
             str = str.Substring(0, str.Length <= 45 ? str.Length : 45).Trim(); 
             str = Regex.Replace(str, @"\s", "-");
             return str;
@@ -24,10 +24,12 @@ namespace QLTTDT.Services
                 var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
                 if (unicodeCategory != UnicodeCategory.NonSpacingMark)
                 {
-                    strbd.Append(c);
+                    // đ, Đ là kí tự đặc biệt không thể phân thành dạng tổ hợp
+                    if ((int)c == 273 || (int)c == 272)
+                        strbd.Append('d');
+                    else strbd.Append(c);
                 }
             }
-
             return strbd.ToString().Normalize(NormalizationForm.FormC);
         }
     }

@@ -14,7 +14,7 @@
 			<div class="course-desc-subtitle">
 				<strong>Chủ đề:</strong>
 				<a asp-controller="AllTopic" asp-action="Details"
-				   asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+				   asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
 				   asp-route-topicId="@Model.MaChuDe" class="tabs__link--tertiary">
 					@Html.DisplayFor(m => m.TenChuDe)
 				</a>
@@ -34,7 +34,7 @@
 
 			<div class="course-desc-item">
 				<strong class="course-desc-label">Thời Gian Khai Giảng:</strong>
-				<span class="course-desc-value">@Model.ThoiGianKhaiGiang.ToString("dd/MM/yyyy")</span>
+				<span class="course-desc-value">@Model.ThoiGianCompute</span>
 			</div>
 
 
@@ -49,7 +49,7 @@
 					if (DateTime.UtcNow < Model.ThoiGianKhaiGiang)
 					{
 						<form asp-controller="Course" asp-action="CancellCourse"
-							  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+							  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
 							  asp-route-topicId="@Model.MaChuDe"
 							  asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
 							  asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">
@@ -67,7 +67,7 @@
 						if (Model.TienDo < 100)
 						{
 							<form asp-controller="Course" asp-action="IncreaseProgress"
-								  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+								  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
 								  asp-route-topicId="@Model.MaChuDe"
 								  asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
 								  asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">
@@ -79,7 +79,7 @@
 				else if (Model.SoLuongHocVienDangKi < Model.SoLuongHocVienToiDa)
 				{
 					<form asp-controller="Course" asp-action="Index"
-						  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe)"
+						  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
 						  asp-route-topicId="@Model.MaChuDe"
 						  asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
 						  asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">

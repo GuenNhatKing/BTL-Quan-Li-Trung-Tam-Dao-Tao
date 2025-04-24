@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QLTTDT.Data;
+using QLTTDT.Services;
 using QLTTDT.ViewModels;
 
 namespace QLTTDT.Controllers
@@ -13,41 +14,40 @@ namespace QLTTDT.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string? searchString)
         {
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
-            var topicCards = _context.ChuDes
-                .Select(i => new TopicCard
-                {
-                    MaChuDe = i.MaChuDe,
-                    TenChuDe = i.TenChuDe,
-                    MoTa = i.MoTa,
-                    UrlAnhChuDe = i.UrlAnhChuDe,
-                    SoKhoaHocDaDangKi = (userId == null) ? 0 : _context.DangKiKhoaHocs
-                    .Include(j => j.MaKhoaHocNavigation)
-                    .Count(j => j.MaKhoaHocNavigation.MaChuDe == i.MaChuDe && j.MaHocVien == userId),
-                });
-
+            int? userId = GetUserId();
+            var tmp = _context.ChuDes.Select(i => i);
             if (!String.IsNullOrEmpty(searchString))
             {
-                topicCards = topicCards.Where(i => i.TenChuDe.ToUpper()
+                tmp = tmp.Where(i => i.TenChuDe.ToUpper()
                 .Contains(searchString.ToUpper()));
             }
+            var topicCards = tmp.Select(i => 
+            new TopicCard {
+                MaChuDe = i.MaChuDe,
+                TenChuDe = i.TenChuDe,
+                MoTa = i.MoTa,
+                UrlAnhChuDe = i.UrlAnhChuDe,
+                SoKhoaHocDaDangKi = (userId == null) ? 0 : _context.DangKiKhoaHocs
+                .Include(j => j.MaKhoaHocNavigation)
+                .Count(j => j.MaKhoaHocNavigation.MaChuDe == i.MaChuDe && j.MaHocVien == userId),
+            });
             return View(await topicCards.ToListAsync());
         }
-        public async Task<IActionResult> Details(string topicSlug, int? topicId, string searchString)
+        public async Task<IActionResult> Details(string? topicSlug, int? topicId, string? searchString)
         {
-            if (topicId == null)
+            var slugCheck = new SlugCheck(_context);
+            if(!await slugCheck.CheckTopicSlug(topicSlug, topicId))
             {
                 return NotFound();
             }
-            var chuDe = await _context.ChuDes
-                .FirstOrDefaultAsync(m => m.MaChuDe == topicId);
+            int? userId = GetUserId();
+            var chuDe = await _context.ChuDes.FirstOrDefaultAsync(m => m.MaChuDe == topicId);
             if (chuDe == null)
             {
                 return NotFound();
             }
-            int? userId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
             var khoaHocs = _context.KhoaHocs
                 .Include(i => i.MaCapDoNavigation)
                 .Where(i => i.MaChuDe == chuDe.MaChuDe)
@@ -79,7 +79,12 @@ namespace QLTTDT.Controllers
                 SoKhoaHocDaDangKi = (userId == null) ? 0 : _context.DangKiKhoaHocs
                 .Count(j => j.MaKhoaHocNavigation.MaChuDe == chuDe.MaChuDe && j.MaHocVien == userId)
             };
+
             return View(topicDesc);
+        }
+        private int? GetUserId()
+        {
+            return Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString());
         }
     }
 }

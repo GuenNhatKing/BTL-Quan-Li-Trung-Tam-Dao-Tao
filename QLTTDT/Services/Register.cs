@@ -70,12 +70,13 @@ namespace QLTTDT.Services
             }
             byte[] saltBytes = CreateSalt(_context);
             string hashedPassword = Login.GetHashedPassword(saltBytes, RegisterForm.Password);
-            var vaiTro = await _context.VaiTros.FirstOrDefaultAsync(i => i.TenVaiTro == "HocVien");
             bool transDone = false;
             using (var trans = _context.Database.BeginTransaction())
             {
                 try
                 {
+                    var vaiTro = await _context.VaiTros.FirstOrDefaultAsync(i => i.TenVaiTro == "HocVien");
+                    if (vaiTro == null) throw new InvalidDataException("Vai trò không tồn tại");
                     var nguoiDung = new NguoiDung
                     {
                         HoVaTen = RegisterForm.HoVaTen,
@@ -97,6 +98,11 @@ namespace QLTTDT.Services
                     await _context.SaveChangesAsync();
                     await trans.CommitAsync();
                     transDone = true;
+                }
+                catch (InvalidDataException)
+                {
+                    ErrorKey = "";
+                    Error = "Vai trò HocVien không tồn tại!";
                 }
                 catch (Exception)
                 {

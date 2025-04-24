@@ -38,7 +38,7 @@ namespace QLTTDT.Areas.Admin.Controllers
         public async Task<IActionResult> Statistics(string searchString, MyDateType? startTime = null, MyDateType? endTime = null, bool statistic = false)
         {
             DateTypes type = (startTime != null && endTime != null) ? startTime.Type : DateTypes.DATE;
-            var dkkh = _context.DangKiKhoaHocs.AsQueryable();
+            var dkkh = _context.DangKiKhoaHocs.Select(i => i);
             if (!String.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToUpper();
