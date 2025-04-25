@@ -144,6 +144,11 @@ namespace QLTTDT.Services
                 Error = "Số lượng học viên không được âm.";
                 return false;
             }
+            if(khoaHoc.ThoiGianKhaiGiang <= DateTime.Now)
+            {
+                Error = "Thời gian khai giảng phải lớn hơn thời gian hiện tại.";
+                return false;
+            }
             return true;
         }
     }

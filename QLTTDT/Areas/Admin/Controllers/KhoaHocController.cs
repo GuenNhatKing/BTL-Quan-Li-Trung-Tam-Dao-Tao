@@ -209,7 +209,7 @@ namespace QLTTDT.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
-                    if (_context.DangKiKhoaHocs.Any(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc))
+                    if (_context.DangKiKhoaHocs.IgnoreQueryFilters().Any(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc))
                     {
                         ModelState.AddModelError("", "Khoá học đã được đăng ký bởi ít nhất một người dùng.");
                         return View(khoaHoc);
