@@ -46,8 +46,18 @@ namespace QLTTDT.Areas.Admin.Controllers
             }
             if (statistic && startTime != null && endTime != null)
             {
-                dkkh = dkkh
-                .Where(i => i.ThoiGianDangKi >= (DateTime)startTime && i.ThoiGianDangKi < (DateTime)endTime);
+                var st = new DateTime(startTime.Year, startTime.Month, startTime.Day);
+                var et = new DateTime(endTime.Year, endTime.Month, endTime.Day);
+                if(st < et)
+                {
+                    dkkh = dkkh
+                    .Where(i => i.ThoiGianDangKi >= (DateTime)startTime && i.ThoiGianDangKi < (DateTime)endTime);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Thời gian bắt đầu không được nhỏ hơn hoặc bằng thời gian kết thúc.");
+                }
+                
             }
             IQueryable<Statistics> statistics;
             if (type == DateTypes.YEAR)
@@ -128,8 +138,8 @@ namespace QLTTDT.Areas.Admin.Controllers
                     DoanhThu = i.Sum(i => i.HocPhi),
                 });
             }
-            ViewBag.startTime = (startTime != null) ? ("Thời gian bắt đầu: " + startTime?.ToString()) : null;
-            ViewBag.endTime = (endTime != null) ? ("Thời gian kết thúc: " + endTime?.ToString()) : null;
+            ViewBag.startTime = startTime?.ToString();
+            ViewBag.endTime = endTime?.ToString();
             return View(await statistics.ToListAsync());
         }
     }

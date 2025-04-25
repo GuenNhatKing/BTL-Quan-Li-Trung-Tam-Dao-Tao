@@ -21,6 +21,10 @@ namespace QLTTDT.Controllers
         }
         public IActionResult Login(string returnUrl)
         {
+            if (HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -28,24 +32,28 @@ namespace QLTTDT.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginForm loginForm, string? ReturnUrl = null)
         {
-            if(ModelState.IsValid)
+            if (HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+            if (ModelState.IsValid)
             {
                 var login = new Login(_context, loginForm);
                 if (await login.IsLoginVaild())
                 {
                     var account = _context.TaiKhoans.FirstOrDefault(i => i.TenDangNhap == loginForm.Username);
-                    if(account == null)
+                    if (account == null)
                     {
-                        return View(new {loginForm = loginForm, ReturnUrl = ReturnUrl});
+                        return View(loginForm);
                     }
                     await _context.Entry(account).Reference(i => i.MaVaiTroNavigation).LoadAsync();
                     var role = account.MaVaiTroNavigation.TenVaiTro;
                     await HttpContext.SignInAsync("AuthenticationSchema",
                     AuCookie.CreatePrincipal(account.MaNguoiDung, account.TenDangNhap, role),
-                    loginForm.RememberMe? AuCookie.CreateProperties(): null);
+                    loginForm.RememberMe ? AuCookie.CreateProperties() : null);
                     if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
                         return Redirect(ReturnUrl);
-                    else 
+                    else
                         return RedirectToAction("Index", "Home", new { area = "" });
                 }
                 else
@@ -57,16 +65,24 @@ namespace QLTTDT.Controllers
         }
         public IActionResult Register()
         {
+            if (HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterForm registerForm)
         {
+            if (HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
             if (ModelState.IsValid)
             {
                 var register = new Register(_context, registerForm);
-                if(await register.CreateUser())
+                if (await register.CreateUser())
                 {
                     return RedirectToAction("Index", "Home", new { area = "" });
                 }
@@ -81,7 +97,10 @@ namespace QLTTDT.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync("AuthenticationSchema");
+            if (HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
+            {
+                await HttpContext.SignOutAsync("AuthenticationSchema");
+            }
             return RedirectToAction("Index", "Home", new { area = "" });
         }
 

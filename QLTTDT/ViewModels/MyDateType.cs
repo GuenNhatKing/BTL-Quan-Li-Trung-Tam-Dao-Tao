@@ -41,6 +41,8 @@ namespace QLTTDT.ViewModels
                 Month = Day = 1;
                 Type = DateTypes.YEAR;
             }
+            // Thêm vào để kiểm tra dữ liệu, nếu không hợp lệ sẽ nhận exception
+            var date = new DateOnly(Year, Month, Day);
         }
         public override string ToString()
         {

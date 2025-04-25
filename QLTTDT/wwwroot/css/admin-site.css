@@ -502,3 +502,15 @@
         background-color: #443cb3;
         transform: scale(0.98);
     }
+
+.is-deleted select {
+    appearance: none;
+    border: none;
+    color: #328E6E;
+    font-weight: 600;
+}
+
+.sitebar-icon {
+    width: 18px;
+    margin-right: 10px;
+}

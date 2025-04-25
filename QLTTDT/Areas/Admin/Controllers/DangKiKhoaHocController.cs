@@ -71,7 +71,7 @@ namespace QLTTDT.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaDangKi,MaHocVien,MaKhoaHoc,ThoiGianDangKi,TienDo,DaHuy")] DangKiKhoaHoc dangKiKhoaHoc)
+        public async Task<IActionResult> Create([Bind("MaDangKi,MaHocVien,MaKhoaHoc")] DangKiKhoaHoc dangKiKhoaHoc)
         {
             await LoadDataList();
             if (ModelState.IsValid)
@@ -138,14 +138,14 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
-                    courseRegister.ThoiGianDangKi = dangKiKhoaHoc.ThoiGianDangKi;
-                    courseRegister.TienDo = dangKiKhoaHoc.TienDo;
-                    courseRegister.DaHuy = dangKiKhoaHoc.DaHuy;
-                    if (!ValidCheck.IsProgressVaild(dangKiKhoaHoc.TienDo))
+                    if (!ValidCheck.IsProgressValid(dangKiKhoaHoc.TienDo))
                     {
                         ModelState.AddModelError("TienDo", "Tiến độ phải có giá trị từ 0 đến 100.");
                         return View(dangKiKhoaHoc);
                     }
+                    courseRegister.ThoiGianDangKi = dangKiKhoaHoc.ThoiGianDangKi;
+                    courseRegister.TienDo = dangKiKhoaHoc.TienDo;
+                    courseRegister.DaHuy = dangKiKhoaHoc.DaHuy;
                     _context.Update(courseRegister);
                     await _context.SaveChangesAsync();
                 }
@@ -181,7 +181,11 @@ namespace QLTTDT.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var dangKiKhoaHoc = await _context.DangKiKhoaHocs.IgnoreQueryFilters().FirstOrDefaultAsync(i => i.MaDangKi == id);
+            var dangKiKhoaHoc = await _context.DangKiKhoaHocs
+                .IgnoreQueryFilters()
+                .Include(d => d.MaHocVienNavigation)
+                .Include(d => d.MaKhoaHocNavigation)
+                .FirstOrDefaultAsync(m => m.MaDangKi == id);
             if (dangKiKhoaHoc != null)
             {
                 try

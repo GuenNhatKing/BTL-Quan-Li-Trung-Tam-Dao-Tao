@@ -598,6 +598,7 @@
 
 .topic-image img {
     width: 220px;
+    min-height: 220px;
     height: 100%;
     object-fit: cover;
 }
@@ -859,14 +860,14 @@
     color: #767676;
 }
 
-.course-desc-hero-image {
+.course-desc-course-image {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-    .course-desc-hero-image img {
+    .course-desc-course-image img {
         max-width: 100%;
         border-radius: 8px;
     }
@@ -1206,3 +1207,7 @@
         background-color: #5a994a;
         transform: scale(0.98);
     }
+
+.border-bottom {
+    border-bottom: solid 1px #90C67C !important;
+}

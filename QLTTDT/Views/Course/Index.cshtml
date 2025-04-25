@@ -14,8 +14,8 @@
 			<div class="course-desc-subtitle">
 				<strong>Chủ đề:</strong>
 				<a asp-controller="AllTopic" asp-action="Details"
-				   asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
-				   asp-route-topicId="@Model.MaChuDe" class="tabs__link--tertiary">
+				asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
+				asp-route-topicId="@Model.MaChuDe" class="tabs__link--tertiary">
 					@Html.DisplayFor(m => m.TenChuDe)
 				</a>
 			</div>
@@ -49,10 +49,10 @@
 					if (DateTime.UtcNow < Model.ThoiGianKhaiGiang)
 					{
 						<form asp-controller="Course" asp-action="CancellCourse"
-							  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
-							  asp-route-topicId="@Model.MaChuDe"
-							  asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
-							  asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">
+						asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
+						asp-route-topicId="@Model.MaChuDe"
+						asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
+						asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">
 							<input type="submit" value="Huỷ đăng kí" class="course-desc-button" />
 						</form>
 					}
@@ -67,10 +67,10 @@
 						if (Model.TienDo < 100)
 						{
 							<form asp-controller="Course" asp-action="IncreaseProgress"
-								  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
-								  asp-route-topicId="@Model.MaChuDe"
-								  asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
-								  asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">
+							asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
+							asp-route-topicId="@Model.MaChuDe"
+							asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
+							asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">
 								<input type="submit" value="Tăng 20% tiến độ" class="course-desc-button" />
 							</form>
 						}
@@ -79,10 +79,10 @@
 				else if (Model.SoLuongHocVienDangKi < Model.SoLuongHocVienToiDa)
 				{
 					<form asp-controller="Course" asp-action="Index"
-						  asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
-						  asp-route-topicId="@Model.MaChuDe"
-						  asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
-						  asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">
+					asp-route-topicSlug="@StrToSlug.Convert(Model.TenChuDe!)"
+					asp-route-topicId="@Model.MaChuDe"
+					asp-route-courseSlug="@StrToSlug.Convert(Model.TenKhoaHoc)"
+					asp-route-courseId="@Model.MaKhoaHoc" method="post" class="course-desc-form">
 						<input type="hidden" name="noUse" />
 						<input type="submit" value="Đăng kí khoá học" class="course-desc-button" />
 					</form>
@@ -101,8 +101,15 @@
 				<span>@Html.DisplayFor(m => m.SoLuongHocVienDangKi) / @Html.DisplayFor(m => m.SoLuongHocVienToiDa) học viên</span>
 			</div>
 		</div>
-		<div class="course-desc-hero-image">
-			<img src="~/images/@Html.DisplayFor(m => m.UrlAnh)" alt="Ảnh bìa khóa học" />
+		<div class="course-desc-course-image">
+			@if(Model.UrlAnh != null)
+			{
+				<img src="~/images/@Model.UrlAnh" alt="Ảnh bìa khóa học" />
+			}
+			else
+			{
+				<img src="~/Resource/Couratest-course.png" alt="Ảnh bìa khóa học" />
+			}
 		</div>
 	</div>
 </div>

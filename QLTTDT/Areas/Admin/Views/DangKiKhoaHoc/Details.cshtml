@@ -55,12 +55,12 @@
 
         <div class="row mb-3 border-bottom pb-2">
             <dt class="col-sm-3 fw-bold">Tiến độ</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.TienDo)</dd>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.TienDo)%</dd>
         </div>
 
         <div class="row mb-3 border-bottom pb-2">
             <dt class="col-sm-3 fw-bold">Đã huỷ?</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.DaHuy)</dd>
+            <dd class="col-sm-9 is-deleted">@Html.DisplayFor(model => model.DaHuy)</dd>
         </div>
 
     </dl>

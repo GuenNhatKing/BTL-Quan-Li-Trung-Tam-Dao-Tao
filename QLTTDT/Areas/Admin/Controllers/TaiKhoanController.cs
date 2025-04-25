@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -165,7 +166,17 @@ namespace QLTTDT.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var taiKhoan = await _context.TaiKhoans.FindAsync(id);
+            var taiKhoan = await _context.TaiKhoans
+                .Include(t => t.MaNguoiDungNavigation)
+                .Include(t => t.MaVaiTroNavigation)
+                .FirstOrDefaultAsync(m => m.MaTaiKhoan == id);
+            int? getId = Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int? idNguoiDung = (await _context.TaiKhoans.FirstOrDefaultAsync(i => i.MaTaiKhoan == id))?.MaNguoiDung;
+            if (HttpContext.User.IsInRole("Admin") && idNguoiDung != null && getId == idNguoiDung)
+            {
+                ModelState.AddModelError("", "Không được xoá bản thân admin.");
+                return View(taiKhoan);
+            }
             if (taiKhoan != null)
             {
                 try

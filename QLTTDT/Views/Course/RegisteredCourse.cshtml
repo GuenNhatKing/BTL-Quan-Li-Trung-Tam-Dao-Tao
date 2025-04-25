@@ -16,7 +16,14 @@
 				   asp-route-courseSlug="@StrToSlug.Convert(item.TenKhoaHoc)"
 				   asp-route-courseId="@item.MaKhoaHoc">
 
-					<img src="~/images/@Html.DisplayFor(modelItem => item.UrlAnhKhoaHoc)" alt="Ảnh khoá học" />
+					@if (item.UrlAnhKhoaHoc != null)
+					{
+						<img src="~/images/@item.UrlAnhKhoaHoc" alt="Ảnh khoá học" class="border-bottom" />
+					}
+					else
+					{
+						<img src="~/Resource/Couratest-course.png" alt="Ảnh khoá học" class="border-bottom" />
+					}
 
 					<div class="d-flex flex-column box-padding-10 row-gap-1 course-content">
 						<div class="break-word min-height-custom-1 line-clamp-2">

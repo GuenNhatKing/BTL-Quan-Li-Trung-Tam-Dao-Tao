@@ -72,6 +72,12 @@ namespace QLTTDT.Areas.Admin.Controllers
             await LoadDataList();
             if (ModelState.IsValid)
             {
+                var validation = new ValidCheck(_context);
+                if (!validation.IsCourseValid(khoaHoc))
+                {
+                    ModelState.AddModelError(validation.ErrorKey, validation.Error);
+                    return View(khoaHoc);
+                }
                 var imageUpload = new ImageUpload(_webHost);
                 if (await imageUpload.SaveImageAs(AnhKhoaHoc!))
                 {
@@ -119,6 +125,18 @@ namespace QLTTDT.Areas.Admin.Controllers
             {
                 try
                 {
+                    var validation = new ValidCheck(_context);
+                    if (!validation.IsCourseValid(khoaHoc))
+                    {
+                        ModelState.AddModelError(validation.ErrorKey, validation.Error);
+                        return View(khoaHoc);
+                    }
+                    var count = await _context.DangKiKhoaHocs.CountAsync(i => _context.KhoaHocs.Any(j => j.MaKhoaHoc == i.MaKhoaHoc));
+                    if (count > khoaHoc.SoLuongHocVienToiDa)
+                    {
+                        ModelState.AddModelError("", "Không thể thay đổi số học viên tối đa nhỏ hơn số học viên hiện tại.");
+                        return View(khoaHoc);
+                    }
                     course.MaCapDo = khoaHoc.MaCapDo;
                     course.MaChuDe = khoaHoc.MaChuDe;
                     course.MaGiangVien = khoaHoc.MaGiangVien;
@@ -174,7 +192,11 @@ namespace QLTTDT.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var khoaHoc = await _context.KhoaHocs.FindAsync(id);
+            var khoaHoc = await _context.KhoaHocs
+                .Include(k => k.MaCapDoNavigation)
+                .Include(k => k.MaChuDeNavigation)
+                .Include(k => k.MaGiangVienNavigation)
+                .FirstOrDefaultAsync(m => m.MaKhoaHoc == id);
             if (khoaHoc != null)
             {
                 try

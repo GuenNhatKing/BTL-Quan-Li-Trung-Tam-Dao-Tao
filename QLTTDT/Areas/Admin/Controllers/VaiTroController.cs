@@ -136,7 +136,8 @@ namespace QLTTDT.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vaiTro = await _context.VaiTros.FindAsync(id);
+            var vaiTro = await _context.VaiTros
+                .FirstOrDefaultAsync(m => m.MaVaiTro == id);
             if (vaiTro != null)
             {
                 try

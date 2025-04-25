@@ -14,7 +14,14 @@
             <dt class="col-sm-3 fw-bold">Ảnh chủ đề</dt>
             <dd class="col-sm-9">
                 <div class="graphic-cover mb-2">
-                    <img src="@Url.Content("~/images/" + Model.UrlAnhChuDe)" alt="Ảnh chủ đề" class="img-thumbnail" style="max-width: 300px;" />
+                    @if(Model.UrlAnhChuDe != null)
+                    {
+                        <img src="~/images/@Model.UrlAnhChuDe" alt="Ảnh chủ đề" class="img-thumbnail" style="max-width: 300px;" />
+                    }
+                    else
+                    {
+                        <img src="~/Resource/Couratest-course.png" alt="Ảnh chủ đề" class="img-thumbnail" style="max-width: 300px;" />
+                    }
                 </div>
                 @Html.DisplayFor(model => model.UrlAnhChuDe)
             </dd>

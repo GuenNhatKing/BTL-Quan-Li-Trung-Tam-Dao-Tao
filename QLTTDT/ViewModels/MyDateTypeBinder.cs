@@ -17,8 +17,15 @@ namespace QLTTDT.ViewModels
             {
                 return Task.CompletedTask;
             }
-            var result = new MyDateType(value);
-            bindingContext.Result = ModelBindingResult.Success(result);
+            try
+            {
+                var result = new MyDateType(value);
+                bindingContext.Result = ModelBindingResult.Success(result);
+            }
+            catch (Exception)
+            {
+                
+            }
             return Task.CompletedTask;
         }
     }

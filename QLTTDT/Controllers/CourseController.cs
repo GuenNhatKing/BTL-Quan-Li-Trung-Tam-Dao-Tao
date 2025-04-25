@@ -128,7 +128,7 @@ namespace QLTTDT.Controllers
             var dkkh = await _context.DangKiKhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == khoaHoc.MaKhoaHoc && i.MaHocVien == userId);
             if (dkkh != null)
             {
-                if (ValidCheck.IsProgressVaild(dkkh.TienDo + 20))
+                if (ValidCheck.IsProgressValid(dkkh.TienDo + 20))
                 {
                     dkkh.TienDo += 20;
                 }

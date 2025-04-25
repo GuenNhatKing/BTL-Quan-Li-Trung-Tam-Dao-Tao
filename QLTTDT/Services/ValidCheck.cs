@@ -99,13 +99,23 @@ namespace QLTTDT.Services
             ErrorKey = "";
             if (maHocVien == null || maKhoaHoc == null)
             {
-                Error = "Mã người dùng hoặc mã khoá học không hợp lệ";
+                Error = "Mã người dùng hoặc mã khoá học không hợp lệ.";
                 return false;
             }
             if (await _context.DangKiKhoaHocs
             .AnyAsync(i => i.MaHocVien == maHocVien && i.MaKhoaHoc == maKhoaHoc))
             {
-                Error = "Học viên đã đăng kí khoá học này rồi";
+                Error = "Học viên đã đăng kí khoá học này rồi.";
+                return false;
+            }
+            if (!await _context.NguoiDungs.AnyAsync(i => i.MaNguoiDung == maHocVien))
+            {
+                Error = "Học viên không tồn tại.";
+                return false;
+            }
+            if (!await _context.KhoaHocs.AnyAsync(i => i.MaKhoaHoc == maKhoaHoc))
+            {
+                Error = "Khoá học không tồn tại.";
                 return false;
             }
             if ((await _context.KhoaHocs.FirstOrDefaultAsync(i => i.MaKhoaHoc == maKhoaHoc))?.SoLuongHocVienToiDa
@@ -116,10 +126,25 @@ namespace QLTTDT.Services
             }
             return true;
         }
-        public static bool IsProgressVaild(int progress)
+        public static bool IsProgressValid(int progress)
         {
             Console.WriteLine($"Progess: {progress}");
             return progress >= 0 && progress <= 100;
+        }
+        public bool IsCourseValid(KhoaHoc khoaHoc)
+        {
+            ErrorKey = "";
+            if (khoaHoc.HocPhi < 0)
+            {
+                Error = "Học phí không được âm.";
+                return false;
+            }
+            if (khoaHoc.SoLuongHocVienToiDa < 0)
+            {
+                Error = "Số lượng học viên không được âm.";
+                return false;
+            }
+            return true;
         }
     }
 }

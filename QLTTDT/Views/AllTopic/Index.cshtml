@@ -7,19 +7,26 @@
 	<div class="topic-container">
 		<form asp-controller="AllTopic" asp-action="Index" method="get" class="user-search-form">
 			<input type="text" name="searchString" value="@Context.Request.Query["searchString"]"
-				   placeholder="Tìm kiếm chủ đề"
-				   class="user-search-input" />
+			placeholder="Tìm kiếm chủ đề"
+			class="user-search-input" />
 			<button type="submit" class="user-search-button">Tìm</button>
 		</form>
 		@foreach (var item in Model)
 		{
 			<a class="topic-card"
-			   asp-action="Details"
-			   asp-route-topicSlug="@StrToSlug.Convert(item.TenChuDe)"
-			   asp-route-topicId="@item.MaChuDe">
+			asp-action="Details"
+			asp-route-topicSlug="@StrToSlug.Convert(item.TenChuDe)"
+			asp-route-topicId="@item.MaChuDe">
 
 				<div class="topic-image">
-					<img src="~/images/@Html.DisplayFor(modelItem => item.UrlAnhChuDe)" alt="Ảnh chủ đề" />
+					@if (item.UrlAnhChuDe != null)
+					{
+						<img src="~/images/@item.UrlAnhChuDe" alt="Ảnh chủ đề" />
+					}
+					else
+					{
+						<img src="~/Resource/Couratest-course.png" alt="Ảnh chủ đề" />
+					}
 				</div>
 				<div class="topic-content">
 					<div class="topic-title">@Html.DisplayFor(modelItem => item.TenChuDe)</div>
